@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Registration</h1>
+            <div class="account-wall">
+                <img class="profile-img"
+                     src="https://cdn.icon-icons.com/icons2/4076/PNG/512/people_team_connection_connect_users_networking_workgroup_icon_258932.png"
+                     alt="">
+                <form class="form-signin" th:action="@{/registration}" method="post" th:object="${user}">
+
+                    <label>
+                        <input type="text" class="form-control" placeholder="name" th:field="*{name}" required autofocus>
+                    </label>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
+
+                    <label>
+                        <input type="number" class="form-control" placeholder="age" th:field="*{age}" required autofocus>
+                    </label>
+                    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
+
+                    <label>
+                        <input type="text" class="form-control" placeholder="country" th:field="*{country}" required autofocus>
+                    </label>
+                    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
+
+<!--                    <label>-->
+<!--                        <input type="text" class="form-control" th:placeholder="#{registration.city}" th:field="*{city}" required autofocus>-->
+<!--                    </label>-->
+<!--                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>-->
+
+<!--                    <label>-->
+<!--                        <input type="text" class="form-control" th:placeholder="#{registration.hobby}" th:field="*{hobby}" required autofocus>-->
+<!--                    </label>-->
+<!--                    <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>-->
+
+<!--                    <label>-->
+<!--                        <input type="file" class="form-control" th:placeholder="#{registration.image}" th:field="*{image}" required autofocus>-->
+<!--                    </label>-->
+<!--                    <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" style="color: red;"></span><br>-->
+                    
+                    <label>
+                        <input type="email" class="form-control" placeholder="email" th:field="*{email}" required autofocus>
+                    </label>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span><br>
+
+                    <label>
+                        <input type="password" class="form-control" placeholder="password" th:field="*{password}" required>
+                    </label>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span><br>
+
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                        Registration
+                    </button>
+                </form>
+            </div>
+            <a th:href="@{/}" class="text-center new-account" >LogIn</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

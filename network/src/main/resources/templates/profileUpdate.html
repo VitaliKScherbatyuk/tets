@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+</head>
+<body>
+
+<form th:action="@{/profileUpdate}" method="post" th:object="${user}" enctype="multipart/form-data">
+
+    <label>
+        <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
+    </label>
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
+
+    <label>
+        <input type="number" class="form-control" placeholder="Age" th:field="*{age}" required>
+    </label>
+    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
+
+    <label>
+        <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
+    </label>
+    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
+
+    <label>
+        <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
+    </label>
+    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>
+
+    <label>
+        <input type="text" class="form-control" placeholder="Hobby" th:field="*{hobby}" required>
+    </label>
+    <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
+
+<!--    <label>-->
+<!--        <input type="file" class="form-control" placeholder="Image" th:field="*{image}" required>-->
+<!--    </label>-->
+<!--    <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" style="color: red;"></span><br>-->
+
+    <label>
+        <input type="email" class="form-control" placeholder="Email" th:field="*{email}" required>
+    </label>
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span><br>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">
+        Update Profile
+    </button>
+</form>
+
+</body>
+</html>
