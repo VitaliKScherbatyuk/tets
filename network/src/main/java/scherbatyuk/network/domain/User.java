@@ -11,7 +11,9 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,15 +42,14 @@ public class User {
     private String country;
     private String city;
     private String hobby;
-    @Column(columnDefinition = "LONGBLOB")
-    private byte[] image;
+    @Lob
+    private String imageData;
     private String password;
     private LocalDate createData;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    @OneToOne
-    @JoinColumn(name = "geo_location_id")
-    private GeoLocationResponse geoLocationResponse;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Friends> friendsList;
 
     public User(User user) {
         this.id = user.id;
@@ -58,7 +59,7 @@ public class User {
         this.country = user.country;
         this.city = user.city;
         this.hobby = user.hobby;
-        this.image = user.image;
+        this.imageData = user.imageData;
         this.password = user.password;
         this.createData = user.createData;
         this.role = user.role;
@@ -68,18 +69,12 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(),
-                user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAge(),
-                user.getAge()) && Objects.equals(getCountry(), user.getCountry()) && Objects.equals(getCity(),
-                user.getCity()) && Objects.equals(getHobby(), user.getHobby()) && Objects.equals(getPassword(),
-                user.getPassword()) && Objects.equals(getCreateData(),
-                user.getCreateData()) && getRole() == user.getRole();
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAge(), user.getAge()) && Objects.equals(getCountry(), user.getCountry()) && Objects.equals(getCity(), user.getCity()) && Objects.equals(getHobby(), user.getHobby()) && Objects.equals(getImageData(), user.getImageData()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getCreateData(), user.getCreateData()) && getRole() == user.getRole() && Objects.equals(getFriendsList(), user.getFriendsList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), getAge(), getCountry(), getCity(), getHobby(),
-                getPassword(), getCreateData(), getRole());
+        return Objects.hash(getId(), getName(), getEmail(), getAge(), getCountry(), getCity(), getHobby(), getImageData(), getPassword(), getCreateData(), getRole(), getFriendsList());
     }
 
     @Override
@@ -92,10 +87,11 @@ public class User {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", hobby='" + hobby + '\'' +
+                ", imageData='" + imageData + '\'' +
                 ", password='" + password + '\'' +
                 ", createData=" + createData +
                 ", role=" + role +
-                ", geoLocationResponse=" + geoLocationResponse +
+                ", friendsList=" + friendsList +
                 '}';
     }
 }

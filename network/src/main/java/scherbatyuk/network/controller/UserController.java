@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
-import scherbatyuk.network.service.LocationService;
 import scherbatyuk.network.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -38,13 +38,16 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private LocationService locationService;
-    @Autowired
     private HttpServletRequest request;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
+    }
 
     /**
      * method is responsible for processing HTTP GET requests to the URL path "/login".
@@ -74,7 +77,6 @@ public class UserController {
     public String loginSubmit(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
         User existingUser = userService.findByEmail(user.getEmail());
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            String ipAddress = locationService.updateVPN(request);
             return "redirect:/home";
         } else {
             model.addAttribute("error", "Invalid login or password.");
@@ -86,6 +88,7 @@ public class UserController {
      * method is responsible for processing HTTP GET requests to the URL path "/registration".
      * It initializes a User object and returns a "registration" page along with a model
      * that contains this object to create a user registration form
+     * ф
      *
      * @param model
      * @return
@@ -124,14 +127,13 @@ public class UserController {
      * @return
      * @throws ServletException
      */
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, null, auth);
-        }
+        request.logout();
         return "redirect:/login";
     }
+
 
     /**
      * Gets a list of all users using the getAllUser method of the UserService service.
@@ -159,25 +161,23 @@ public class UserController {
     }
 
     @PostMapping("/profileUpdate")
-    public String updateProfile(User updatedUser) {
-        User user = userRepository.findByEmail(updatedUser.getEmail()).orElse(null);
+    public String updateProfile() throws IOException {
+        // Отримати користувача з бази даних за email
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
 
-        if (user != null) {
-            user.setName(updatedUser.getName());
-            user.setAge(updatedUser.getAge());
-            user.setCountry(updatedUser.getCountry());
-            user.setCity(updatedUser.getCity());
-            user.setHobby(updatedUser.getHobby());
 
-            userService.updateProfile(user);
-        }
-        return "redirect:home";
+        return "redirect:/home";
     }
+
+
 
 
     /**
      * method is responsible for processing HTTP GET requests to the URL path "/home"
      * and returns the page "home"
+     *
      * @param model
      * @return
      */
@@ -188,7 +188,8 @@ public class UserController {
         User user = userService.findByEmail(userEmail);
         UserRole role = user.getRole();
 
-        model.addAttribute("user", user);
+        List<User> userList = userService.getAllUser();
+        model.addAttribute("users", userList);
         model.addAttribute("role", role);
         return "home";
     }

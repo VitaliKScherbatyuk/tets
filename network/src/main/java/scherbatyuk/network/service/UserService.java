@@ -14,6 +14,7 @@ import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -61,27 +62,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    /**
-     * Takes a user identifier (id) and returns a User object if it exists in the database.
-     * If not found, returns null.
-     *
-     * @param id
-     * @return
-     */
-    public User findById(Integer id) {
-        return userRepository.findById(id).orElse(null);
-    }
 
-    /**
-     * Takes the user ID (id) and removes it from the database.
-     *
-     * @param id
-     */
-    public void deleteById(Integer id) {
-        userRepository.deleteById(id);
-    }
 
-    public void updateProfile(User user) {
-        userRepository.save(user);
-    }
 }

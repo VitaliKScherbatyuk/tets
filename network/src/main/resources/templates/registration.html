@@ -20,7 +20,7 @@
                 <img class="profile-img"
                      src="https://cdn.icon-icons.com/icons2/4076/PNG/512/people_team_connection_connect_users_networking_workgroup_icon_258932.png"
                      alt="">
-                <form class="form-signin" th:action="@{/registration}" method="post" th:object="${user}">
+                <form class="form-signin" th:action="@{/registration}" method="post" th:object="${user}" enctype="multipart/form-data">
 
                     <label>
                         <input type="text" class="form-control" placeholder="name" th:field="*{name}" required autofocus>

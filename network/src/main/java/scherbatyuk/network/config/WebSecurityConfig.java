@@ -18,6 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import scherbatyuk.network.security.CustomUserDetailsService;
 
 /**
@@ -59,13 +61,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/home").authenticated()
-//                .antMatchers("/users").hasAuthority("Admin")
+                .antMatchers("/home").authenticated() // Сторінка home доступна тільки для аутентифікованих користувачів
                 .anyRequest().permitAll().and()
 
                 .formLogin().loginPage("/login")
                 .defaultSuccessUrl("/home").usernameParameter("email").passwordParameter("password").and()
-                .logout().logoutSuccessUrl("/login?logout").deleteCookies("JSESSIONID")
+                .logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true).and()
                 .exceptionHandling().accessDeniedPage("/403").and()
                 .csrf().disable();
