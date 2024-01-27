@@ -1,5 +1,21 @@
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
+#formBody{
+margin: 5px;
+border: 1px solid white;
+border-radius: 15px;
+ -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+h3{
+ -webkit-text-fill-color: transparent;
+     -webkit-background-clip: text;
+     -webkit-box-decoration-break: clone;
+      background-image: linear-gradient(to bottom, #ff0000, #ffffff);
+      text-transform: uppercase;
+      margin-right: 10px;
+}
 .navbar-icon-top .navbar-nav .nav-link > .fa {
   position: relative;
   width: 36px;
@@ -111,9 +127,43 @@
 
   .iconProf{
     width: 72px;
-    height:72px;
-    background-color: white;
+    height: 72px;
     border-radius: 50%;
     margin: 0 15px;
     border: 2px red solid;
   }
+
+/*Випадаюче меню*/
+.profile-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff; /* Колір фону меню */
+    border: 1px solid #ddd; /* Рамка меню */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тінь меню */
+    z-index: 1;
+}
+
+.iconProf:hover + .profile-menu,
+.profile-menu:hover {
+    display: block;
+}
+
+.profile-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-menu li {
+    padding: 8px;
+}
+
+.profile-menu a {
+    text-decoration: none;
+    color: #333; /* Колір тексту пунктів меню */
+    display: block;
+}
+
+.profile-menu a:hover {
+    background-color: #f5f5f5; /* Колір фону при наведенні */
+}

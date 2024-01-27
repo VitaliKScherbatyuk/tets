@@ -8,14 +8,15 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody.css">
 
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="registration">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <h1 class="text-center login-title">Registration</h1>
+            <h1 class="text-center login-title text text1">Registration</h1>
             <div class="account-wall">
                 <img class="profile-img"
                      src="https://cdn.icon-icons.com/icons2/4076/PNG/512/people_team_connection_connect_users_networking_workgroup_icon_258932.png"
@@ -67,7 +68,7 @@
                     </button>
                 </form>
             </div>
-            <a th:href="@{/}" class="text-center new-account" >LogIn</a>
+            <a th:href="@{/login}" class="text-center new-account" >LogIn</a>
         </div>
     </div>
 </div>

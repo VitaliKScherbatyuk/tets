@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:action="@{/profileUpdate}" method="post" th:object="${user}" enctype="multipart/form-data">
+<form th:object="${user}" method="post" enctype="multipart/form-data" th:action="@{/profileUpdate}">
 
     <label>
         <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
@@ -33,9 +33,16 @@
     </label>
     <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
 
+    <div>
+        <!-- Додайте тег img для відображення завантаженого в базу зображення -->
+        <img id="userImage" th:if="${user.imageData != null}" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image" style="max-width: 200px; max-height: 200px;" />
+
+    </div> <br>
+
     <label>
-        <input type="file" name="file" accept="image/*">
+        <input type="file" class="form-control" placeholder="Image" th:field="*{imageData}" accept="image/*" name="imageFile" required>
     </label>
+    <span th:if="${#fields.hasErrors('imageData')}" th:errors="*{imageData}" style="color: red;"></span><br>
 
     <label>
         <input type="email" class="form-control" placeholder="Email" th:field="*{email}" required>
@@ -49,3 +56,4 @@
 
 </body>
 </html>
+

@@ -7,24 +7,31 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 import scherbatyuk.network.service.UserService;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -35,6 +42,8 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -44,9 +53,9 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public String showLoginForm() {
-        return "login";
+        return "start";
     }
 
     /**
@@ -57,7 +66,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("user", new User());
         return "login";
@@ -73,7 +82,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @PostMapping("/")
+    @PostMapping("/login")
     public String loginSubmit(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
         User existingUser = userService.findByEmail(user.getEmail());
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
@@ -161,18 +170,32 @@ public class UserController {
     }
 
     @PostMapping("/profileUpdate")
-    public String updateProfile() throws IOException {
+    public String updateProfile(Model model, @RequestParam String city, @RequestParam String hobby, @RequestParam String name,
+                                @RequestParam Integer age, @RequestParam String country
+                               ) throws IOException {
         // Отримати користувача з бази даних за email
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
+        logger.info("Визначено користувача" + user.getName() + " = " + user.getEmail());
 
+        user.setCity(city);
+        user.setHobby(hobby);
+        user.setName(name);
+        user.setAge(age);
+        user.setCountry(country);
+        user.setCreateData(user.getCreateData());
+
+        logger.info("Буде завантажуватись зображення");
+//            user.setImageData(Base64.getEncoder().encodeToString(imageFile.getBytes()));
+//        user.setImageData(imageFile);
+            logger.info("Взято нове зображення");
+
+
+        userService.updateProfile(Collections.singletonList(user));
 
         return "redirect:/home";
     }
-
-
-
 
     /**
      * method is responsible for processing HTTP GET requests to the URL path "/home"
@@ -191,6 +214,16 @@ public class UserController {
         List<User> userList = userService.getAllUser();
         model.addAttribute("users", userList);
         model.addAttribute("role", role);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageDate = user.getImageData();
+        model.addAttribute("user", user); // Додати об'єкт користувача в модель
+        model.addAttribute("age", age); // Додати вік в модель
+        model.addAttribute("country", country); // Додати країну в модель
+        model.addAttribute("hobby", hobby); // Додати хобі в модель
+        model.addAttribute("imageDate", imageDate);
         return "home";
     }
 

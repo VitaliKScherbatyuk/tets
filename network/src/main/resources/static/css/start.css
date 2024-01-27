@@ -1,0 +1,22 @@
+body{
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.box_main{
+    display: flex;
+    align-items: center;
+    height: 550px;
+}
+h1{
+     -webkit-text-fill-color: transparent;
+     -webkit-background-clip: text;
+     -webkit-box-decoration-break: clone;
+      background-image: linear-gradient(to bottom, #ff0000, #ffffff);
+      text-transform: uppercase;
+}
+img{
+     border-radius: 5px;
+}
