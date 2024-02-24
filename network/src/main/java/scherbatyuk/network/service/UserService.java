@@ -16,6 +16,7 @@ import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -35,20 +36,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    /**
-     * Takes a User object and stores it in the database. The user's password is hashed
-     * using PasswordEncoder before saving. Also sets the user role to UserRole.User.
-     *
-     * @param user
-     */
-//    public void save(User user) {
-//
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRole(UserRole.User);
-//        user.setCreateData(LocalDate.now());
-//        userRepository.save(user);
-//    }
 
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -112,4 +99,12 @@ public class UserService {
         }
     }
 
+    public User findById(int id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public User getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+    }
 }

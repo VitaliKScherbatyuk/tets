@@ -8,7 +8,6 @@
 package scherbatyuk.network.domain;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,7 +25,7 @@ import java.util.Objects;
 @Builder
 @Entity
 @Table
-public class User {
+public class User{
 
     private static final String SEQ_NAME = "user_seq";
 
@@ -50,6 +49,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Friends> friendsList;
 
+
+
     public User(User user) {
         this.id = user.id;
         this.name = user.name;
@@ -68,12 +69,24 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getAge(), user.getAge()) && Objects.equals(getCountry(), user.getCountry()) && Objects.equals(getCity(), user.getCity()) && Objects.equals(getHobby(), user.getHobby()) && Objects.equals(getImageData(), user.getImageData()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getCreateData(), user.getCreateData()) && getRole() == user.getRole() && Objects.equals(getFriendsList(), user.getFriendsList());
+        return Objects.equals(getId(), user.getId())
+                && Objects.equals(getName(), user.getName())
+                && Objects.equals(getEmail(), user.getEmail())
+                && Objects.equals(getAge(), user.getAge())
+                && Objects.equals(getCountry(), user.getCountry())
+                && Objects.equals(getCity(), user.getCity())
+                && Objects.equals(getHobby(), user.getHobby())
+                && Objects.equals(getImageData(), user.getImageData())
+                && Objects.equals(getPassword(), user.getPassword())
+                && Objects.equals(getCreateData(), user.getCreateData())
+                && getRole() == user.getRole()
+                && Objects.equals(getFriendsList(), user.getFriendsList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), getAge(), getCountry(), getCity(), getHobby(), getImageData(), getPassword(), getCreateData(), getRole(), getFriendsList());
+        return Objects.hash(getId(), getName(), getEmail(), getAge(), getCountry(), getCity(), getHobby(),
+                getImageData(), getPassword(), getCreateData(), getRole(), getFriendsList());
     }
 
     @Override

@@ -13,26 +13,12 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table
-public class Friends {
+public class Message {
 
-    private static final String SEQ_NAME = "friend_seq";
+    private static final String SEQ_NAME = "message_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "friend_id")
-    private User friend;
-
-    private boolean accepted; // Поле для вказання, чи прийнято товаришування
-    private boolean answer;
-
 }
-
-

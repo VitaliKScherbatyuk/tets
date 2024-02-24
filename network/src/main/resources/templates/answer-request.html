@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Answer Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody.css">
+</head>
+<body>
+
+<h2>Friend Requests:</h2>
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Hobby</th>
+        <th>Accept</th>
+        <th>Reject</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.country}"></td>
+        <td th:text="${user.city}"></td>
+        <td th:text="${user.hobby}"></td>
+        <td>
+            <form th:action="@{'/answerAccept/' + ${user.id}}" method="post">
+                <button type="submit" class="btn btn-primary">Accept</button>
+            </form>
+        </td>
+        <td>
+            <!-- Add the reject button/form here if needed -->
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
+</body>
+</html>
+
+

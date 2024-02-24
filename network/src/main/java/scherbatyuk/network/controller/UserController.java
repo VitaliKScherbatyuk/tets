@@ -19,8 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.dao.UserRepository;
+import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
+import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.UserService;
 
 import javax.imageio.ImageIO;
@@ -52,6 +54,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FriendsService friendsService;
 
     @GetMapping("/")
     public String showLoginForm() {
@@ -164,15 +168,15 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
-
-        model.addAttribute("user", user);
+        Integer userId = user.getId();
+        model.addAttribute("userId", userId);
         return "profileUpdate";
     }
 
     @PostMapping("/profileUpdate")
     public String updateProfile(Model model, @RequestParam String city, @RequestParam String hobby, @RequestParam String name,
                                 @RequestParam Integer age, @RequestParam String country
-                               ) throws IOException {
+    ) throws IOException {
         // Отримати користувача з бази даних за email
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
@@ -189,7 +193,7 @@ public class UserController {
         logger.info("Буде завантажуватись зображення");
 //            user.setImageData(Base64.getEncoder().encodeToString(imageFile.getBytes()));
 //        user.setImageData(imageFile);
-            logger.info("Взято нове зображення");
+        logger.info("Взято нове зображення");
 
 
         userService.updateProfile(Collections.singletonList(user));
@@ -224,7 +228,23 @@ public class UserController {
         model.addAttribute("country", country); // Додати країну в модель
         model.addAttribute("hobby", hobby); // Додати хобі в модель
         model.addAttribute("imageDate", imageDate);
+
+        int countRequests = friendsService.countPendingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
         return "home";
     }
 
+    @GetMapping("/user/{id}")
+    public String viewUserDetails(@PathVariable Integer id, Model model) {
+
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+
+        // Додайте новий об'єкт FriendsRequest до моделі для використання в формі
+        Friends friendsRequest = new Friends();
+        friendsRequest.setId(id);
+        model.addAttribute("friendsRequest", friendsRequest);
+
+        return "userDetail";
+    }
 }
