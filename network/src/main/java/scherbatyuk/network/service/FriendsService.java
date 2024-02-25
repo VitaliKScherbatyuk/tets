@@ -28,11 +28,15 @@ public class FriendsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender with id " + userId + " not found"));
 
-        if(!friend.equals(user)){
+        // Перевірка, чи існує вже запит дружби
+        boolean existingFriendRequest = friendsRepository.existsByFriendAndUser(friend, user) ||
+                friendsRepository.existsByFriendAndUser(user, friend);
+
+        if (!friend.equals(user) && !existingFriendRequest) {
             // Відправлення запиту
             Friends friends = new Friends();
             friends.setFriend(friend);
-            friends.setAccepted(false);// Запит не прийнято
+            friends.setAccepted(false); // Запит не прийнято
             friends.setUser(user);
             friends.setAnswer(false);
             friendsRepository.save(friends);
@@ -45,19 +49,20 @@ public class FriendsService {
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
         // Перевірка запиту користувача що отримав запит
-        Friends friendNew = friendsRepository.findById(friendId)
+        Friends friend = friendsRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("Friend request with id " + friendId + " not found"));
 
         // Перевірка, чи користувач не відправляє собі запит
-        if (friendNew.getUser().getId().equals(userId)) {
+        if (friend.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("Cannot accept your own friend request");
         }
 
         // Оновлення списків друзів
-        user.getFriendsList().add(friendNew);
-        friendNew.setAccepted(true);
-        friendNew.setAnswer(true);
-        friendsRepository.save(friendNew);
+        user.getFriendsList().add(friend);
+        friend.setAccepted(true);
+        friend.setAnswer(true);
+        friendsRepository.save(friend);
+
     }
 
     public List<User> findUsersWithFriendRequests(Integer userId) {
@@ -78,10 +83,10 @@ public class FriendsService {
         return friendsRepository.countByFriendAndAcceptedAndAnswer(user, false, false);
     }
 
-    public void acceptAnswerFriend(Integer userId, Integer friendId){
+    public void acceptAnswerFriend(Integer userId, Integer friendId) {
         Optional<User> user = userRepository.findById(userId);
         Optional<User> friendNew = userRepository.findById(friendId);
-        if((user.isEmpty() || friendNew.isEmpty() || friendNew.equals(user))){
+        if ((user.isEmpty() || friendNew.isEmpty() || friendNew.equals(user))) {
             throw new IllegalArgumentException("Cannot accept your own friend request");
         }
 

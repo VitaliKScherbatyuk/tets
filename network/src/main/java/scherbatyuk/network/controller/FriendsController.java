@@ -1,7 +1,6 @@
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,6 +24,12 @@ public class FriendsController {
     @Autowired
     private FriendsService friendsService;
 
+    /**
+     * Метод відповідає за здійснення запиту дружби у іншого користувача
+     * @param friendId
+     * @param model
+     * @return
+     */
     @PostMapping("/addFriends")
     public String sendFriendRequest(@RequestParam Integer friendId, Model model) {
 
@@ -42,6 +47,11 @@ public class FriendsController {
         return "redirect:/home";
     }
 
+    /**
+     * Метод виводить список активних запитів на дружбу
+     * @param model
+     * @return
+     */
     @GetMapping("/answer-request")
     public String responseToFriendRequest(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
