@@ -15,5 +15,5 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer>, Crud
 
     List<Friends> findByUserAndAccepted(User user, boolean accepted);
 
-    int countByUserAndAcceptedAndAnswer(User user, boolean b, boolean b1);
+    int countByFriendAndAcceptedAndAnswer(User friend, boolean accepted, boolean answer);
 }

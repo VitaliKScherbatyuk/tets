@@ -229,7 +229,7 @@ public class UserController {
         model.addAttribute("hobby", hobby); // Додати хобі в модель
         model.addAttribute("imageDate", imageDate);
 
-        int countRequests = friendsService.countPendingFriendRequests(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
         return "home";
     }

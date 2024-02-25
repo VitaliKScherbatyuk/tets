@@ -58,18 +58,6 @@ public class FriendsService {
         friendNew.setAccepted(true);
         friendNew.setAnswer(true);
         friendsRepository.save(friendNew);
-
-//        friendNew.getFriend().getFriendsList().add(user);
-//        userRepository.save(friendNew.getFriend());
-//
-//        userRepository.save(user);
-    }
-
-    public int countPendingFriendRequests(Integer userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
-
-        return friendsRepository.countByUserAndAcceptedAndAnswer(user, false, false);
     }
 
     public List<User> findUsersWithFriendRequests(Integer userId) {
@@ -86,8 +74,11 @@ public class FriendsService {
                 .collect(Collectors.toList());
     }
 
-    public int countUsersWithFriendRequests(Integer userId) {
-        return findUsersWithFriendRequests(userId).size();
+    public int countIncomingFriendRequests(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+
+        return friendsRepository.countByFriendAndAcceptedAndAnswer(user, false, false);
     }
 
     public void acceptAnswerFriend(Integer userId, Integer friendId){
