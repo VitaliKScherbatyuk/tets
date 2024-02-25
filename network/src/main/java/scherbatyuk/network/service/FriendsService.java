@@ -61,14 +61,11 @@ public class FriendsService {
     }
 
     public List<User> findUsersWithFriendRequests(Integer userId) {
-        // Перевірка користувача
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
-        // Отримання списку користувачів, які пропонують дружбу
-        List<Friends> friendRequests = friendsRepository.findByUserAndAccepted(user, false);
+        List<Friends> friendRequests = friendsRepository.findByFriendAndAccepted(user, false);
 
-        // Вибірка користувачів із списку запитів
         return friendRequests.stream()
                 .map(Friends::getUser)
                 .collect(Collectors.toList());

@@ -11,9 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FriendsRepository extends JpaRepository<Friends, Integer>, CrudRepository<Friends, Integer>{
-    List<Friends> findByUser(User user);
 
-    List<Friends> findByUserAndAccepted(User user, boolean accepted);
+    List<Friends> findByFriendAndAccepted(User friend, boolean accepted);
 
     int countByFriendAndAcceptedAndAnswer(User friend, boolean accepted, boolean answer);
 }
