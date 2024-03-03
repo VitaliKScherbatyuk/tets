@@ -30,9 +30,10 @@ public class Friends {
     @JoinColumn(name = "friend_id")
     private User friend;
 
-    private boolean accepted; // Поле для вказання, чи прийнято товаришування
-    private boolean answer;
+    @Enumerated(EnumType.STRING)
+    private FriendshipStatus status;
 
+    // Додайте інші необхідні поля або методи, які вам потрібні
 }
 
 

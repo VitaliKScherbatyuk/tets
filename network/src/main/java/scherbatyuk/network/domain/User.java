@@ -10,7 +10,9 @@ package scherbatyuk.network.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Array;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +48,7 @@ public class User{
     private LocalDate createData;
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Friends> friendsList;
 
 

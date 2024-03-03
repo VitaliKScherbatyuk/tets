@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import scherbatyuk.network.domain.Friends;
+import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.UserService;
@@ -24,21 +25,24 @@ public class FriendsController {
     @Autowired
     private FriendsService friendsService;
 
-    /**
-     * Метод відповідає за здійснення запиту дружби у іншого користувача
-     * @param friendId
-     * @param model
-     * @return
-     */
     @PostMapping("/addFriends")
     public String sendFriendRequest(@RequestParam Integer friendId, Model model) {
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
 
         try {
+            // Створення та збереження дружби
+            Friends friendship = new Friends();
+            friendship.setUser(user);
+            User friend = userService.findById(friendId);
+            friendship.setFriend(friend);
+            friendship.setStatus(FriendshipStatus.PENDING);
+            friendsService.saveFriendship(friendship);
+
+            // Виклик методу для відправки запиту на дружбу
             friendsService.sendFriendRequest(friendId, user.getId());
+
             model.addAttribute("friendId", friendId);
             model.addAttribute("userId", user.getId());
         } catch (IllegalArgumentException e) {
@@ -47,11 +51,7 @@ public class FriendsController {
         return "redirect:/home";
     }
 
-    /**
-     * Метод виводить список активних запитів на дружбу
-     * @param model
-     * @return
-     */
+
     @GetMapping("/answer-request")
     public String responseToFriendRequest(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -63,24 +63,22 @@ public class FriendsController {
             return "redirect:/home";
         }
         model.addAttribute("users", friendsList);
-        model.addAttribute("id", user.getId());
+
+        List<Integer> friendIds = friendsService.getFriendIds(friendsList);
+        model.addAttribute("friendIds", friendIds);
+
         return "answer-request";
     }
 
-    @GetMapping("/answerAccept/{id}")
+    @PostMapping("/answerAccept/{id}")
     public String acceptFriendRequest(@PathVariable Integer id, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User currentUser = userService.findByEmail(userEmail);
 
-        try {
-            friendsService.acceptAnswerFriend(currentUser.getId(), id);
-            model.addAttribute("successMessage", "Friend request accepted successfully");
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", "Error accepting friend request");
-        }
+        friendsService.acceptFriendRequest(currentUser.getId(), id);
 
-        return "redirect:/friends";
+        return "redirect:/friend";
     }
 
     @GetMapping("/friends")
@@ -95,6 +93,7 @@ public class FriendsController {
         return "friends";
     }
 }
+
 
 
 

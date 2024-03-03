@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.FriendsRepository;
 import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.Friends;
+import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,74 +23,89 @@ public class FriendsService {
     private FriendsRepository friendsRepository;
 
     public void sendFriendRequest(Integer friendId, Integer userId) {
-        // Перевірка наявності користувачів
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender with id " + friendId + " not found"));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender with id " + userId + " not found"));
 
-        // Перевірка, чи існує вже запит дружби
         boolean existingFriendRequest = friendsRepository.existsByFriendAndUser(friend, user) ||
                 friendsRepository.existsByFriendAndUser(user, friend);
 
         if (!friend.equals(user) && !existingFriendRequest) {
-            // Відправлення запиту
             Friends friends = new Friends();
             friends.setFriend(friend);
-            friends.setAccepted(false); // Запит не прийнято
+            friends.setStatus(FriendshipStatus.PENDING);
             friends.setUser(user);
-            friends.setAnswer(false);
             friendsRepository.save(friends);
         }
     }
 
     public void acceptFriendRequest(Integer userId, Integer friendId) {
-        // Перевірка користувача, що подав запит
+        System.err.println(userId + " " + friendId);
+
+        User friend = userRepository.findById(friendId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + friendId + " not found"));
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
-        // Перевірка запиту користувача що отримав запит
-        Friends friend = friendsRepository.findById(friendId)
-                .orElseThrow(() -> new IllegalArgumentException("Friend request with id " + friendId + " not found"));
+        boolean existingFriendRequest = friendsRepository.existsByFriendAndUser(friend, user) ||
+                friendsRepository.existsByFriendAndUser(user, friend);
+        System.err.println(existingFriendRequest);
 
-        // Перевірка, чи користувач не відправляє собі запит
-        if (friend.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("Cannot accept your own friend request");
+        if (existingFriendRequest) {
+            // Знайдемо id запиту дружби
+            Integer requestId = friendsRepository.requestIdByFriendAndUser(user.getId(), friend.getId(), FriendshipStatus.PENDING);
+            System.err.println(requestId);
+
+            // Прийняти запит дружби, змінивши його статус
+            acceptFriendshipRequest(requestId);
         }
-
-        // Оновлення списків друзів
-        user.getFriendsList().add(friend);
-        friend.setAccepted(true);
-        friend.setAnswer(true);
-        friendsRepository.save(friend);
-
     }
+
+    private void acceptFriendshipRequest(int requestId) {
+        Optional<Friends> friendshipRequest = friendsRepository.findById(requestId);
+
+        friendshipRequest.ifPresent(friendship -> {
+            // Здійснюйте потрібні дії для прийняття запиту дружби, наприклад, змінюйте статус
+            friendship.setStatus(FriendshipStatus.ACCEPTED);
+            friendsRepository.save(friendship);
+        });
+    }
+
 
     public List<User> findUsersWithFriendRequests(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
-        List<Friends> friendRequests = friendsRepository.findByFriendAndAccepted(user, false);
+        List<Friends> friendRequests = friendsRepository.findByFriendAndStatus(user, FriendshipStatus.PENDING);
 
         return friendRequests.stream()
                 .map(Friends::getUser)
                 .collect(Collectors.toList());
     }
 
+    public List<Integer> getFriendIds(List<User> friendsList) {
+        List<Integer> friendIds = new ArrayList<>();
+        for (User user : friendsList) {
+            List<Integer> userFriendIds = user.getFriendsList().stream()
+                    .map(friend -> friend.getFriend().getId())
+                    .collect(Collectors.toList());
+            friendIds.addAll(userFriendIds);
+        }
+        return friendIds;
+    }
+
     public int countIncomingFriendRequests(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
-        return friendsRepository.countByFriendAndAcceptedAndAnswer(user, false, false);
+        return friendsRepository.countByFriendAndStatus(user, FriendshipStatus.PENDING);
     }
 
-    public void acceptAnswerFriend(Integer userId, Integer friendId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<User> friendNew = userRepository.findById(friendId);
-        if ((user.isEmpty() || friendNew.isEmpty() || friendNew.equals(user))) {
-            throw new IllegalArgumentException("Cannot accept your own friend request");
-        }
-
+    public void saveFriendship(Friends friendship) {
+        // Логіка для збереження дружби в базі даних
+        friendsRepository.save(friendship);
     }
 }

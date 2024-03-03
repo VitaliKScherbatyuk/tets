@@ -34,8 +34,9 @@
         <td th:text="${user.hobby}"></td>
         <td>
             <form th:action="@{'/answerAccept/' + ${user.id}}" method="post">
+                <!-- Додайте приховане поле для id друга -->
+                <input type="hidden" name="friendId" th:value="${user.id}" />
                 <button type="submit" class="btn btn-primary">Accept</button>
-            </form>
         </td>
         <td>
             <!-- Add the reject button/form here if needed -->
