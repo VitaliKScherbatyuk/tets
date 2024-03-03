@@ -64,8 +64,8 @@ public class FriendsController {
         }
         model.addAttribute("users", friendsList);
 
-        List<Integer> friendIds = friendsService.getFriendIds(friendsList);
-        model.addAttribute("friendIds", friendIds);
+//        List<Integer> friendIds = friendsService.getFriendIds(friendsList);
+//        model.addAttribute("friendIds", friendIds);
 
         return "answer-request";
     }
@@ -77,7 +77,6 @@ public class FriendsController {
         User currentUser = userService.findByEmail(userEmail);
 
         friendsService.acceptFriendRequest(currentUser.getId(), id);
-
         return "redirect:/friend";
     }
 
@@ -86,9 +85,14 @@ public class FriendsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
+        System.err.println(user.getName());
 
-        List<Friends> friendsList = user.getFriendsList();
-        model.addAttribute("friends", friendsList);
+        // Отримуємо список друзів
+        List<User> friendsListAcceped = friendsService.getFriends(user.getId());
+        if (friendsListAcceped.isEmpty()) {
+            return "redirect:/home";
+        }
+        model.addAttribute("users", friendsListAcceped);
 
         return "friends";
     }

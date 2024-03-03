@@ -42,17 +42,13 @@ public class FriendsService {
     }
 
     public void acceptFriendRequest(Integer userId, Integer friendId) {
-        System.err.println(userId + " " + friendId);
-
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + friendId + " not found"));
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
         boolean existingFriendRequest = friendsRepository.existsByFriendAndUser(friend, user) ||
                 friendsRepository.existsByFriendAndUser(user, friend);
-        System.err.println(existingFriendRequest);
 
         if (existingFriendRequest) {
             // Знайдемо id запиту дружби
@@ -86,16 +82,25 @@ public class FriendsService {
                 .collect(Collectors.toList());
     }
 
-    public List<Integer> getFriendIds(List<User> friendsList) {
-        List<Integer> friendIds = new ArrayList<>();
-        for (User user : friendsList) {
-            List<Integer> userFriendIds = user.getFriendsList().stream()
-                    .map(friend -> friend.getFriend().getId())
-                    .collect(Collectors.toList());
-            friendIds.addAll(userFriendIds);
-        }
-        return friendIds;
+    public List<User> getFriends(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+
+        List<Friends> friendReq = friendsRepository.findByFriendAndStatus(user, FriendshipStatus.ACCEPTED);
+        List<Friends> userReq = friendsRepository.findByUserAndStatus(user, FriendshipStatus.ACCEPTED);
+
+        List<Friends> friendRequests = new ArrayList<>();
+        friendRequests.addAll(friendReq);
+        friendRequests.addAll(userReq);
+
+        List<User> friendsList = friendRequests.stream()
+                .map(friendRequest -> user.equals(friendRequest.getUser()) ? friendRequest.getFriend() : friendRequest.getUser())
+                .collect(Collectors.toList());
+
+        return friendsList;
     }
+
+
 
     public int countIncomingFriendRequests(Integer userId) {
         User user = userRepository.findById(userId)
