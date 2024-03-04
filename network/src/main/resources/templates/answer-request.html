@@ -33,13 +33,18 @@
         <td th:text="${user.city}"></td>
         <td th:text="${user.hobby}"></td>
         <td>
-            <form th:action="@{'/answerAccept/' + ${user.id}}" method="post">
-                <!-- Додайте приховане поле для id друга -->
+            <form th:action="@{'/responseRequest/' + ${user.id}}" method="post">
+                <!-- Додайте приховані поля для id друга та статусу -->
                 <input type="hidden" name="friendId" th:value="${user.id}" />
-                <button type="submit" class="btn btn-primary">Accept</button>
+                <button type="submit" name="status" value="ACCEPTED" class="btn btn-primary">Accept</button>
+            </form>
         </td>
         <td>
-            <!-- Add the reject button/form here if needed -->
+            <form th:action="@{'/responseRequest/' + ${user.id}}" method="post">
+                <!-- Додайте приховані поля для id друга та статусу -->
+                <input type="hidden" name="friendId" th:value="${user.id}" />
+                <button type="submit" name="status" value="REJECTED" class="btn btn-primary">Reject</button>
+            </form>
         </td>
     </tr>
     </tbody>

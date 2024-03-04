@@ -22,6 +22,11 @@ public class FriendsService {
     @Autowired
     private FriendsRepository friendsRepository;
 
+    /**
+     * Метод що відповідає за створення запиту дружби між користувачами
+     * @param friendId
+     * @param userId
+     */
     public void sendFriendRequest(Integer friendId, Integer userId) {
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender with id " + friendId + " not found"));
@@ -41,7 +46,13 @@ public class FriendsService {
         }
     }
 
-    public void acceptFriendRequest(Integer userId, Integer friendId) {
+    /**
+     * Метод що відповідає за погодження або відхилення дружби двох користувачів на основі id та статусу із html
+     * @param userId
+     * @param friendId
+     * @param status
+     */
+    public void responseFriendRequest(Integer userId, Integer friendId, String status) {
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + friendId + " not found"));
         User user = userRepository.findById(userId)
@@ -53,24 +64,32 @@ public class FriendsService {
         if (existingFriendRequest) {
             // Знайдемо id запиту дружби
             Integer requestId = friendsRepository.requestIdByFriendAndUser(user.getId(), friend.getId(), FriendshipStatus.PENDING);
-            System.err.println(requestId);
 
-            // Прийняти запит дружби, змінивши його статус
-            acceptFriendshipRequest(requestId);
+            // Прийняти або відхилити запит дружби
+            acceptOrRejectFriendshipRequest(requestId, status);
         }
     }
 
-    private void acceptFriendshipRequest(int requestId) {
+    /**
+     * Метод що змінює статус в БД на основі статусу що надійшов для індентифікації прийняття або відхилення дружби
+     * @param requestId
+     * @param status
+     */
+    private void acceptOrRejectFriendshipRequest(int requestId, String status) {
         Optional<Friends> friendshipRequest = friendsRepository.findById(requestId);
 
         friendshipRequest.ifPresent(friendship -> {
-            // Здійснюйте потрібні дії для прийняття запиту дружби, наприклад, змінюйте статус
-            friendship.setStatus(FriendshipStatus.ACCEPTED);
+            // Змінюємо статус на ACCEPTED або REJECTED
+            friendship.setStatus(status.equals("ACCEPTED") ? FriendshipStatus.ACCEPTED : FriendshipStatus.REJECTED);
             friendsRepository.save(friendship);
         });
     }
 
-
+    /**
+     * Метод що повертає на сторінку answer-request.html всі не підтверджені запити дружби
+     * @param userId
+     * @return
+     */
     public List<User> findUsersWithFriendRequests(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -82,6 +101,11 @@ public class FriendsService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод що повертає всіх підтерджених друзів залогіненого користувача
+     * @param userId
+     * @return
+     */
     public List<User> getFriends(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -100,8 +124,11 @@ public class FriendsService {
         return friendsList;
     }
 
-
-
+    /**
+     * Метод що підраховує кількість запитів дружби
+     * @param userId
+     * @return
+     */
     public int countIncomingFriendRequests(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -109,8 +136,13 @@ public class FriendsService {
         return friendsRepository.countByFriendAndStatus(user, FriendshipStatus.PENDING);
     }
 
+    /**
+     * Метод що відповідає за збереження зміни в БД
+     * @param friendship
+     */
     public void saveFriendship(Friends friendship) {
         // Логіка для збереження дружби в базі даних
         friendsRepository.save(friendship);
     }
+
 }

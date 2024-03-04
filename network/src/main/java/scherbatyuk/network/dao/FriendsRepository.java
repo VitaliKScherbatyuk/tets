@@ -1,6 +1,7 @@
 package scherbatyuk.network.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -23,5 +24,8 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer>, Crud
     @Query("SELECT f.id FROM Friends f WHERE ((f.user.id = :userId AND f.friend.id = :friendId) OR (f.user.id = :friendId AND f.friend.id = :userId)) AND f.status = :status")
     Integer requestIdByFriendAndUser(@Param("userId") Integer userId, @Param("friendId") Integer friendId, @Param("status") FriendshipStatus status);
 
+    @Modifying
+    @Query("UPDATE Friends f SET f.status = :status WHERE f.id = :friendshipId")
+    void updateStatus(@Param("friendshipId") Integer friendshipId, @Param("status") FriendshipStatus status);
 }
 
