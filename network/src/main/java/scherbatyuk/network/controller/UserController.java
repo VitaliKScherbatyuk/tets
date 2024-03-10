@@ -234,7 +234,7 @@ public class UserController {
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
-        int countMessages = messageService.countReceivedMessages(user.getId());
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
         model.addAttribute("countMessages", countMessages);
         return "home";
     }

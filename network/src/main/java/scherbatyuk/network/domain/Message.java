@@ -33,4 +33,5 @@ public class Message {
 
     private String message;
     private LocalDate createMessage;
+    private boolean readMessage;
 }

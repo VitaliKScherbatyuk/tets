@@ -49,8 +49,6 @@ public class MessageController {
         return "redirect:/home";
     }
 
-
-
     @GetMapping("/viewMessages")
     public String viewMessages(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

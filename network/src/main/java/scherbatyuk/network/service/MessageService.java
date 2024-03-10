@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.MessageRepository;
 import scherbatyuk.network.dao.UserRepository;
+import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
 
@@ -21,6 +22,7 @@ public class MessageService {
     public void saveMessage(Message message) {
         // Логіка для збереження повідомлення в базі даних
         message.setCreateMessage(LocalDate.now()); // Встановлюємо поточну дату
+        message.setReadMessage(false); // Позначаємо повідомлення як непрочитане
 
         // Перевіряємо, чи не null message.getFriend(), щоб уникнути NullPointerException
         if (message.getFriend() != null) {
@@ -39,7 +41,11 @@ public class MessageService {
         return messageRepository.findByUser_IdOrderByCreateMessageDesc(userId);
     }
 
-    public int countReceivedMessages(Integer userId) {
-        return messageRepository.countByUser_Id(userId);
+    public int countIncomingFriendMessage(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
+
+        return messageRepository.countByFriendAndReadMessage(user, false);
     }
+
 }
