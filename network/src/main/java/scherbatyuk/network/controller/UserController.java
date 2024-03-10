@@ -23,6 +23,7 @@ import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 import scherbatyuk.network.service.FriendsService;
+import scherbatyuk.network.service.MessageService;
 import scherbatyuk.network.service.UserService;
 
 import javax.imageio.ImageIO;
@@ -54,6 +55,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MessageService messageService;
     @Autowired
     private FriendsService friendsService;
 
@@ -231,6 +234,8 @@ public class UserController {
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countReceivedMessages(user.getId());
+        model.addAttribute("countMessages", countMessages);
         return "home";
     }
 

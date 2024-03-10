@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Message view</title>
+</head>
+<body>
+
+<h2>Messages:</h2>
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+    <tr>
+        <th>Sender</th>
+        <th>Message</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="message : ${messages}">
+        <td th:text="${message.user.name}"></td>
+        <td th:text="${message.message}"></td>
+        <td th:text="${message.createMessage}"></td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
+</body>
+</html>

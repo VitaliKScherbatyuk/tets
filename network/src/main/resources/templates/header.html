@@ -39,9 +39,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" th:href="@{/viewMessages}">
                     <i class="fa fa-envelope-o">
-                        <span class="badge badge-danger">11</span>
+                        <span class="badge badge-danger" th:text="${countMessages}"></span>
                     </i>
                     Messages
                 </a>
