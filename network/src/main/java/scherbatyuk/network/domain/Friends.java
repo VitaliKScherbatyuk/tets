@@ -34,6 +34,7 @@ public class Friends {
     private FriendshipStatus status;
 
     // Додайте інші необхідні поля або методи, які вам потрібні
+
 }
 
 

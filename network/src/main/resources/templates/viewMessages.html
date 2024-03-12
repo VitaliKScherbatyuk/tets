@@ -19,7 +19,7 @@
     <tr th:each="message : ${messages}">
         <td th:text="${message.user.name}"></td>
         <td th:text="${message.message}"></td>
-        <td th:text="${message.createMessage}"></td>
+        <td th:text="${#temporals.format(message.createMessage, 'dd.MM.yyyy')}"></td>
     </tr>
     </tbody>
 </table>
@@ -27,3 +27,4 @@
 <a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>
+

@@ -33,10 +33,6 @@ public class MessageController {
 
         User friend = userService.findById(userId);
 
-        System.err.println("Повідомлення - " + messageText);
-        System.err.println("авторизований - " + currentUser.getName());
-        System.err.println("прийшов - " + friend.getName());
-
         Message message = new Message();
         message.setUser(currentUser);
         message.setFriend(friend);
@@ -57,9 +53,15 @@ public class MessageController {
 
         List<Message> messages = messageService.getMessagesForUser(currentUser.getId());
 
+        // Оновлення значення readMessage на true для кожного повідомлення
+        for (Message message : messages) {
+            message.setReadMessage(true);
+            messageService.updateMessage(message); // Збереження змін у базу даних
+        }
         model.addAttribute("messages", messages);
 
-        return "view-messages";
+        return "viewMessages";
     }
+
 }
 

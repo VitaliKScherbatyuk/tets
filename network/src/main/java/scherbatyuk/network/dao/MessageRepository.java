@@ -10,9 +10,7 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Integer>, CrudRepository<Message,Integer> {
 
-    List<Message> findByUser_IdOrderByCreateMessageDesc(Integer userId);
-
-    int countByUser_Id(Integer userId);
-
     int countByFriendAndReadMessage(User friend, boolean readMessage);
+
+    List<Message> findByFriend_Id(Integer friendId);
 }

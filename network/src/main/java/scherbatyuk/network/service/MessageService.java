@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.MessageRepository;
 import scherbatyuk.network.dao.UserRepository;
+import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -37,8 +39,8 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    public List<Message> getMessagesForUser(Integer userId) {
-        return messageRepository.findByUser_IdOrderByCreateMessageDesc(userId);
+    public List<Message> getMessagesForUser(Integer friendId) {
+        return messageRepository.findByFriend_Id(friendId);
     }
 
     public int countIncomingFriendMessage(Integer userId) {
@@ -46,6 +48,10 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
         return messageRepository.countByFriendAndReadMessage(user, false);
+    }
+
+    public void updateMessage(Message message) {
+        messageRepository.save(message);
     }
 
 }
