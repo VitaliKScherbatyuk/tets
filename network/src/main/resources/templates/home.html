@@ -39,8 +39,13 @@
         <a th:href="@{'/user/' + ${user.getId()}}">
 
             <div class="card" id="userCard" style="width: 10rem; margin: 5px;">
+
+                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+             <span class="visually-hidden">New alerts</span>
+        </span>
+
                 <img th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
-                <div class="card-body">
+                <div id="border_text" class="card-body">
                     <h5 class="card-title" th:text="${user.name}">Card title</h5>
 <!--                    <p class="card-text">Some quick example text</p>-->
                 </div>

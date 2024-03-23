@@ -21,6 +21,10 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
+    /**
+     * Сервіс для збереження повідомлення в БД
+     * @param message
+     */
     public void saveMessage(Message message) {
         // Логіка для збереження повідомлення в базі даних
         message.setCreateMessage(LocalDate.now()); // Встановлюємо поточну дату
@@ -39,10 +43,20 @@ public class MessageService {
         messageRepository.save(message);
     }
 
+    /**
+     * Сервіс для виведення всіх повідомлень авторизованого користувача
+     * @param friendId
+     * @return
+     */
     public List<Message> getMessagesForUser(Integer friendId) {
         return messageRepository.findByFriend_Id(friendId);
     }
 
+    /**
+     * Сервер для підрахунку кількості не прочитаних повідомлень у авторизованого користувача
+     * @param userId
+     * @return
+     */
     public int countIncomingFriendMessage(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
@@ -50,8 +64,11 @@ public class MessageService {
         return messageRepository.countByFriendAndReadMessage(user, false);
     }
 
+    /**
+     * Сервіс для оновлення збереженого повідомлення в БД
+     * @param message
+     */
     public void updateMessage(Message message) {
         messageRepository.save(message);
     }
-
 }

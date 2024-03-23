@@ -23,6 +23,13 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    /**
+     * Контроллер для збереження нового повідомлення в БД.
+     * @param userId
+     * @param messageText
+     * @param model
+     * @return
+     */
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestParam("userId") Integer userId,
                               @RequestParam("messageText") String messageText,
@@ -45,6 +52,11 @@ public class MessageController {
         return "redirect:/home";
     }
 
+    /**
+     * Контроллер для відображення всіх повідомлень у авторизованого користувача
+     * @param model
+     * @return
+     */
     @GetMapping("/viewMessages")
     public String viewMessages(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

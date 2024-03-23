@@ -10,3 +10,6 @@ h5{
 #userCard, img{
    border-radius: 15px;
 }
+#border_text{
+    padding: 0.25rem;
+}
