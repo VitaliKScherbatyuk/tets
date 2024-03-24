@@ -13,6 +13,7 @@ import scherbatyuk.network.service.PhotoAlbumService;
 import scherbatyuk.network.service.PhotoService;
 import scherbatyuk.network.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -42,13 +43,6 @@ public class PhotoAlbumController {
 
         photoAlbumService.createAlbum(albumName, currentUser);
         return "photoSetting";
-    }
-
-    @PostMapping("/editAlbum")
-    public String editAlbum(@RequestParam("id") Integer id,
-                            @RequestParam("newAlbumName") String newAlbumName) {
-        photoAlbumService.editAlbum(id, newAlbumName);
-        return "redirect:/albums"; // Перенаправлення на сторінку з альбомами після редагування
     }
 
     @GetMapping("/delete/{id}")
@@ -83,4 +77,17 @@ public class PhotoAlbumController {
         return "redirect:/albums";
     }
 
+    @GetMapping("photoGallery")
+    public String photoGallery(Model model){
+        List<PhotoAlbum> albums = photoAlbumService.getAllAlbums();
+        model.addAttribute("albums", albums);
+        return "photoGallery";
+    }
+
+    @GetMapping("/photoGalleryDetails/{id}")
+    public String photoGalleryDetails(@PathVariable Integer id, Model model) {
+        model.addAttribute("id", id);
+        model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id)); // Assuming you have a method to retrieve photos by album id
+        return "photoGalleryDetails";
+    }
 }

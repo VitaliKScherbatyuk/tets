@@ -46,14 +46,15 @@ public class PhotoService {
     }
 
 
-    private String encodeImage(MultipartFile image) {
+    protected String encodeImage(MultipartFile image) {
         String base64Image = "";
         try {
             byte[] imageBytes = image.getBytes();
             base64Image = Base64.getEncoder().encodeToString(imageBytes);
         } catch (IOException e) {
             e.printStackTrace();
-            // Обробити виняток, якщо він виникне
+            System.err.println("Error encoding image: " + e.getMessage());
+            return null; // поверніть null або встановіть base64Image в якесь значення за замовчуванням
         }
         return base64Image;
     }

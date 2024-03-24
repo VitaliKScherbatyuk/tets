@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.dao.UserRepository;
+import scherbatyuk.network.domain.Photo;
+import scherbatyuk.network.domain.PhotoAlbum;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 
@@ -25,6 +27,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * service class that provides methods for interacting with the User entity in the database.
@@ -36,6 +39,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PhotoService photoService;
 
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -93,7 +98,6 @@ public class UserService {
                 userRepository.save(userUpdate);
                 System.out.println("User updated successfully: " + userUpdate.getId());
             } catch (Exception e) {
-                e.printStackTrace();
                 System.err.println("Error updating user: " + userUpdate.getId());
             }
         }
@@ -106,5 +110,16 @@ public class UserService {
     public User getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+    }
+
+    public void uploadImage(MultipartFile image, String userEmail) {
+
+        User user = findByEmail(userEmail);
+        if (user != null) {
+            String encodedImage =  photoService.encodeImage(image);
+            user.setImageData(encodedImage);
+
+            userRepository.save(user);
+        }
     }
 }

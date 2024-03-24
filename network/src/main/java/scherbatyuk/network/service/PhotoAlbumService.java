@@ -33,14 +33,6 @@ public class PhotoAlbumService {
         photoAlbumRepository.save(photoAlbum);
     }
 
-    public void editAlbum(Integer albumId, String newAlbumName) {
-        Optional<PhotoAlbum> photoAlbumOptional = photoAlbumRepository.findById(albumId);
-        photoAlbumOptional.ifPresent(photoAlbum -> {
-            photoAlbum.setNameAlbum(newAlbumName);
-            photoAlbumRepository.save(photoAlbum);
-        });
-    }
-
     public PhotoAlbum findById(int id){
         return photoAlbumRepository.findById(id).orElse(null);
     }
@@ -48,5 +40,4 @@ public class PhotoAlbumService {
     public void deleteById(Integer id){
         photoAlbumRepository.deleteById(id);
     }
-
 }

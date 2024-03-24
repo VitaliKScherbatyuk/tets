@@ -24,6 +24,7 @@ import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.MessageService;
+import scherbatyuk.network.service.PhotoService;
 import scherbatyuk.network.service.UserService;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,8 @@ import javax.validation.Valid;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -167,42 +170,44 @@ public class UserController {
     }
 
     @GetMapping("/profileUpdate")
-    public String showProfileUpdatePage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
+    public String showProfileUpdatePage(Model model, Principal principal) {
+        String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
-        Integer userId = user.getId();
-        model.addAttribute("userId", userId);
+
+        model.addAttribute("user", user);
         return "profileUpdate";
     }
 
     @PostMapping("/profileUpdate")
-    public String updateProfile(Model model, @RequestParam String city, @RequestParam String hobby, @RequestParam String name,
-                                @RequestParam Integer age, @RequestParam String country
-    ) throws IOException {
-        // Отримати користувача з бази даних за email
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = auth.getName();
-        User user = userService.findByEmail(userEmail);
-        logger.info("Визначено користувача" + user.getName() + " = " + user.getEmail());
-
-        user.setCity(city);
-        user.setHobby(hobby);
-        user.setName(name);
-        user.setAge(age);
-        user.setCountry(country);
-        user.setCreateData(user.getCreateData());
-
-        logger.info("Буде завантажуватись зображення");
-//            user.setImageData(Base64.getEncoder().encodeToString(imageFile.getBytes()));
-//        user.setImageData(imageFile);
-        logger.info("Взято нове зображення");
-
-
-        userService.updateProfile(Collections.singletonList(user));
-
+    public String updateProfile(@ModelAttribute("user") User updatedUser, Principal principal, Model model) {
+        String userEmail = principal.getName();
+        User existingUser = userService.findByEmail(userEmail);
+        if (existingUser != null) {
+            existingUser.setName(updatedUser.getName());
+            existingUser.setAge(updatedUser.getAge());
+            existingUser.setCountry(updatedUser.getCountry());
+            existingUser.setCity(updatedUser.getCity());
+            existingUser.setHobby(updatedUser.getHobby());
+            try {
+                userService.updateProfile(Collections.singletonList(existingUser));
+            } catch (Exception e) {
+                model.addAttribute("error", "Your profile is nit update");
+            }
+        }
         return "redirect:/home";
     }
+
+    @PostMapping("/profileImageUpdate")
+    public String updateProfileImage(@RequestParam("imageData") MultipartFile[] imageData, Principal principal) {
+        String userEmail = principal.getName();
+
+        for (MultipartFile image : imageData) {
+            userService.uploadImage(image, userEmail); // передайте зображення, а не масив зображень
+        }
+        return "redirect:/home";
+    }
+
+
 
     /**
      * method is responsible for processing HTTP GET requests to the URL path "/home"
