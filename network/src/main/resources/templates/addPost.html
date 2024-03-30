@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+</head>
+<body>
+
+<form action="/savePost" method="post" enctype="multipart/form-data">
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" multiple><br>
+
+    <label for="postNews">Post News:</label>
+    <input type="text" id="postNews" name="postNews"><br>
+
+    <label for="internetLink">Internet Link:</label>
+    <input type="text" id="internetLink" name="internetLink"><br>
+
+    <label for="hashTag">Hash Tag:</label>
+    <input type="text" id="hashTag" name="hashTag"><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

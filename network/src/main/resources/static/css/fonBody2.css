@@ -1,0 +1,10 @@
+body{
+    background-image: url('/image/fon30.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Зафіксувати фон при скролінгу */
+
+    /* background-color: rgba(255, 255, 255, 0.8);  0.95 - це прозорість від 0 (повністю прозорий) до 1 (непрозорий) */
+     /*background-blend-mode: lighten; *//* Це може покращити ефект прозорості, враховуючи фоновий зображення */body
+
+}

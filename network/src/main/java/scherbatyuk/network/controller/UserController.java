@@ -20,12 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.Friends;
+import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
-import scherbatyuk.network.service.FriendsService;
-import scherbatyuk.network.service.MessageService;
-import scherbatyuk.network.service.PhotoService;
-import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -35,10 +33,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -62,6 +57,8 @@ public class UserController {
     private MessageService messageService;
     @Autowired
     private FriendsService friendsService;
+    @Autowired
+    private PostNewsService postNewsService;
 
     @GetMapping("/")
     public String showLoginForm() {
@@ -222,6 +219,12 @@ public class UserController {
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
         UserRole role = user.getRole();
+
+        List<User> friends = friendsService.getFriends(user.getId()); // отримати список друзів користувача
+        List<PostNews> posts = postNewsService.getPostsByUsers(friends); // отримати пости друзів
+        posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed()); // сортувати по даті
+
+        model.addAttribute("posts", posts); // додати пости в модель
 
         List<User> userList = userService.getAllUser();
         model.addAttribute("users", userList);

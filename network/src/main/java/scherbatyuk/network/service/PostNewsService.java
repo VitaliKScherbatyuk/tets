@@ -1,0 +1,47 @@
+package scherbatyuk.network.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import scherbatyuk.network.dao.PostNewsRepository;
+import scherbatyuk.network.domain.PostNews;
+import scherbatyuk.network.domain.User;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class PostNewsService {
+    @Autowired
+    private PostNewsRepository newsRepository;
+    @Autowired
+    private PhotoService photoService;
+
+    public void createPost(MultipartFile image, String postNews, String internetLink, String hashTag, User user) {
+
+        PostNews post = new PostNews();
+        post.setAddPostNews(LocalDateTime.now());
+        post.setPostNews(postNews);
+        post.setUser(user);
+        post.setInternetLink(internetLink);
+        post.setHashTag(hashTag);
+        String encodedImage = photoService.encodeImage(image);
+        post.setEncodedImage(encodedImage);
+
+        newsRepository.save(post);
+
+    }
+
+    public List<PostNews> getPostsByUsers(List<User> users) {
+        List<PostNews> posts = new ArrayList<>();
+        for (User user : users) {
+            List<PostNews> userPosts = newsRepository.findByUserOrderByAddPostNewsDesc(user);
+            posts.addAll(userPosts);
+        }
+        return posts;
+    }
+
+}

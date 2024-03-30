@@ -61,29 +61,41 @@
                 </a>
             </li>
         </ul>
+    <div>
+        <nav class="navbar bg-light" style="border-radius: 10px">
+            <div class="container-fluid">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+
     </div>
 
     <!-- Фото профілю -->
-    <div class="profile-container">
-        <img id="profileImage" class="iconProf" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
-        <div class="profile-menu" id="profileMenu">
-            <ul>
-                <div>
-                    <h5>Profile</h5>
-                    <p th:text="'Name: ' + ${user.name}"></p>
-                    <p th:text="'Age: ' + ${age}"></p>
-                    <p th:text="'Country: ' + ${country}"></p>
-                    <p th:text="'Hobby: ' + ${hobby}"></p>
-                </div>
+<!--    <div class="profile-container">-->
+<!--        <img id="profileImage" class="iconProf" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">-->
+<!--        <div class="profile-menu" id="profileMenu">-->
+<!--            <ul>-->
+<!--                <div>-->
+<!--                    <h5>Profile</h5>-->
+<!--                    <p th:text="'Name: ' + ${user.name}"></p>-->
+<!--                    <p th:text="'Age: ' + ${age}"></p>-->
+<!--                    <p th:text="'Country: ' + ${country}"></p>-->
+<!--                    <p th:text="'Hobby: ' + ${hobby}"></p>-->
+<!--                </div>-->
 
-                <li><a th:href="@{/profileUpdate}">Update profile</a></li>
-                <li><a th:href="@{/users}">Users</a></li>
-                <li><a th:href="@{/friends}">Friends</a></li>
-                <li><a th:href="@{/photoSetting}">Photo edit</a></li>
-                <li><a th:href="@{/photoGallery}">Photo gallery</a></li>
-            </ul>
-        </div>
-    </div>
+<!--                <li><a th:href="@{/profileUpdate}">Update profile</a></li>-->
+<!--                <li><a th:href="@{/users}">Users</a></li>-->
+<!--                <li><a th:href="@{/friends}">Friends</a></li>-->
+<!--                <li><a th:href="@{/photoSetting}">Photo edit</a></li>-->
+<!--                <li><a th:href="@{/photoGallery}">Photo gallery</a></li>-->
+<!--                <li><a th:href="@{/addPost}">Add post</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
 </nav>
 
 </body>

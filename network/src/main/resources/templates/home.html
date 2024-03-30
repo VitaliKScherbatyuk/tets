@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
@@ -9,7 +9,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/home.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/fonBody.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
 </head>
 <body>
 
@@ -18,40 +18,86 @@
 </header>
 
 <section>
-    <h4>Friends:</h4>
-<!--    <div class="d-flex col-xl-10">-->
-<!--        <div th:each="friend : ${friendsList}">-->
-<!--            <a th:href="@{'/user/' + ${friend.getUser().getId()}}">-->
-<!--                <div class="card" id="userCard" style="width: 10rem; margin: 5px;">-->
-<!--                    <img th:src="${'data:image/jpeg;base64,' + friend.getUser().getImageData()}" alt="User Image">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title" th:text="${friend.getNameFriends()}">Card title</h5>-->
-<!--                        &lt;!&ndash; Додаткова інформація про друга, якщо потрібно &ndash;&gt;-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </a>-->
-<!--        </div>-->
-<!--    </div>-->
-</section>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-10">
 
-<div class="d-flex col-xl-10">
-    <div th:each="user : ${users}">
-        <a th:href="@{'/user/' + ${user.getId()}}">
+                <div id="box_header_left" th:each="post : ${posts}" class="card" style="width: 40rem; margin: 10px auto">
+                    <img th:src="${'data:image/jpeg;base64,' + post.encodedImage}" class="card-img-top"
+                         alt="Post image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${post.postNews}">Post title</h5>
+                        <!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:text="${post.internetLink}">Internet link</li>
+                        <!--            <li class="list-group-item" th:text="${post.hashTag}">Hash tag</li>-->
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
 
-            <div class="card" id="userCard" style="width: 10rem; margin: 5px;">
+            </div>
+            <!-- Профіль -->
+            <div class="col-2" style="margin-top: 10px;">
 
-                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-             <span class="visually-hidden">New alerts</span>
-        </span>
+                <div id="box_header_right" class="card" style="width: 14rem; border-radius: 15px;">
+                    <img class="card-img-top" id="imageProfile" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
+                    <div class="card-body">
 
-                <img th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
-                <div id="border_text" class="card-body">
-                    <h5 class="card-title" th:text="${user.name}">Card title</h5>
-<!--                    <p class="card-text">Some quick example text</p>-->
+                        <div class="card" style="width: 12rem;">
+                            <ul class="list-group list-group-flush link">
+
+                                <li class="list-group-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            Profile
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#"><p th:text="'Name: ' + ${user.name}"></p></a></li>
+                                            <li><a class="dropdown-item" href="#"><p th:text="'Age: ' + ${age}"></p></a></li>
+                                            <li><a class="dropdown-item" href="#"><p th:text="'Country: ' + ${country}"></p></a></li>
+                                            <li><a class="dropdown-item" href="#"><p th:text="'Hobby: ' + ${hobby}"></p></a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            Edit Profile
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" th:href="@{/profileUpdate}">Update</a></li>
+                                            <li><a class="dropdown-item" th:href="@{/photoSetting}">Photo edit</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="sizeLi1"><a th:href="@{/photoGallery}">Photo gallery</a></li>
+                            </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="sizeLi2"><a th:href="@{/friends}">Friends</a></li>
+                            </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="sizeLi3"><a th:href="@{/addPost}">Add post</a></li>
+                            </ul>
+                        </div>
+
+                        <!--                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                    </div>
+
                 </div>
             </div>
-        </a>
+        </div>
     </div>
-</div>
+</section>
+
 </body>
 </html>
