@@ -12,17 +12,18 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/js/mdb.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
 
 </head>
 <body>
-
+<h3 style="text-align: center; color: white;">Photo gallery</h3>
 <div class="d-flex col-xl-10">
     <div th:each="album : ${albums}">
-        <div class="card" id="userCard" style="width: 10rem; margin: 10px;">
+        <div class="card" id="userCard" style="width: 10rem; margin: 15px; border-radius: 10px">
 
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header" style="text-align: center;">
                 <div class="btn-group">
-                    <h5 class="card-title" style="margin: 0 10px; align-text: centre" th:text="${album.getNameAlbum()}">
+                    <h5 class="card-title" style="margin: 0 auto;" th:text="${album.getNameAlbum()}">
                         Card title</h5>
                 </div>
             </div>

@@ -50,35 +50,36 @@
                         <div class="card" style="width: 12rem;">
                             <ul class="list-group list-group-flush link">
 
-                                <li class="list-group-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                            Profile
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#"><p th:text="'Name: ' + ${user.name}"></p></a></li>
-                                            <li><a class="dropdown-item" href="#"><p th:text="'Age: ' + ${age}"></p></a></li>
-                                            <li><a class="dropdown-item" href="#"><p th:text="'Country: ' + ${country}"></p></a></li>
-                                            <li><a class="dropdown-item" href="#"><p th:text="'Hobby: ' + ${hobby}"></p></a></li>
-                                        </ul>
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                Profile
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <ul>
+                                                <li><p th:text="'Name: ' + ${user.name}"></p></li>
+                                                <li><p th:text="'Age: ' + ${age}"></p></li>
+                                                <li><p th:text="'Country: ' + ${country}"></li>
+                                                <li><p th:text="'Hobby: ' + ${hobby}"></p></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </li>
-
-                                <li class="list-group-item">
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                            Edit Profile
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="@{/profileUpdate}">Update</a></li>
-                                            <li><a class="dropdown-item" th:href="@{/photoSetting}">Photo edit</a></li>
-                                        </ul>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingTwo">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                Update profile
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                            <a class="dropdown-item" th:href="@{/profileUpdate}">Update</a>
+                                            <a class="dropdown-item" th:href="@{/photoSetting}">Photo edit</a>
+                                        </div>
                                     </div>
-                                </li>
-
+                                </div>
                             </ul>
+
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi1"><a th:href="@{/photoGallery}">Photo gallery</a></li>
                             </ul>
@@ -88,9 +89,25 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi3"><a th:href="@{/addPost}">Add post</a></li>
                             </ul>
-                        </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="sizeLi4">
 
-                        <!--                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+
+                                    <button class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Support</button>
+                                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+                                        <div class="offcanvas-header">
+                                            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                        </div>
+                                        <div class="offcanvas-body small">
+                                            ...
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
