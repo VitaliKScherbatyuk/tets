@@ -45,7 +45,7 @@ public class MessageController {
         message.setUser(currentUser);
         message.setFriend(friend);
         message.setMessage(messageText);
-        message.setCreateMessage(LocalDate.now());
+        message.setCreateMessage(LocalDateTime.now());
 
         // Збереження повідомлення
         messageService.saveMessage(message);

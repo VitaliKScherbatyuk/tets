@@ -10,6 +10,7 @@ import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class MessageService {
      */
     public void saveMessage(Message message) {
         // Логіка для збереження повідомлення в базі даних
-        message.setCreateMessage(LocalDate.now()); // Встановлюємо поточну дату
+        message.setCreateMessage(LocalDateTime.now()); // Встановлюємо поточну дату
         message.setReadMessage(false); // Позначаємо повідомлення як непрочитане
 
         // Перевіряємо, чи не null message.getFriend(), щоб уникнути NullPointerException

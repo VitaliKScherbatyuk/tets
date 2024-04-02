@@ -12,20 +12,38 @@
 </head>
 <body>
 <h2 style="text-align: center; color: white;">Friends</h2>
-<div class="d-flex col-xl-10" style="border-radius: 15px;">
-    <div th:each="user : ${users}">
-        <a th:href="@{'/user/' + ${user.getId()}}">
+<div class="row" style="margin: 20px">
+    <div class="col-xl-4 col-lg-5 mb-4">
+        <div th:each="user : ${users}">
+            <a th:href="@{'/user/' + ${user.getId()}}">
+                <div class="card">
 
-            <div class="card" id="userCard" style="width: 10rem; margin: 5px;">
-                <img style="height: 150px; border-radius: 15px;" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
-                <div class="card-body">
-                    <h5 class="card-title" style="text-align: center;" th:text="${user.name}">Card title</h5>
-                    <!--  <p class="card-text">Some quick example text</p>-->
+                     <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+    <span class="visually-hidden">New alerts</span>
+  </span>
+                    <!--                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"-->
+                    <!--                          th:classappend="${user.isOnline() ? 'online' : 'offline'}"></span>-->
+
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <img
+                                    th:src="${'data:image/jpeg;base64,' + user.imageData}"
+                                    alt="User Image"
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle"
+                            />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1" th:text="${user.name}">John Doe</p>
+                                <p class="text-muted mb-0" th:text="${user.email}">john.doe@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
-</div><br>
+</div>
+<br>
 <a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>

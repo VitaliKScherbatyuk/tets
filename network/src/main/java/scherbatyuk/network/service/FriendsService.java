@@ -8,6 +8,8 @@ import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -144,5 +146,22 @@ public class FriendsService {
         // Логіка для збереження дружби в базі даних
         friendsRepository.save(friendship);
     }
+
+    private boolean isUserOnline(User user) {
+        // В цьому прикладі, якщо користувач має останню активність менше ніж 5 хвилин тому, ми вважаємо його "онлайн"
+        // Ви можете змінити цю логіку відповідно до вашого варіанту реалізації
+
+        // Отримати час останньої активності користувача (це може бути власне поле в об'єкті User або інші дані про активність)
+        LocalDateTime lastActivityTime = user.getLastActivityTime(); // Припустимо, що це поле дати і часу останньої активності користувача
+
+        // Порівняти час останньої активності з поточним часом
+        LocalDateTime currentTime = LocalDateTime.now();
+        Duration duration = Duration.between(lastActivityTime, currentTime);
+
+        // Перевірити, чи була активність менше ніж 5 хвилин тому
+        // Якщо так, повернути true, що вказує на "онлайн" статус, в іншому випадку, повернути false
+        return duration.toMinutes() < 5; // Залежно від вашого варіанту, ви можете вибрати інтервал часу для визначення "онлайн" статусу
+    }
+
 
 }

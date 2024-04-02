@@ -33,7 +33,7 @@ public class Message {
     private User friend;
 
     private String message;
-    private LocalDate createMessage;
+    private LocalDateTime createMessage;
     private boolean readMessage;
 
 }

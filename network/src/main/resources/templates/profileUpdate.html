@@ -3,46 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>My Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/profileUpdate.css">
+
 </head>
 <body>
 
-<form th:object="${user}" method="post"  th:action="@{/profileUpdate}">
+<div class="container text-center boxUpdate">
+    <div class="row">
+        <div class="col-6">
+            <form th:object="${user}" method="post"  th:action="@{/profileUpdate}">
+                <h3>Update Profile</h3>
+                <label>
+                    <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
+                </label>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
 
-    <label>
-        <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
-    </label>
-    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
+                <label>
+                    <input type="number" class="form-control" placeholder="Age" th:field="*{age}" required>
+                </label>
+                <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
 
-    <label>
-        <input type="number" class="form-control" placeholder="Age" th:field="*{age}" required>
-    </label>
-    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
+                <label>
+                    <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
+                </label>
+                <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
 
-    <label>
-        <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
-    </label>
-    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
+                <label>
+                    <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
+                </label>
+                <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>
 
-    <label>
-        <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
-    </label>
-    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>
+                <label>
+                    <input type="text" class="form-control" placeholder="Hobby" th:field="*{hobby}" required>
+                </label>
+                <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
 
-    <label>
-        <input type="text" class="form-control" placeholder="Hobby" th:field="*{hobby}" required>
-    </label>
-    <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
-
-    <button class="btn btn-lg btn-primary btn-block" type="submit">
-        Update Profile
-    </button>
-</form>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Update Profile
+                </button>
+            </form>
+        </div>
+        <div class="col-6">
+            <form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
+                <h3>Update Photo</h3>
+                <input class="form-control" type="file" name="imageData" multiple>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Update photo</button>
+            </form>
+        </div>
+    </div>
+</div>
 <br>
-<h2>Update Photo</h2>
-<form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
-    <input type="file" name="imageData" multiple>
-    <button type="submit">Update photo</button>
-</form>
-
+<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>

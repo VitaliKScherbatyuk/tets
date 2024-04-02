@@ -116,10 +116,14 @@ public class UserService {
 
         User user = findByEmail(userEmail);
         if (user != null) {
-            String encodedImage =  photoService.encodeImage(image);
+            String encodedImage = photoService.encodeImage(image);
             user.setImageData(encodedImage);
+
+            // Оновіть час активності користувача
+            user.setLastActivityOnUpdate();
 
             userRepository.save(user);
         }
     }
+
 }

@@ -22,7 +22,8 @@
         <div class="row">
             <div class="col-10">
 
-                <div id="box_header_left" th:each="post : ${posts}" class="card" style="width: 40rem; margin: 10px auto">
+                <div id="box_header_left" th:each="post : ${posts}" class="card"
+                     style="width: 40rem; margin: 10px auto">
                     <img th:src="${'data:image/jpeg;base64,' + post.encodedImage}" class="card-img-top"
                          alt="Post image">
                     <div class="card-body">
@@ -44,7 +45,8 @@
             <div class="col-2" style="margin-top: 10px;">
 
                 <div id="box_header_right" class="card" style="width: 14rem; border-radius: 15px;">
-                    <img class="card-img-top" id="imageProfile" th:src="${'data:image/jpeg;base64,' + user.imageData}" alt="User Image">
+                    <img class="card-img-top" id="imageProfile" th:src="${'data:image/jpeg;base64,' + user.imageData}"
+                         alt="User Image">
                     <div class="card-body">
 
                         <div class="card" style="width: 12rem;">
@@ -53,11 +55,14 @@
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="flush-headingOne">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                    aria-expanded="false" aria-controls="flush-collapseOne">
                                                 Profile
                                             </button>
                                         </h2>
-                                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                             <ul>
                                                 <li><p th:text="'Name: ' + ${user.name}"></p></li>
                                                 <li><p th:text="'Age: ' + ${age}"></p></li>
@@ -68,11 +73,14 @@
                                     </div>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="flush-headingTwo">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
+                                                    aria-expanded="false" aria-controls="flush-collapseTwo">
                                                 Update profile
                                             </button>
                                         </h2>
-                                        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                             aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                                             <a class="dropdown-item" th:href="@{/profileUpdate}">Update</a>
                                             <a class="dropdown-item" th:href="@{/photoSetting}">Photo edit</a>
                                         </div>
@@ -81,7 +89,8 @@
                             </ul>
 
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="sizeLi1"><a th:href="@{/photoGallery}">Photo gallery</a></li>
+                                <li class="list-group-item" id="sizeLi1"><a th:href="@{/photoGallery}">Photo gallery</a>
+                                </li>
                             </ul>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi2"><a th:href="@{/friends}">Friends</a></li>
@@ -92,24 +101,36 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi4">
 
+                                    <button class="btn btn-light" type="button" data-bs-toggle="offcanvas"
+                                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Support
+                                    </button>
 
-                                    <button class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Support</button>
-                                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
-                                        <div class="offcanvas-header">
-                                            <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                        </div>
-                                        <div class="offcanvas-body small">
-                                            ...
+                                    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
+                                         aria-labelledby="offcanvasBottomLabel">
+                                        <div class="offcanvas-body">
+                                            <footer class="bg-body-tertiary text-center text-lg-start position-relative">
+                                                <!-- Кнопка закриття -->
+                                                <button type="button"
+                                                        class="btn-close position-absolute top-0 end-0 m-2"
+                                                        data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                <!-- Copyright -->
+                                                <div class="text-center p-3"
+                                                     style="background-color: rgba(0, 0, 0, 0.05);">
+                                                    © 2024 Project by:
+                                                    <a class="text-black"
+                                                       href="https://www.linkedin.com/in/v-s-485101240/"
+                                                       target="_blank">V.Scherbatyuk</a>
+                                                </div>
+                                                <!-- Copyright -->
+                                            </footer>
+                                            <p style="margin-top: 20px">vitaliktuhata@gmail.com</p>
                                         </div>
                                     </div>
-
 
                                 </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

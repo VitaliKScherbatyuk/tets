@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Array;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,8 +51,7 @@ public class User{
     private UserRole role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Friends> friendsList;
-
-
+    private LocalDateTime lastActivityTime;
 
     public User(User user) {
         this.id = user.id;
@@ -65,6 +65,18 @@ public class User{
         this.password = user.password;
         this.createData = user.createData;
         this.role = user.role;
+    }
+
+    // Анотація PreUpdate викликається перед оновленням об'єкта у базі даних
+    @PreUpdate
+    public void setLastActivityOnUpdate() {
+        this.lastActivityTime = LocalDateTime.now();
+    }
+
+    // Анотація PrePersist викликається перед збереженням нового об'єкта у базі даних
+    @PrePersist
+    public void setLastActivityOnCreate() {
+        this.lastActivityTime = LocalDateTime.now();
     }
 
     @Override

@@ -12,12 +12,13 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/js/mdb.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
 
 </head>
 <body>
 
-<h2>Photo Album</h2>
-<div class="d-flex col-xl-10">
+<h3 style="text-align: center; color: white;">Photo Album</h3>
+<div class="d-flex col-xl-10" style="margin: 10px">
     <div th:each="album : ${albums}">
         <div class="card" id="userCard" style="width: 10rem; margin: 10px;">
             <a class="position-absolute top-0 start-100 translate-middle p-1" th:href="@{'/delete/' + ${album.getId()}}"><i class="fas fa-trash"></i></a>
@@ -36,14 +37,18 @@
     </div>
 </div>
 
-<br>
-<h2>Create Photo Album</h2>
-<form th:action="@{/createAlbum}" method="post">
-    <label for="albumName">Album Name:</label>
-    <input type="text" id="albumName" name="albumName" required>
-    <button type="submit">Create Album</button>
-</form>
-
+<div class="container text-center">
+    <div class="row">
+        <div class="col-6" style="margin: 5px auto">
+            <h3 style="text-align: center; color: white;">Create Photo Album</h3>
+            <form th:action="@{/createAlbum}" method="post">
+                <label for="albumName" style="margin: 5px 0; color: white">Album Name:</label>
+                <input class="form-control" style="margin: 5px 0" type="text" id="albumName" name="albumName" required>
+                <button class="btn btn-lg btn-primary btn-block" style="margin: 5px 0" type="submit">Create Album</button>
+            </form>
+        </div>
+    </div>
+</div>
 <br/>
 <a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
