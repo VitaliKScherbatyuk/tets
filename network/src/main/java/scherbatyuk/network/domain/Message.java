@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -36,4 +38,10 @@ public class Message {
     private LocalDateTime createMessage;
     private boolean readMessage;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_message_id")
+    private Message parentMessage;
+
+    @OneToMany(mappedBy = "parentMessage")
+    private List<Message> replies = new ArrayList<>();
 }

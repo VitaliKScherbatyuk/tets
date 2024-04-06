@@ -19,7 +19,12 @@
 
 </head>
 <body>
-<h3 style="text-align: center; color: white;">Photos</h3>
+
+<header>
+    <main th:replace="header"></main>
+</header>
+
+<h4 style="text-align: center; color: white;">Photos</h4>
 <div class="container d-flex">
     <div class="col" style="margin: 5px">
         <!-- Виправлений HTML-шаблон для видалення фото -->
@@ -34,7 +39,5 @@
 
     </div>
 </div>
-<br>
-<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>

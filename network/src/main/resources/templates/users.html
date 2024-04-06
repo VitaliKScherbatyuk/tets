@@ -13,7 +13,11 @@
 </head>
 <body>
 
-<h2>All registered users:</h2>
+<header>
+    <main th:replace="header"></main>
+</header>
+
+<h4>All registered users:</h4>
 <table class="table align-middle mb-0 bg-white">
     <thead class="bg-light">
     <tr>
@@ -46,8 +50,5 @@
     </tr>
     </tbody>
 </table>
-<br>
-<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
-
 </body>
 </html>

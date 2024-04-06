@@ -63,7 +63,11 @@
 </head>
 <body>
 
-<h3>Photos</h3>
+<header>
+    <main th:replace="header"></main>
+</header>
+
+<h4>Photos</h4>
 <div class="container d-flex">
         <div class="col" style="margin: 5px">
             <!-- Виправлений HTML-шаблон для видалення фото -->
@@ -89,7 +93,5 @@
     <input type="hidden" name="id" th:value="${id}">
     <button type="submit">Save photo</button>
 </form>
-<br>
-<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>

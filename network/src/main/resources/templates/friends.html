@@ -11,7 +11,12 @@
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
 </head>
 <body>
-<h2 style="text-align: center; color: white;">Friends</h2>
+
+<header>
+    <main th:replace="header"></main>
+</header>
+
+<h4 style="text-align: center; color: white;">Friends</h4>
 <div class="row" style="margin: 20px">
     <div class="col-xl-4 col-lg-5 mb-4">
         <div th:each="user : ${users}">
@@ -43,7 +48,5 @@
         </div>
     </div>
 </div>
-<br>
-<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
 </body>
 </html>

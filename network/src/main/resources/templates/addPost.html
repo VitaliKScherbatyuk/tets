@@ -13,11 +13,16 @@
     <link rel="stylesheet" type="text/css" href="../static/css/addPost.css">
 </head>
 <body>
+
+<header>
+    <main th:replace="header"></main>
+</header>
+
 <div class="container text-center">
     <div class="row">
         <div class="col-4 boxAddPostMain">
             <form action="/savePost" method="post" enctype="multipart/form-data">
-                <h3>Add post</h3>
+                <h4>Add post</h4>
                 <label for="image">Image:</label>
                 <input class="form-control" type="file" id="image" name="image" multiple>
 
@@ -34,8 +39,5 @@
         </div>
     </div>
 </div>
-<br/>
-<a th:href="@{'/home'}" class="btn btn-primary">Back to Home</a>
-
 </body>
 </html>

@@ -72,4 +72,14 @@ public class MessageService {
     public void updateMessage(Message message) {
         messageRepository.save(message);
     }
+
+    public boolean isReply(Integer userId, Integer messageId) {
+        // Перевіряємо, чи є у базі даних відповідь від користувача на це повідомлення
+        return messageRepository.existsByUser_IdAndId(userId, messageId);
+    }
+
+    public Message findById(Integer messageId) {
+        return messageRepository.findById(messageId)
+                .orElse(null);
+    }
 }

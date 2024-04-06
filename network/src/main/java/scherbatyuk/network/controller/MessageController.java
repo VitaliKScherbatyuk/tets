@@ -76,5 +76,29 @@ public class MessageController {
         return "viewMessages";
     }
 
+
+    @PostMapping("/replyMessage")
+    public String replyMessage(@RequestParam("messageId") Integer messageId,
+                               @RequestParam("replyText") String replyText,
+                               Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User currentUser = userService.findByEmail(userEmail);
+
+        Message originalMessage = messageService.findById(messageId);
+
+        // Створюємо нове повідомлення з відповіддю
+        Message reply = new Message();
+        reply.setUser(currentUser);
+        reply.setFriend(originalMessage.getUser()); // Отримувач відповіді - автор початкового повідомлення
+        reply.setMessage(replyText);
+        reply.setCreateMessage(LocalDateTime.now());
+        reply.setParentMessage(originalMessage); // Встановлюємо батьківське повідомлення для відповіді
+        // Збереження відповіді
+        messageService.saveMessage(reply);
+
+        return "redirect:/viewMessages";
+    }
+
 }
 

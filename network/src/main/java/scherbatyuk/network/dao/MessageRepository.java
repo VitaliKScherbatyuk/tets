@@ -13,4 +13,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer>, Crud
     int countByFriendAndReadMessage(User friend, boolean readMessage);
 
     List<Message> findByFriend_Id(Integer friendId);
+
+    boolean existsByUser_IdAndId(Integer userId, Integer messageId);
+
 }
