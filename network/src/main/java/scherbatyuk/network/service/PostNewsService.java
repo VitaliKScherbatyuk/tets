@@ -20,13 +20,12 @@ public class PostNewsService {
     @Autowired
     private PhotoService photoService;
 
-    public void createPost(MultipartFile image, String postNews, String internetLink, String hashTag, User user) {
+    public void createPost(MultipartFile image, String postNews, String hashTag, User user) {
 
         PostNews post = new PostNews();
         post.setAddPostNews(LocalDateTime.now());
         post.setPostNews(postNews);
         post.setUser(user);
-        post.setInternetLink(internetLink);
         post.setHashTag(hashTag);
         String encodedImage = photoService.encodeImage(image);
         post.setEncodedImage(encodedImage);

@@ -32,6 +32,6 @@ public class PostNews {
     private LocalDateTime addPostNews;
     @Lob
     private String encodedImage;
-    private String internetLink;
     private String hashTag;
+
 }
