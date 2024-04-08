@@ -28,15 +28,24 @@
                          alt="Post image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${post.postNews}">Post title</h5>
-                        <!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
                     </div>
-<!--                    <ul class="list-group list-group-flush">-->
-<!--                        <li class="list-group-item" th:text="${post.internetLink}">Internet link</li>-->
-<!--                        &lt;!&ndash;            <li class="list-group-item" th:text="${post.hashTag}">Hash tag</li>&ndash;&gt;-->
-<!--                    </ul>-->
                     <div class="card-body">
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <div class="container text-center">
+                            <div class="row align-items-start">
+                                <div class="col">
+                                    <i class="fa fa-thumbs-o-up" aria-hidden="true" onclick="likePost(this)" th:attr="data-likes=${post.likeInPost}, data-post-id=${post.id}"></i>
+                                    <span th:if="${post.likeInPost > 0}" th:text="${post.likeInPost}"></span>
+                                </div>
+                                <div class="col">
+                                    <i class="fa fa-retweet" aria-hidden="true"></i>
+                                </div>
+                                <div class="col">
+                                    <i class="fa fa-comments" aria-hidden="true"></i>
+                                    <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -136,6 +145,61 @@
         </div>
     </div>
 </section>
+
+<!--<script>-->
+<!--    function likePost(iconElement) {-->
+<!--        let countPost = parseInt(iconElement.getAttribute('data-likes'));-->
+<!--        if(iconElement.classList.contains('fa-thumbs-o-up')){-->
+<!--            iconElement.classList.remove('fa-thumbs-o-up');-->
+<!--            iconElement.classList.add('fa-thumbs-up');-->
+<!--            countPost += 1;-->
+<!--        }else{-->
+<!--            iconElement.classList.remove('fa-thumbs-up');-->
+<!--            iconElement.classList.add('fa-thumbs-o-up');-->
+<!--            countPost -= 1;-->
+<!--        }-->
+<!--        iconElement.setAttribute('data-likes', countPost);-->
+<!--        iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';-->
+<!--    }-->
+<!--</script>-->
+
+<script>
+    function likePost(iconElement) {
+    let countPost = parseInt(iconElement.getAttribute('data-likes'));
+    let isLiked = iconElement.classList.contains('fa-thumbs-up');
+    iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
+    iconElement.classList.toggle('fa-thumbs-up', !isLiked);
+    countPost += isLiked ? -1 : 1;
+
+    iconElement.setAttribute('data-likes', countPost);
+    iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
+
+    // Оновлення кількості лайків на сервері
+    let postId = iconElement.getAttribute('data-post-id');
+    fetch('/updateLikes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            postId: postId,
+            likes: countPost,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+</script>
 
 </body>
 </html>

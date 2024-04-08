@@ -9,4 +9,6 @@ import java.util.List;
 public interface PostNewsRepository extends JpaRepository <PostNews, Integer> {
 
     List<PostNews> findByUserOrderByAddPostNewsDesc(User user);
+
+    List<PostNews> findByUser(User user);
 }

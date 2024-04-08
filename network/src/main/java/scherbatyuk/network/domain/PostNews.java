@@ -33,5 +33,6 @@ public class PostNews {
     @Lob
     private String encodedImage;
     private String hashTag;
+    private Integer likeInPost;
 
 }

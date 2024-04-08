@@ -27,6 +27,7 @@ public class PostNewsService {
         post.setPostNews(postNews);
         post.setUser(user);
         post.setHashTag(hashTag);
+        post.setLikeInPost(0);
         String encodedImage = photoService.encodeImage(image);
         post.setEncodedImage(encodedImage);
 
@@ -43,4 +44,20 @@ public class PostNewsService {
         return posts;
     }
 
+    public List<PostNews> getPostsByUser(User user) {
+        return newsRepository.findByUser(user);
+    }
+
+    public void deletePost(Integer postId) {
+        newsRepository.deleteById(postId);
+    }
+
+
+    public PostNews findById(Integer postId) {
+        return newsRepository.findById(postId).orElse(null);
+    }
+
+    public void save(PostNews post) {
+        newsRepository.save(post);
+    }
 }
