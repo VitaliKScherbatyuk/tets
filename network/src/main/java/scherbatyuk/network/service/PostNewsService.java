@@ -21,7 +21,6 @@ public class PostNewsService {
     private PhotoService photoService;
 
     public void createPost(MultipartFile image, String postNews, String hashTag, User user) {
-
         PostNews post = new PostNews();
         post.setAddPostNews(LocalDateTime.now());
         post.setPostNews(postNews);
@@ -60,4 +59,4 @@ public class PostNewsService {
     public void save(PostNews post) {
         newsRepository.save(post);
     }
-}
+   }

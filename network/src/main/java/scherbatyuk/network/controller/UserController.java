@@ -19,10 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.dao.UserRepository;
-import scherbatyuk.network.domain.Friends;
-import scherbatyuk.network.domain.PostNews;
-import scherbatyuk.network.domain.User;
-import scherbatyuk.network.domain.UserRole;
+import scherbatyuk.network.domain.*;
 import scherbatyuk.network.service.*;
 
 import javax.imageio.ImageIO;
@@ -59,6 +56,8 @@ public class UserController {
     private FriendsService friendsService;
     @Autowired
     private PostNewsService postNewsService;
+    @Autowired
+    private PostLikesService postLikesService;
 
     @GetMapping("/")
     public String showLoginForm() {
@@ -244,6 +243,7 @@ public class UserController {
         model.addAttribute("countRequests", countRequests);
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
         model.addAttribute("countMessages", countMessages);
+
         return "home";
     }
 

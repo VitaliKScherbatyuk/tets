@@ -6,9 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,9 +13,9 @@ import java.util.List;
 @Builder
 @Entity
 @Table
-public class PostNews {
+public class PostLikes {
 
-    private static final String SEQ_NAME = "post_seq";
+    private static final String SEQ_NAME = "likePost_seq";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
@@ -29,11 +26,9 @@ public class PostNews {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String postNews;
-    private LocalDateTime addPostNews;
-    @Lob
-    private String encodedImage;
-    private String hashTag;
-    private Integer likeInPost;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostNews post;
 
+    private Integer likePost;
 }

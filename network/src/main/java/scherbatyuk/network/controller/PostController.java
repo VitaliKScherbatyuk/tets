@@ -15,21 +15,24 @@ import scherbatyuk.network.domain.User;
 import scherbatyuk.network.service.PostNewsService;
 import scherbatyuk.network.service.UserService;
 
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class PostController {
+    @Autowired
+    private PostNewsService postNewsService;
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PostNewsService postNewsService;
-
+    /**
+     * Відображення сторінки addPost враховуючи сортування за датою створення
+     * виводяться лише пости друзів
+     * @param model
+     * @return
+     */
     @GetMapping("/addPost")
     private String addPost(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -43,7 +46,13 @@ public class PostController {
         return "addPost";
     }
 
-
+    /**
+     * зберігання нового посту
+     * @param images
+     * @param postNews
+     * @param hashTag
+     * @return
+     */
     @PostMapping("/savePost")
     private String addPost(@RequestParam("image") MultipartFile[] images,
                            @RequestParam("postNews") String postNews,
@@ -52,6 +61,7 @@ public class PostController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
+        System.err.println(user.getName() + "savePost");
 
         for (MultipartFile image : images) {
            postNewsService.createPost(image, postNews, hashTag, user);
@@ -60,37 +70,24 @@ public class PostController {
         return "redirect:/home";
     }
 
+    /**
+     * видалення посту за його id
+     * @param postId
+     * @return
+     */
     @GetMapping("/deletePost/{id}")
     public String deletePost(@PathVariable("id") Integer postId) {
         postNewsService.deletePost(postId);
         return "redirect:/addPost";
     }
 
+    /**
+     * відображення сторінки з рейтингами rating (не реалізовано)
+     * @return
+     */
     @GetMapping("/rating")
     public String ratingPost() {
         return "rating";
-    }
-
-    @PostMapping("/likeable")
-    public String countLike(@RequestParam Integer postId, Model model){
-        PostNews post = postNewsService.findById(postId);
-        int likePost = post.getLikeInPost();
-        model.addAttribute("likeInPost", likePost);
-        return "home";
-    }
-
-    @PostMapping("/updateLikes")
-    @Transactional
-    public ResponseEntity<Void> updateLikes(@RequestBody Map<String, Integer> payload) {
-        Integer postId = payload.get("postId");
-        Integer likes = payload.get("likes");
-        PostNews post = postNewsService.findById(postId);
-        if (post == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        post.setLikeInPost(likes);
-        postNewsService.save(post);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
