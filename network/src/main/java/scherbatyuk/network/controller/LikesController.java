@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import scherbatyuk.network.domain.PostLikes;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
+import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.PostLikesService;
 import scherbatyuk.network.service.PostNewsService;
 import scherbatyuk.network.service.UserService;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class LikesController {
@@ -27,6 +31,8 @@ public class LikesController {
     private UserService userService;
     @Autowired
     private PostNewsService postNewsService;
+    @Autowired
+    private FriendsService friendsService;
 
     @PostMapping("/addLikeToPost")
     @Transactional
@@ -83,6 +89,39 @@ public class LikesController {
 
         return "home";
     }
+
+    /**
+     * відображення сторінки з рейтингами rating (не реалізовано)
+     * @return
+     */
+    @GetMapping("/rating")
+    public String ratingPost(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        List<PostNews> posts = postNewsService.getPostsByUsers(friends);
+
+        Optional<PostNews> topPost = posts.stream()
+                .sorted(Comparator.comparingInt(PostNews::getLikeInPost).reversed())
+                .findFirst();
+
+        topPost.ifPresent(post -> model.addAttribute("topPost", post));
+
+        List<PostNews> myPosts = postNewsService.getPostsByUser(user); // Отримати всі пости користувача
+        Optional<PostNews> myTopPost = myPosts.stream()
+                .sorted(Comparator.comparingInt(PostNews::getLikeInPost).reversed())
+                .findFirst();
+
+        myTopPost.ifPresent(post -> model.addAttribute("myTopPost", post)); // Передати пост користувача в шаблон
+
+        return "rating";
+    }
+
+
+
+
 
 }
 

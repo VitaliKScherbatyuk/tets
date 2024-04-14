@@ -59,4 +59,5 @@ public class PostNewsService {
     public void save(PostNews post) {
         newsRepository.save(post);
     }
+
    }

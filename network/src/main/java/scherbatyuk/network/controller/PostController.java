@@ -81,14 +81,5 @@ public class PostController {
         return "redirect:/addPost";
     }
 
-    /**
-     * відображення сторінки з рейтингами rating (не реалізовано)
-     * @return
-     */
-    @GetMapping("/rating")
-    public String ratingPost() {
-        return "rating";
-    }
-
 
 }

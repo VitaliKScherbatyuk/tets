@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Rating</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -19,7 +18,70 @@
     <main th:replace="header"></main>
 </header>
 
+<div class="container text-center">
+    <div class="row">
+        <div class="col-6">
+            <h4 style="text-align: center; color: white;">Rating of own post</h4>
+            <div class="card" style="width: 25rem; margin: 10px auto" th:if="${myTopPost}">
+                <img th:src="${'data:image/jpeg;base64,' + myTopPost.encodedImage}" class="card-img-top" alt="Post image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${myTopPost.postNews}">Post title</h5>
+                </div>
+                <div class="card-body">
+                    <div class="container text-center">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <i class="fa"
+                                   th:classappend="${myTopPost.likeInPost == 1 ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}"
+                                   aria-hidden="true" onclick="likePost(this)"
+                                   th:attr="data-likes=${myTopPost.likeInPost}, data-post-id=${myTopPost.id}"></i>
+                                <span th:if="${myTopPost.likeInPost > 0}" th:text="${myTopPost.likeInPost}"></span>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-retweet" aria-hidden="true"></i>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-6">
+            <h4 style="text-align: center; color: white;">Rating of a friend's post</h4>
+            <div class="card" style="width: 25rem; margin: 10px auto" th:if="${topPost}">
+                <img th:src="${'data:image/jpeg;base64,' + topPost.encodedImage}" class="card-img-top" alt="Post image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${topPost.postNews}">Post title</h5>
+                </div>
+                <div class="card-body">
+                    <div class="container text-center">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <i class="fa"
+                                   th:classappend="${topPost.likeInPost == 1 ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}"
+                                   aria-hidden="true" onclick="likePost(this)"
+                                   th:attr="data-likes=${topPost.likeInPost}, data-post-id=${topPost.id}"></i>
+                                <span th:if="${topPost.likeInPost > 0}" th:text="${topPost.likeInPost}"></span>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-retweet" aria-hidden="true"></i>
+                            </div>
+                            <div class="col">
+                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 </body>
 </html>
