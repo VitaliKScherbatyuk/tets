@@ -37,7 +37,6 @@ public class CommentController {
     public String commentPage(@PathVariable Integer id, Model model) {
         PostNews post = postNewsService.findById(id);
         List<Comment> comments = commentService.getCommentByPost(post.getId());
-        System.err.println("Post:");
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         return "comment";
