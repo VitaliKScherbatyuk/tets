@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <main th:replace="header"></main>
+</header>
+
+<div class="container text-center">
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card" style="width: 30rem;">
+                <div class="container text-center" style="margin-top: 10px">
+                    <div class="row justify-content-between">
+                        <div class="col-4">
+                            <a th:href="@{'/user/' + ${post.user.id}}">
+                                <p th:text="${'Published: ' + post.user.name}"></p>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-body-secondary" th:text="${post.addPostNews}"></small>
+                        </div>
+                    </div>
+                </div>
+                <img th:src="'data:image/jpeg;base64,' + ${post.encodedImage}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text" th:text="${post.postNews}">Some quick example text to build on the card title
+                        and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-5">
+
+            <div th:each="commentPost:${comments}">
+                <div class="container text-center" style="border: 2px solid white; border-radius: 10px; margin: 8px">
+                    <div class="justify-content-between">
+                        <img th:src="'data:image/jpeg;base64,' + ${commentPost.user.imageData}" alt="User Image"
+                             class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                        <strong style="color: white" th:text="${commentPost.user.name}"></strong>
+                        <small class="text-muted" style="color: white"
+                               th:text="${#temporals.format(commentPost.addCommentTime, 'dd.MM.yyyy HH:mm')}"></small>
+                    </div>
+                    <p th:text="${commentPost.commentText}"></p>
+                </div>
+            </div>
+            <div>
+                <!-- Форма для додавання коментаря -->
+                <form th:action="@{/addComment}" method="post" class="mb-3">
+                    <input type="hidden" name="postId" th:value="${post.id}">
+                    <div class="mb-3">
+                        <label>
+                            <textarea class="form-control" name="commentText" placeholder="Add a comment"></textarea>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
