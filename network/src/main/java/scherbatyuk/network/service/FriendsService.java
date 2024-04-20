@@ -147,6 +147,12 @@ public class FriendsService {
         friendsRepository.save(friendship);
     }
 
+    public boolean areFriends(Integer userId, Integer friendId) {
+        // Логика проверки, являются ли пользователи друзьями
+        return friendsRepository.areFriends(userId, friendId);
+    }
+
+
     private boolean isUserOnline(User user) {
         // В цьому прикладі, якщо користувач має останню активність менше ніж 5 хвилин тому, ми вважаємо його "онлайн"
         // Ви можете змінити цю логіку відповідно до вашого варіанту реалізації

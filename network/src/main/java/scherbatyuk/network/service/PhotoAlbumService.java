@@ -40,4 +40,8 @@ public class PhotoAlbumService {
     public void deleteById(Integer id){
         photoAlbumRepository.deleteById(id);
     }
+
+    public List<PhotoAlbum> findByUserId(Integer userId) {
+        return photoAlbumRepository.findByUserId(userId);
+    }
 }

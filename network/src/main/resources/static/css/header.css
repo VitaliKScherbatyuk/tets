@@ -124,39 +124,6 @@ h3{
     top: 0;
     line-height: 24px;
   }
-.iconProf{
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    margin: 0 15px;
-    border: 2px red solid;
- }
 
- .profile-container {
-     position: relative;
-     display: inline-block;
- }
-
- .profile-menu {
-     display: none;
-     position: absolute;
-     margin-top: 15px;
-     width: 250px;
-     top: 100%; /* Розташування випадаючого меню відносно фото профілю */
-     right: 0;
-     background-color: #fff;
-     border: 1px solid #ddd;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-     z-index: 1;
-
-     border-radius: 15px;
-      -moz-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-              -webkit-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-              box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
- }
-
- .profile-container:hover .profile-menu {
-     display: block;
- }
 
 

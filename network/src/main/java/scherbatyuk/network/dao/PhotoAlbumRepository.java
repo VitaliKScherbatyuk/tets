@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PhotoAlbumRepository extends JpaRepository<PhotoAlbum, Integer>, CrudRepository <PhotoAlbum, Integer> {
 
+    List<PhotoAlbum> findByUserId(Integer userId);
 }

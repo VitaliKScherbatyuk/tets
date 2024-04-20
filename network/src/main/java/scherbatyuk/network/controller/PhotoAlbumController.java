@@ -90,4 +90,11 @@ public class PhotoAlbumController {
         model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id)); // Assuming you have a method to retrieve photos by album id
         return "photoGalleryDetails";
     }
+
+    @GetMapping("/photoGalleryFriend/{id}")
+    public String photoGalleryFriend(@PathVariable Integer id, Model model){
+        List<PhotoAlbum> albums = photoAlbumService.findByUserId(id);
+        model.addAttribute("albums", albums);
+        return "photoGallery";
+    }
 }

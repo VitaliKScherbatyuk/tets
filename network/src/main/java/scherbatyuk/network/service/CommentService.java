@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.CommentRepository;
 import scherbatyuk.network.domain.Comment;
+import scherbatyuk.network.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,4 +26,5 @@ public class CommentService {
         // Викликаємо метод репозиторію для отримання коментарів за ідентифікатором посту
         return commentRepository.findByPostId(postId);
     }
+
 }

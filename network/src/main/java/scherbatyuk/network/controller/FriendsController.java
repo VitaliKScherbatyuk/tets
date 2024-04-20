@@ -115,6 +115,7 @@ public class FriendsController {
 
         return "friends";
     }
+
 }
 
 

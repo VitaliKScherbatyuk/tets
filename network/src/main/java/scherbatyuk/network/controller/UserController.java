@@ -248,10 +248,21 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public String viewUserDetails(@PathVariable Integer id, Model model) {
+    public String viewUserDetails(@PathVariable Integer id, Model model, Principal principal) {
 
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
+
+        // Перевірка чи авторизований користувач є товаришем користувача, що відображається на сторінці
+        boolean isFriend = false;
+        if (principal != null) {
+            String userEmail = principal.getName();
+            User currentUser = userService.findByEmail(userEmail);
+
+            isFriend = friendsService.areFriends(currentUser.getId(), id);
+            System.err.println(isFriend);
+        }
+        model.addAttribute("isFriend", isFriend);
 
         // Додайте новий об'єкт FriendsRequest до моделі для використання в формі
         Friends friendsRequest = new Friends();

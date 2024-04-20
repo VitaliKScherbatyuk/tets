@@ -9,6 +9,7 @@ import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,9 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer>, Crud
     @Modifying
     @Query("UPDATE Friends f SET f.status = :status WHERE f.id = :friendshipId")
     void updateStatus(@Param("friendshipId") Integer friendshipId, @Param("status") FriendshipStatus status);
+
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END FROM Friends f WHERE ((f.user.id = ?1 AND f.friend.id = ?2) OR (f.user.id = ?2 AND f.friend.id = ?1)) AND f.status = 'ACCEPTED'")
+    boolean areFriends(Integer userId, Integer friendId);
+
 }
 
