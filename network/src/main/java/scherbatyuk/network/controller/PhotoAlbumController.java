@@ -77,9 +77,9 @@ public class PhotoAlbumController {
         return "redirect:/albums";
     }
 
-    @GetMapping("photoGallery")
-    public String photoGallery(Model model){
-        List<PhotoAlbum> albums = photoAlbumService.getAllAlbums();
+    @GetMapping("/photoGallery/{id}")
+    public String photoGallery(@PathVariable Integer id, Model model){
+        List<PhotoAlbum> albums = photoAlbumService.findByUserId(id);
         model.addAttribute("albums", albums);
         return "photoGallery";
     }

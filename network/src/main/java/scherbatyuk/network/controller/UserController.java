@@ -260,7 +260,6 @@ public class UserController {
             User currentUser = userService.findByEmail(userEmail);
 
             isFriend = friendsService.areFriends(currentUser.getId(), id);
-            System.err.println(isFriend);
         }
         model.addAttribute("isFriend", isFriend);
 

@@ -30,35 +30,38 @@
         <small class="text-muted" th:text="'Hobby: ' + ${user.hobby}"></small>
     </div>
 
-    <div th:unless="${isFriend}">
-        <form th:action="@{/addFriends}" method="post" th:object="${friendsRequest}">
-            <input type="hidden" name="friendId" th:value="${user.id}"/>
-            <button type="submit" class="btn btn-link">Add as Friend</button>
-        </form>
-    </div>
+    <ul class="list-group" style="text-align: center">
+        <li class="list-group-item list-group-item-action boxList" th:unless="${isFriend}">
+            <form th:action="@{/addFriends}" method="post" th:object="${friendsRequest}">
+                <input type="hidden" name="friendId" th:value="${user.id}"/>
+                <button type="submit" class="btn btn-link liBox">Add as Friend</button>
+            </form>
+        </li>
+        <li class="list-group-item list-group-item-action boxList" th:if="${isFriend}">
+            <a th:href="@{'/friendliesPage/' + ${user.id}}">Open page</a>
+        </li>
+        <li class="list-group-item list-group-item-action boxList">
+            <p class="d-inline-flex gap-1 liBox">
+                <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                   aria-expanded="false"
+                   aria-controls="collapseExample">
+                    Send message
+                </a>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <form id="messageForm" th:action="@{/sendMessage}" method="post">
+                    <div class="mb-3">
+                        <label for="messageText" class="form-label">Message Text</label>
+                        <textarea class="form-control" id="messageText" name="messageText"
+                                  rows="3"></textarea>
+                    </div>
+                    <input type="hidden" name="userId" th:value="${user.id}"/>
 
-    <div th:if="${isFriend}">
-        <a th:href="@{'/photoGalleryFriend/' + ${user.id}}">Photo Gallery</a>
-    </div>
-
-    <p class="d-inline-flex gap-1">
-        <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-           aria-controls="collapseExample">
-            Send message
-        </a>
-    </p>
-    <div class="collapse" id="collapseExample">
-        <form id="messageForm" th:action="@{/sendMessage}" method="post">
-            <div class="mb-3">
-                <label for="messageText" class="form-label">Message Text</label>
-                <textarea class="form-control" id="messageText" name="messageText"
-                          rows="3"></textarea>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
             </div>
-            <input type="hidden" name="userId" th:value="${user.id}"/>
-
-            <button type="submit" class="btn btn-primary">Send Message</button>
-        </form>
-    </div>
+        </li>
+    </ul>
 </div>
 
 </body>

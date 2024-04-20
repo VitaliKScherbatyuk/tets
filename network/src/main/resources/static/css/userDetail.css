@@ -12,3 +12,6 @@ img{
 .textBox{
    margin: -2px 0;
 }
+.boxList{
+   padding: 0.25rem 1.25rem;
+}
