@@ -58,6 +58,8 @@ public class UserController {
     private PostNewsService postNewsService;
     @Autowired
     private PostLikesService postLikesService;
+    @Autowired
+    private RepostService repostService;
 
     @GetMapping("/")
     public String showLoginForm() {
@@ -204,7 +206,6 @@ public class UserController {
     }
 
 
-
     /**
      * method is responsible for processing HTTP GET requests to the URL path "/home"
      * and returns the page "home"
@@ -220,7 +221,13 @@ public class UserController {
         UserRole role = user.getRole();
 
         List<User> friends = friendsService.getFriends(user.getId()); // отримати список друзів користувача
-        List<PostNews> posts = postNewsService.getPostsByUsers(friends); // отримати пости друзів
+        List<PostNews> postFromUser = postNewsService.getPostsByUsers(friends); // отримати пости друзів
+        List<Repost> repostsFromFriends = repostService.getRepostsByUser(user);
+
+        List<PostNews> posts = new ArrayList<>(postFromUser);
+        for (Repost repost : repostsFromFriends) {
+            posts.add(repost.getPost());
+        }
         posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed()); // сортувати по даті
 
         model.addAttribute("posts", posts); // додати пости в модель

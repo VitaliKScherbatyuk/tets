@@ -53,7 +53,7 @@
                                 <span th:if="${post.likeInPost > 0}" th:text="${post.likeInPost}"></span>
                             </div>
                             <div class="col-4">
-                                <i class="fa fa-retweet" aria-hidden="true" onclick="repostPost(this)"></i>
+                                <i class="fa fa-retweet" aria-hidden="true"></i>
                             </div>
                             <div class="col-4">
                                 <a th:href="@{'/comment/'+ ${post.id}}"> <i class="fa fa-comments-o"
@@ -113,11 +113,13 @@
                             </ul>
 
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="sizeLi1"><a th:href="@{'/photoGallery/' +${user.id}}">Photo gallery</a>
+                                <li class="list-group-item" id="sizeLi1"><a th:href="@{'/photoGallery/' +${user.id}}">Photo
+                                    gallery</a>
                                 </li>
                             </ul>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="sizeLi2"><a th:href="@{'/friends/' +${user.id}}">Friends</a></li>
+                                <li class="list-group-item" id="sizeLi2"><a
+                                        th:href="@{'/friends/' +${user.id}}">Friends</a></li>
                             </ul>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi3"><a th:href="@{/addPost}">Add post</a></li>
@@ -162,45 +164,42 @@
 </section>
 
 <script>
-    function repostPost(iconElement){
 
-    }
+     function likePost(iconElement) {
+     let countPost = parseInt(iconElement.getAttribute('data-likes'));
+     let isLiked = iconElement.classList.contains('fa-thumbs-up');
+     iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
+     iconElement.classList.toggle('fa-thumbs-up', !isLiked);
+     countPost += isLiked ? -1 : 1;
 
-    function likePost(iconElement) {
-    let countPost = parseInt(iconElement.getAttribute('data-likes'));
-    let isLiked = iconElement.classList.contains('fa-thumbs-up');
-    iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
-    iconElement.classList.toggle('fa-thumbs-up', !isLiked);
-    countPost += isLiked ? -1 : 1;
+     iconElement.setAttribute('data-likes', countPost);
+     iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
 
-    iconElement.setAttribute('data-likes', countPost);
-    iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
-
-    // Оновлення кількості лайків на сервері
-    let postId = iconElement.getAttribute('data-post-id');
-    fetch('/addLikeToPost', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            postId: postId,
-            likes: countPost,
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
+     // Оновлення кількості лайків на сервері
+     let postId = iconElement.getAttribute('data-post-id');
+     fetch('/addLikeToPost', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+             postId: postId,
+             likes: countPost,
+         }),
+     })
+     .then(response => {
+         if (!response.ok) {
+             throw new Error('Network response was not ok');
+         }
+         return response.json();
+     })
+     .then(data => {
+         console.log('Success:', data);
+     })
+     .catch((error) => {
+         console.error('Error:', error);
+     });
+ }
 
 </script>
 

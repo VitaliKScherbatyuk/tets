@@ -61,7 +61,6 @@ public class PostController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
-        System.err.println(user.getName() + "savePost");
 
         for (MultipartFile image : images) {
            postNewsService.createPost(image, postNews, hashTag, user);

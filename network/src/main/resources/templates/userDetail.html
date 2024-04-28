@@ -19,7 +19,7 @@
     <main th:replace="header"></main>
 </header>
 
-<div class="card" id="cardBox" style="width: 18rem;">
+<div class="card mx-auto" id="cardBox" style="width: 18rem;">
     <img th:src="${'data:image/jpeg;base64,' + user.imageData}" class="card-img-top" alt="...">
     <div class="card-body" style="text-align:center">
         <h5 class="card-title" th:text="${user.name}">Card title</h5>

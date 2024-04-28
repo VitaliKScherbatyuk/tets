@@ -52,7 +52,8 @@
                                 <span th:if="${post.likeInPost > 0}" th:text="${post.likeInPost}"></span>
                             </div>
                             <div class="col-4">
-                                <i class="fa fa-retweet" aria-hidden="true" onclick="repostPost(this)"></i>
+                                <i class="fa fa-retweet" aria-hidden="true" onclick="repostPost(this)"
+                                   th:attr="data-post-id=${post.id}"></i>
                             </div>
                             <div class="col-4">
                                 <a th:href="@{'/comment/'+ ${post.id}}"> <i class="fa fa-comments-o"
@@ -98,11 +99,13 @@
                             </ul>
 
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="sizeLi1"><a th:href="@{'/photoGallery/' +${user.id}}">Photo gallery</a>
+                                <li class="list-group-item" id="sizeLi1"><a th:href="@{'/photoGallery/' +${user.id}}">Photo
+                                    gallery</a>
                                 </li>
                             </ul>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" id="sizeLi2"><a th:href="@{'/friends/' +${user.id}}">Friends</a></li>
+                                <li class="list-group-item" id="sizeLi2"><a
+                                        th:href="@{'/friends/' +${user.id}}">Friends</a></li>
                             </ul>
 
                             <ul class="list-group list-group-flush">
@@ -143,6 +146,35 @@
         </div>
     </div>
 </section>
+<script>
+    function repostPost(element) {
+     var postId = element.getAttribute("data-post-id");
 
+     var rePostId = {
+         postId: postId
+     };
+
+     fetch('/createRepost', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(rePostId)
+     })
+     .then(response => {
+         if (response.ok) {
+             // Якщо репост створено успішно, ви можете виконати необхідні дії, наприклад, оновити сторінку або відобразити повідомлення про успішність
+             console.log('Репост створено успішно');
+         } else {
+             // Якщо сталася помилка при створенні репосту, ви можете відобразити повідомлення про помилку або виконати інші дії
+             console.error('Помилка при створенні репосту');
+         }
+     })
+     .catch(error => {
+         // Обробка помилок під час відправлення запиту на сервер
+         console.error('Помилка при відправленні запиту на сервер:', error);
+     });
+ }
+</script>
 </body>
 </html>
