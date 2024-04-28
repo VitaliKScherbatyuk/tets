@@ -1,7 +1,7 @@
 .online {
-    color: green; /* Зелений колір */
+    background-color: green; /* Зелений колір */
 }
 
 .offline {
-    color: red; /* Червоний колір */
+    background-color: red; /* Червоний колір */
 }

@@ -17,15 +17,16 @@
     <main th:replace="header"></main>
 </header>
 <h4 style="text-align: center; color: white;">Search Results:</h4>
+
 <div class="row" style="margin: 20px">
     <div class="col-xl-4 col-lg-5 mb-4">
-        <div th:each="user : ${users}">
+        <div th:if="${users != null}" th:each="user : ${users}">
             <a th:href="@{'/user/' + ${user.getId()}}">
                 <div class="card">
 
                      <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-    <span class="visually-hidden">New alerts</span>
-  </span>
+                          <span class="visually-hidden">New alerts</span>
+                     </span>
                     <!--                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"-->
                     <!--                          th:classappend="${user.isOnline() ? 'online' : 'offline'}"></span>-->
 
@@ -46,6 +47,49 @@
                 </div>
             </a>
         </div>
+
+
+        <div th:if="${posts != null}" th:each="post: ${posts}" class="card"
+             style="width: 40rem; margin: 10px auto">
+            <div class="container text-center" style="margin-top: 10px">
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <a th:href="@{'/user/' + ${post.user.id}}">
+                            <p th:text="${'Published: ' + post.user.name}"></p></a>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-body-secondary" th:text="${post.addPostNews}"></small>
+                    </div>
+                </div>
+            </div>
+
+            <img th:src="${'data:image/jpeg;base64,' + post.encodedImage}" class="card-img-top"
+                 alt="Post image">
+            <div style="margin: 10px">
+                <h5 class="card-title" th:text="${post.postNews}">Post title</h5>
+            </div>
+
+            <div class="container text-center" style="margin-bottom: 10px">
+                <div class="row justify-content-between">
+                    <div class="col-4">
+                        <i class="fa"
+                           th:classappend="${post.likeInPost == 1 ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}"
+                           aria-hidden="true" onclick="likePost(this)"
+                           th:attr="data-likes=${post.likeInPost}, data-post-id=${post.id}"></i>
+                        <span th:if="${post.likeInPost > 0}" th:text="${post.likeInPost}"></span>
+                    </div>
+                    <div class="col-4">
+                        <i class="fa fa-retweet" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-4">
+                        <a th:href="@{'/comment/'+ ${post.id}}"> <i class="fa fa-comments-o"
+                                                                    aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 

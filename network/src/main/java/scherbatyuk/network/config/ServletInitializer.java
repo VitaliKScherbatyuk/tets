@@ -12,7 +12,6 @@ public class ServletInitializer implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        // Реєстрація фільтра
         servletContext.addFilter("userActivityFilter", UserActivityFilter.class).addMappingForUrlPatterns(null, false, "/*");
     }
 }

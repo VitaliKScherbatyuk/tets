@@ -24,6 +24,7 @@ public class UserActivityFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession(false);
+
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             // Оновіть час активності користувача тут, наприклад:

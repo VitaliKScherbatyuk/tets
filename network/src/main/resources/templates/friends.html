@@ -9,6 +9,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/friends.css">
 </head>
 <body>
 
@@ -21,13 +22,12 @@
     <div class="col-xl-4 col-lg-5 mb-4">
         <div  th:each="user : ${users}">
             <a th:href="@{'/user/' + ${user.getId()}}">
-                <div class="card">
+                <div class="card" style="margin: 10px">
 
-                     <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-    <span class="visually-hidden">New alerts</span>
-  </span>
-                    <!--                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"-->
-                    <!--                          th:classappend="${user.isOnline() ? 'online' : 'offline'}"></span>-->
+                    <span class="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+                          th:classappend="${friendsOnlineStatus.get(user) ? 'online' : 'offline'}">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
 
                     <div class="card-body">
                         <div class="d-flex align-items-center">

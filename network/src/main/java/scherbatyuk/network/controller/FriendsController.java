@@ -16,7 +16,9 @@ import scherbatyuk.network.service.PostNewsService;
 import scherbatyuk.network.service.UserService;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -113,7 +115,15 @@ public class FriendsController {
         if (friendsListAcceped.isEmpty()) {
             return "redirect:/home";
         }
+
+        // Для кожного друга в списку перевіряємо, чи він онлайн
+        Map<User, Boolean> friendsOnlineStatus = new HashMap<>();
+        for (User friend : friendsListAcceped) {
+            friendsOnlineStatus.put(friend, friendsService.isUserOnline(friend));
+        }
+
         model.addAttribute("users", friendsListAcceped);
+        model.addAttribute("friendsOnlineStatus", friendsOnlineStatus);
 
         return "friends";
     }
