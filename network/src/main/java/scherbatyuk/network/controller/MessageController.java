@@ -13,6 +13,7 @@ import scherbatyuk.network.service.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -26,6 +27,7 @@ public class MessageController {
 
     /**
      * Контроллер для збереження нового повідомлення в БД.
+     *
      * @param userId
      * @param messageText
      * @param model
@@ -55,6 +57,7 @@ public class MessageController {
 
     /**
      * Контроллер для відображення всіх повідомлень у авторизованого користувача
+     *
      * @param model
      * @return
      */
@@ -65,6 +68,7 @@ public class MessageController {
         User currentUser = userService.findByEmail(userEmail);
 
         List<Message> messages = messageService.getMessagesForUser(currentUser.getId());
+        messages.sort(Comparator.comparing(Message::getCreateMessage).reversed());
 
         // Оновлення значення readMessage на true для кожного повідомлення
         for (Message message : messages) {

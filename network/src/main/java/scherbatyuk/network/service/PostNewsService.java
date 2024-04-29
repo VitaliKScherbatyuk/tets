@@ -8,7 +8,6 @@ import scherbatyuk.network.dao.PostNewsRepository;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class PostNewsService {
     @Autowired
     private PhotoService photoService;
 
-    public void createPost(MultipartFile image, String postNews, String hashTag, User user) {
+    public PostNews createPost(MultipartFile image, String postNews, String hashTag, User user) {
         PostNews post = new PostNews();
         post.setAddPostNews(LocalDateTime.now());
         post.setPostNews(postNews);
@@ -31,7 +30,7 @@ public class PostNewsService {
         post.setEncodedImage(encodedImage);
 
         newsRepository.save(post);
-
+        return post;
     }
 
     public List<PostNews> getPostsByUsers(List<User> users) {

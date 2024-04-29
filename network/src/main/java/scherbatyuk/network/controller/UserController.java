@@ -222,12 +222,15 @@ public class UserController {
 
         List<User> friends = friendsService.getFriends(user.getId()); // отримати список друзів користувача
         List<PostNews> postFromUser = postNewsService.getPostsByUsers(friends); // отримати пости друзів
+        List<PostNews> myPost = postNewsService.getPostsByUser(user);
         List<Repost> repostsFromFriends = repostService.getRepostsByUser(user);
 
         List<PostNews> posts = new ArrayList<>(postFromUser);
         for (Repost repost : repostsFromFriends) {
             posts.add(repost.getPost());
         }
+        posts.addAll(myPost);
+
         posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed()); // сортувати по даті
 
         model.addAttribute("posts", posts); // додати пости в модель

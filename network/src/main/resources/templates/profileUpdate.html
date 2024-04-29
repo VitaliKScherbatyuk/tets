@@ -23,7 +23,7 @@
     <div class="row">
         <div class="col-6">
             <form th:object="${user}" method="post"  th:action="@{/profileUpdate}">
-                <h4>Update Profile</h4>
+                <h4 style="text-align: center; color: white;">Update Profile</h4>
                 <label>
                     <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
                 </label>
@@ -56,7 +56,7 @@
         </div>
         <div class="col-6">
             <form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
-                <h4>Update Photo</h4>
+                <h4 style="text-align: center; color: white;">Update Photo</h4>
                 <input class="form-control" type="file" name="imageData" multiple>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Update photo</button>
             </form>

@@ -45,13 +45,17 @@
 
                     <div class="container text-center" style="margin-bottom: 10px">
                         <div class="row justify-content-between">
+
                             <div class="col-4">
                                 <i class="fa"
                                    th:classappend="${post.likeInPost == 1 ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}"
                                    aria-hidden="true" onclick="likePost(this)"
-                                   th:attr="data-likes=${post.likeInPost}, data-post-id=${post.id}"></i>
-                                <span th:if="${post.likeInPost > 0}" th:text="${post.likeInPost}"></span>
+                                   th:attr="data-likes=${post.likeInPost != null ? post.likeInPost : 0}, data-post-id=${post.id}"></i>
+                                <!-- Відображення кількості лайків, навіть якщо це 0 -->
+                                <span th:text="${post.likeInPost}"></span>
                             </div>
+
+
                             <div class="col-4">
                                 <i class="fa fa-retweet" aria-hidden="true"></i>
                             </div>
@@ -165,43 +169,86 @@
 
 <script>
 
-     function likePost(iconElement) {
-     let countPost = parseInt(iconElement.getAttribute('data-likes'));
-     let isLiked = iconElement.classList.contains('fa-thumbs-up');
-     iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
-     iconElement.classList.toggle('fa-thumbs-up', !isLiked);
-     countPost += isLiked ? -1 : 1;
+function likePost(iconElement) {
+    let postId = iconElement.getAttribute('data-post-id');
+    let countPost = parseInt(iconElement.getAttribute('data-likes'));
+    let isLiked = iconElement.classList.contains('fa-thumbs-up');
+    countPost += isLiked ? -1 : 1;
+    iconElement.setAttribute('data-likes', countPost);
+    iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
+    iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
+    iconElement.classList.toggle('fa-thumbs-up', !isLiked);
 
-     iconElement.setAttribute('data-likes', countPost);
-     iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
-
-     // Оновлення кількості лайків на сервері
-     let postId = iconElement.getAttribute('data-post-id');
-     fetch('/addLikeToPost', {
-         method: 'POST',
-         headers: {
-             'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({
-             postId: postId,
-             likes: countPost,
-         }),
-     })
-     .then(response => {
-         if (!response.ok) {
-             throw new Error('Network response was not ok');
-         }
-         return response.json();
-     })
-     .then(data => {
-         console.log('Success:', data);
-     })
-     .catch((error) => {
-         console.error('Error:', error);
-     });
- }
+    fetch('/addLikeToPost', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            postId: postId,
+            likes: countPost,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
 </script>
 
 </body>
 </html>
+
+
+<!--    function updateLikes() {-->
+<!--      // Отримання всіх елементів, що містять лайки-->
+<!--      let likeElements = document.querySelectorAll('[data-post-id]');-->
+
+<!--      likeElements.forEach((iconElement) => {-->
+<!--          let postId = iconElement.getAttribute('data-post-id');-->
+
+<!--          // Запит на сервер для отримання кількості лайків-->
+<!--          fetch('/likeable', {-->
+<!--              method: 'POST',-->
+<!--              headers: {-->
+<!--                  'Content-Type': 'application/json',-->
+<!--              },-->
+<!--              body: JSON.stringify({-->
+<!--                  postId: postId,-->
+<!--              }),-->
+<!--          })-->
+<!--          .then(response => {-->
+<!--              if (!response.ok) {-->
+<!--                  throw new Error('Network response was not ok');-->
+<!--              }-->
+<!--              return response.json();-->
+<!--          })-->
+<!--          .then(data => {-->
+<!--              // Оновлення кількості лайків на сторінці-->
+<!--              let countPost = data.likes; // Припустимо, що сервер повертає об'єкт з полем "likes", яке містить кількість лайків-->
+<!--              iconElement.setAttribute('data-likes', countPost);-->
+<!--              iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';-->
+<!--              let isLiked = countPost > 0;-->
+<!--              iconElement.classList.toggle('fa-thumbs-o-up', !isLiked);-->
+<!--              iconElement.classList.toggle('fa-thumbs-up', isLiked);-->
+<!--          })-->
+<!--          .catch((error) => {-->
+<!--              console.error('Error:', error);-->
+<!--          });-->
+<!--      });-->
+
+<!--      // Запуск функції updateLikes кожні 1 хв-->
+<!--      setTimeout(updateLikes, 30000);-->
+<!--  }-->
+
+<!--  // Запуск функції updateLikes при завантаженні сторінки-->
+<!--  window.onload = updateLikes;-->

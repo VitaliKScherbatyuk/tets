@@ -59,6 +59,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/js/mdb.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
 
 </head>
 <body>
@@ -67,7 +68,7 @@
     <main th:replace="header"></main>
 </header>
 
-<h4>Photos</h4>
+<h4 style="text-align: center; color: white;">Photos</h4>
 <div class="container d-flex">
         <div class="col" style="margin: 5px">
             <!-- Виправлений HTML-шаблон для видалення фото -->
@@ -86,7 +87,7 @@
 </div>
 
 <br>
-<h2>Add Photo</h2>
+<h4 style="text-align: center; color: white;">Add Photo</h4>
 <form th:action="@{/uploadPhotos}" method="post" enctype="multipart/form-data">
     <input type="file" name="image" multiple>
     <input type="text" name="description" placeholder="Description" required>

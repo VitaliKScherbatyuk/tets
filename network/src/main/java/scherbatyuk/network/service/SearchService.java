@@ -36,10 +36,10 @@ public class SearchService {
     public List<PostNews> searchPost(String searchTerm) {
         return entityManager.createQuery(
                         "SELECT p FROM PostNews p WHERE " +
-//                                "LOWER(p.postNews) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-//                                "LOWER(p.encodedImage) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+                                "LOWER(p.postNews) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+                                "LOWER(p.encodedImage) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
                                 "LOWER(p.hashTag) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR "
-//                                +"LOWER(p.user.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))"
+                                +"LOWER(p.user.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))"
                         , PostNews.class)
                 .setParameter("searchTerm", searchTerm)
                 .getResultList();

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.PostLikesRepository;
 import scherbatyuk.network.domain.PostLikes;
+import scherbatyuk.network.domain.PostNews;
+import scherbatyuk.network.domain.User;
 
 import java.util.List;
 

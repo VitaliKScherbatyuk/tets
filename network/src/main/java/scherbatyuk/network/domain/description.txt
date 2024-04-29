@@ -1,5 +1,5 @@
 Потрібно реалізувати:
-1) реалізувати активність користувача                /створив фільтри, доробити/
+/створив фільтри, доробити/
 5) додати створення груп
 6) реалізувати інтернаціональність
 7) реалізувати переклад на різні мови діяльність користувачів (преміум)
@@ -20,3 +20,24 @@
    - найпопулярніший твій допис,
    - найпопулярніший допис друзів
 4) налаштувати пошук дописів за тегом
+1) реалізувати активність користувача
+
+@GetMapping("/search/autocomplete")
+@ResponseBody
+public List<String> searchAutocomplete(@RequestParam String term) {
+    // Поверніть список рядків, які відповідають терміну пошуку.
+    // Це можуть бути імена користувачів, хештеги тощо.
+    return searchService.searchAutocomplete(term);
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.form-control').on('input', function() {
+        var searchTerm = $(this).val();
+        $.get('/search/autocomplete', { term: searchTerm }, function(data) {
+            // Оновіть віджет автозаповнення з даними, отриманими від сервера.
+            // Це може залежати від використовуваного вами плагіна автозаповнення.
+        });
+    });
+});
+</script>
