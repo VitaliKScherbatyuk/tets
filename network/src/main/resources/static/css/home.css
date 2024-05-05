@@ -11,3 +11,10 @@
    padding: -0.25rem 1.25rem;
    margin-bottom: -10px;
 }
+@media (min-width: 768px) and (max-width: 991.98px) {
+    #box_header_left {
+        width: calc(40rem - 5%);
+        margin-left: 5%;
+    }
+
+}

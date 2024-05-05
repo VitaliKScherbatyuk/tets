@@ -11,6 +11,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
     <link rel="stylesheet" type="text/css" href="../static/css/profileUpdate.css">
+    <link rel="manifest" href="/manifest.json">
 
 </head>
 <body>
@@ -18,50 +19,65 @@
 <header>
     <main th:replace="header"></main>
 </header>
+<section>
+    <div class="container text-center boxUpdate">
+        <div class="row">
+            <div class="col-6">
+                <form th:object="${user}" method="post" th:action="@{/profileUpdate}">
+                    <h4 style="text-align: center; color: white;">Update Profile</h4>
+                    <label>
+                        <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required
+                               autofocus>
+                    </label>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
 
-<div class="container text-center boxUpdate">
-    <div class="row">
-        <div class="col-6">
-            <form th:object="${user}" method="post"  th:action="@{/profileUpdate}">
-                <h4 style="text-align: center; color: white;">Update Profile</h4>
-                <label>
-                    <input type="text" class="form-control" placeholder="Name" th:field="*{name}" required autofocus>
-                </label>
-                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></span><br>
+                    <label>
+                        <input type="number" class="form-control" placeholder="Age" th:field="*{age}" required>
+                    </label>
+                    <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
 
-                <label>
-                    <input type="number" class="form-control" placeholder="Age" th:field="*{age}" required>
-                </label>
-                <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
+                    <label>
+                        <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
+                    </label>
+                    <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
 
-                <label>
-                    <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
-                </label>
-                <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
+                    <label>
+                        <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
+                    </label>
+                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>
 
-                <label>
-                    <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
-                </label>
-                <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>
+                    <label>
+                        <input type="text" class="form-control" placeholder="Hobby" th:field="*{hobby}" required>
+                    </label>
+                    <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
 
-                <label>
-                    <input type="text" class="form-control" placeholder="Hobby" th:field="*{hobby}" required>
-                </label>
-                <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>
-
-                <button class="btn btn-lg btn-primary btn-block" type="submit">
-                    Update Profile
-                </button>
-            </form>
-        </div>
-        <div class="col-6">
-            <form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
-                <h4 style="text-align: center; color: white;">Update Photo</h4>
-                <input class="form-control" type="file" name="imageData" multiple>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Update photo</button>
-            </form>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+            <div class="col-6">
+                <form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
+                    <h4 style="text-align: center; color: white;">Update Photo</h4>
+                    <input class="form-control" type="file" name="imageData" multiple>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Update photo</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+          });
+        }
+</script>
+
 </body>
 </html>

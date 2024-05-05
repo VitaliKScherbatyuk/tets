@@ -48,6 +48,17 @@ public class PostController {
 
         model.addAttribute("posts", posts); // додати пости в модель
 
+        model.addAttribute("user", user);
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "addPost";
     }
 

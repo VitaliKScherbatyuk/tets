@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
     <link rel="stylesheet" type="text/css" href="../static/css/comment.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+
 </head>
 <body>
 
@@ -19,19 +21,19 @@
     <main th:replace="header"></main>
 </header>
 
-<div class="container text-center" style="margin-top: 10px">
+<div class="container text-center" >
 
     <div class="row">
-        <div class="col-6">
-            <div class="card boxCard" style="width: 30rem;">
+        <div class="col-lg-6 col-md-auto mx-auto" style="margin: 5% 0">
+            <div class="card" id="boxCard">
                 <div class="container text-center" style="margin-top: 10px">
                     <div class="row justify-content-between">
-                        <div class="col-4">
+                        <div class="col">
                             <a th:href="@{'/user/' + ${post.user.id}}">
                                 <p th:text="${'Published: ' + post.user.name}"></p>
                             </a>
                         </div>
-                        <div class="col-4">
+                        <div class="col">
                             <small class="text-body-secondary" th:text="${post.addPostNews}"></small>
                         </div>
                     </div>
@@ -44,7 +46,7 @@
             </div>
         </div>
 
-        <div class="col-5" style="height: 400px; overflow-y: auto;">
+        <div class="col-lg-5 col-md-12" style="height: 400px; overflow-y: auto; margin: 5% 2%">
 
             <div th:each="commentPost:${comments}">
 
@@ -88,6 +90,18 @@
 
     </div>
 </div>
+
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+</script>
 
 </body>
 </html>

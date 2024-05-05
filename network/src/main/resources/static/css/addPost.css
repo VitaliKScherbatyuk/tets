@@ -7,10 +7,20 @@ h3, label{
    border: 1px solid white;
    border-radius: 15px;
    margin: 50px auto;
-  -moz-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-          -webkit-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-          box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
+   -moz-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
+   -webkit-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
+   box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
 }
-.btn{
-   margin-top: 20px;
+.btnForm{
+   margin: 20px 0;
 }
+/*.fixed-bottom {
+   position: fixed;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   background-color: #f8f9fa;
+   border-top: 1px solid #dee2e6;
+   padding: 10px 0;
+}*/
+

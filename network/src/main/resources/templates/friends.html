@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Friends</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -10,6 +10,8 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
     <link rel="stylesheet" type="text/css" href="../static/css/friends.css">
+    <link rel="manifest" href="/manifest.json">
+
 </head>
 <body>
 
@@ -17,36 +19,50 @@
     <main th:replace="header"></main>
 </header>
 
-<h4 style="text-align: center; color: white;">Friends</h4>
-<div class="row" style="margin: 20px">
-    <div class="col-xl-4 col-lg-5 mb-4">
-        <div  th:each="user : ${users}">
-            <a th:href="@{'/user/' + ${user.getId()}}">
-                <div class="card" style="margin: 10px">
+<section>
+    <h4 style="text-align: center; color: white; margin-top: 5%;">Friends</h4>
+    <div class="row" style="margin: 20px">
+        <div class="col-xl-4 col-lg-5 mb-4">
+            <div th:each="user : ${users}">
+                <a th:href="@{'/user/' + ${user.getId()}}">
+                    <div class="card" style="margin: 10px">
 
                     <span class="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
                           th:classappend="${friendsOnlineStatus.get(user) ? 'online' : 'offline'}">
                         <span class="visually-hidden">New alerts</span>
                     </span>
 
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <img
-                                    th:src="${'data:image/jpeg;base64,' + user.imageData}"
-                                    alt="User Image"
-                                    style="width: 45px; height: 45px"
-                                    class="rounded-circle"
-                            />
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1" th:text="${user.name}">John Doe</p>
-                                <p class="text-muted mb-0" th:text="${user.email}">john.doe@gmail.com</p>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <img
+                                        th:src="${'data:image/jpeg;base64,' + user.imageData}"
+                                        alt="User Image"
+                                        style="width: 45px; height: 45px"
+                                        class="rounded-circle"
+                                />
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1" th:text="${user.name}">John Doe</p>
+                                    <p class="text-muted mb-0" th:text="${user.email}">john.doe@gmail.com</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
-</div>
+</section>
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+          });
+        }
+</script>
+
 </body>
 </html>

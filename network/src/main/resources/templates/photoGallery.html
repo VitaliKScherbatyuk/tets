@@ -13,6 +13,7 @@
             crossorigin="anonymous"></script>
     <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/js/mdb.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="manifest" href="/manifest.json">
 
 </head>
 <body>
@@ -21,7 +22,7 @@
     <main th:replace="header"></main>
 </header>
 
-<h4 style="text-align: center; color: white;">Photo gallery</h4>
+<h4 style="text-align: center; color: white; margin-top: 5%;">Photo gallery</h4>
 <div class="d-flex col-xl-10">
     <div th:each="album : ${albums}">
         <div class="card" id="userCard" style="width: 10rem; margin: 15px; border-radius: 10px">
@@ -40,5 +41,18 @@
         </div>
     </div>
 </div>
+
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+          });
+        }
+</script>
+
 </body>
 </html>

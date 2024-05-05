@@ -75,7 +75,19 @@ public class MessageController {
             message.setReadMessage(true);
             messageService.updateMessage(message); // Збереження змін у базу даних
         }
+
         model.addAttribute("messages", messages);
+        model.addAttribute("user", currentUser);
+
+        int age = currentUser.getAge();
+        String country = currentUser.getCountry();
+        String hobby = currentUser.getHobby();
+        String imageData = currentUser.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
 
         return "viewMessages";
     }

@@ -11,6 +11,8 @@
             crossorigin="anonymous"></script>
     <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/js/mdb.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="manifest" href="/manifest.json">
+
 </head>
 <body>
 
@@ -20,9 +22,9 @@
 
 <div class="container text-center">
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-md-6">
             <h4 style="text-align: center; color: white; margin: 10px 0">Rating of own post</h4>
-            <div class="card" style="width: 25rem; margin: 10px auto" th:if="${myTopPost}">
+            <div class="card col-md-12" style="width: 25rem; margin: 10px auto" th:if="${myTopPost}">
                 <div class="container text-center">
                     <div class="row justify-content-between" style="margin: 5px 0">
                         <div class="col-4">
@@ -60,9 +62,9 @@
             </div>
         </div>
 
-        <div class="col-6">
-            <h4 style="text-align: center; color: white; margin: 10px 0">Rating of a friend's post</h4>
-            <div class="card" style="width: 25rem; margin: 10px auto" th:if="${topPost}">
+        <div class="col-lg-6 col-md-6">
+            <h4 style="text-align: center; color: white; margin: 5% 0">Rating of a friend's post</h4>
+            <div class="card col-md-12" style="width: 25rem; margin: 10px auto" th:if="${topPost}">
                 <div class="container text-center">
                     <div class="row justify-content-between" style="margin: 5px 0">
                         <div class="col-4">
@@ -103,6 +105,18 @@
 
     </div>
 </div>
+
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
+<script>
+    if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+          });
+        }
+</script>
 
 </body>
 </html>

@@ -164,6 +164,7 @@ public class UserController {
     public String userPage(Model model) {
         List<User> users = userService.getAllUser();
         model.addAttribute("users", users);
+
         return "users";
     }
 
@@ -173,6 +174,17 @@ public class UserController {
         User user = userService.findByEmail(userEmail);
 
         model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "profileUpdate";
     }
 
@@ -277,6 +289,16 @@ public class UserController {
         Friends friendsRequest = new Friends();
         friendsRequest.setId(id);
         model.addAttribute("friendsRequest", friendsRequest);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
 
         return "userDetail";
     }

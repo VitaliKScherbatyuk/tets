@@ -20,7 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * responsible for handling HTTP requests related to a user's friends, including adding friends,
+ * responding to friend requests, and displaying a list of friends
+ */
 @Controller
 public class FriendsController {
 
@@ -32,7 +35,9 @@ public class FriendsController {
     private PostNewsService postNewsService;
 
     /**
-     * Метод для додавання запиту дружби, автоматично присвоюється значення PENDING
+     * the method handles sending a friend request between a user and another user;
+     * Creates a Friends object that represents the friend request and stores it in the database;
+     * А friend request message is sent
      * @param friendId
      * @param model
      * @return
@@ -44,7 +49,6 @@ public class FriendsController {
         User user = userService.findByEmail(userEmail);
 
         try {
-            // Створення та збереження дружби
             Friends friendship = new Friends();
             friendship.setUser(user);
             User friend = userService.findById(friendId);
@@ -52,7 +56,6 @@ public class FriendsController {
             friendship.setStatus(FriendshipStatus.PENDING);
             friendsService.saveFriendship(friendship);
 
-            // Виклик методу для відправки запиту на дружбу
             friendsService.sendFriendRequest(friendId, user.getId());
 
             model.addAttribute("friendId", friendId);
@@ -64,8 +67,8 @@ public class FriendsController {
     }
 
     /**
-     * Метод для відображення всіх запитів дружби для залогіненого користувача.
-     * На html сторінці присутні кнопки для підтвердження або відхилення дружби.
+     * Displays all friend requests for the logged in user.
+     * Returns a page where the user can approve or decline friend requests.
      * @param model
      * @return
      */
@@ -81,12 +84,24 @@ public class FriendsController {
         }
         model.addAttribute("users", friendsList);
 
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "answer-request";
     }
 
     /**
-     * Метод для погодження або відхилення запиту дружби, яка створюється на основі прийнятого значення status.
-     * Значення двох юзерів та статус передається в сервіс, який опрацьовує відповідне підтвердження або відхилення.
+     * Handles responses to friend requests.
+     * Changes the friendship status depending on whether the request was accepted
      * @param id
      * @param model
      * @return
@@ -102,7 +117,9 @@ public class FriendsController {
     }
 
     /**
-     * Метод який відображає всіх підтверджених друзів на основі фільтруванню за статусом: ACCEPTED
+     * Displays all verified friends of the user.
+     * Gets a list of friends and their online status.
+     * Returns a page with a list of friends and their online status
      * @param model
      * @return
      */
@@ -110,13 +127,11 @@ public class FriendsController {
     public String getFriends(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
 
-        // Отримуємо список друзів
         List<User> friendsListAcceped = friendsService.getFriends(user.getId());
         if (friendsListAcceped.isEmpty()) {
             return "redirect:/home";
         }
 
-        // Для кожного друга в списку перевіряємо, чи він онлайн
         Map<User, Boolean> friendsOnlineStatus = new HashMap<>();
         for (User friend : friendsListAcceped) {
             friendsOnlineStatus.put(friend, friendsService.isUserOnline(friend));
@@ -125,26 +140,47 @@ public class FriendsController {
         model.addAttribute("users", friendsListAcceped);
         model.addAttribute("friendsOnlineStatus", friendsOnlineStatus);
 
+        model.addAttribute("user", user);
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "friends";
     }
 
+    /**
+     * Displays a page with the posts of the user's friends.
+     * Gets a list of the user's friends and their posts, sorted by date.
+     * Adds information about the user (age, country, hobbies, etc.) and their posts to the model
+     * to be displayed on the page.
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/friendliesPage/{id}")
     public String friendliesPage (@PathVariable Integer id, Model model){
         User user = userService.findById(id);
-        List<User> friends = friendsService.getFriends(user.getId()); // отримати список друзів користувача
-        List<PostNews> posts = postNewsService.getPostsByUsers(friends); // отримати пости друзів
-        posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed()); // сортувати по даті
+        List<User> friends = friendsService.getFriends(user.getId());
+        List<PostNews> posts = postNewsService.getPostsByUsers(friends);
+        posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed());
 
-        model.addAttribute("posts", posts); // додати пости в модель
+        model.addAttribute("posts", posts);
 
+        model.addAttribute("user", user);
         int age = user.getAge();
         String country = user.getCountry();
         String hobby = user.getHobby();
         String imageDate = user.getImageData();
-        model.addAttribute("user", user); // Додати об'єкт користувача в модель
-        model.addAttribute("age", age); // Додати вік в модель
-        model.addAttribute("country", country); // Додати країну в модель
-        model.addAttribute("hobby", hobby); // Додати хобі в модель
+        model.addAttribute("user", user);
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
         model.addAttribute("imageDate", imageDate);
 
         return "friendliesPage";

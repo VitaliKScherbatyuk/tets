@@ -95,6 +95,18 @@ public class LikesController {
 
         myTopPost.ifPresent(post -> model.addAttribute("myTopPost", post)); // Передати пост користувача в шаблон
 
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "rating";
     }
 

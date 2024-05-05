@@ -31,6 +31,21 @@ public class PhotoAlbumController {
     public String photoSetting(Model model){
         List<PhotoAlbum> albums = photoAlbumService.getAllAlbums();
         model.addAttribute("albums", albums);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "photoSetting";
     }
 
@@ -55,7 +70,22 @@ public class PhotoAlbumController {
     @GetMapping("/album/{id}")
     public String viewAlbums(@PathVariable Integer id, Model model) {
         model.addAttribute("id", id);
-        model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id)); // Assuming you have a method to retrieve photos by album id
+        model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
         return "albums";
     }
 
@@ -81,6 +111,21 @@ public class PhotoAlbumController {
     public String photoGallery(@PathVariable Integer id, Model model){
         List<PhotoAlbum> albums = photoAlbumService.findByUserId(id);
         model.addAttribute("albums", albums);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
         return "photoGallery";
     }
 
@@ -88,6 +133,22 @@ public class PhotoAlbumController {
     public String photoGalleryDetails(@PathVariable Integer id, Model model) {
         model.addAttribute("id", id);
         model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id)); // Assuming you have a method to retrieve photos by album id
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
+
         return "photoGalleryDetails";
     }
 
@@ -95,6 +156,7 @@ public class PhotoAlbumController {
     public String photoGalleryFriend(@PathVariable Integer id, Model model){
         List<PhotoAlbum> albums = photoAlbumService.findByUserId(id);
         model.addAttribute("albums", albums);
+
         return "photoGallery";
     }
 }

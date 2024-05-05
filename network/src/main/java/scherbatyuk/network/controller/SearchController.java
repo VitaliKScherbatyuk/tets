@@ -1,6 +1,8 @@
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,8 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/search")
     public String search(@RequestParam String searchTerm, Model model) {
@@ -29,6 +33,21 @@ public class SearchController {
             List<User> users = searchService.searchUsers(searchTerm);
             model.addAttribute("users", users);
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User user = userService.findByEmail(userEmail);
+        model.addAttribute("user", user);
+
+        int age = user.getAge();
+        String country = user.getCountry();
+        String hobby = user.getHobby();
+        String imageData = user.getImageData();
+
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
+        model.addAttribute("imageData", imageData);
 
         return "searchResults";
     }

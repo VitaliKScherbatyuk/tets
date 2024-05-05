@@ -9,13 +9,14 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/login.css">
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody.css">
+    <link rel="manifest" href="/manifest.json">
 
 </head>
 <body>
 
 <div class="container" id="registration">
     <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="col-sm-6 col-md-4">
             <h1 class="text-center login-title text text1">Registration</h1>
             <div class="account-wall">
                 <img class="profile-img"
@@ -38,21 +39,6 @@
                     </label>
                     <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
 
-<!--                    <label>-->
-<!--                        <input type="text" class="form-control" th:placeholder="#{registration.city}" th:field="*{city}" required autofocus>-->
-<!--                    </label>-->
-<!--                    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color: red;"></span><br>-->
-
-<!--                    <label>-->
-<!--                        <input type="text" class="form-control" th:placeholder="#{registration.hobby}" th:field="*{hobby}" required autofocus>-->
-<!--                    </label>-->
-<!--                    <span th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color: red;"></span><br>-->
-
-<!--                    <label>-->
-<!--                        <input type="file" class="form-control" th:placeholder="#{registration.image}" th:field="*{image}" required autofocus>-->
-<!--                    </label>-->
-<!--                    <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" style="color: red;"></span><br>-->
-                    
                     <label>
                         <input type="email" class="form-control" placeholder="email" th:field="*{email}" required autofocus>
                     </label>
@@ -72,6 +58,27 @@
         </div>
     </div>
 </div>
+
+<style>
+    @media (min-width: 992px) {
+    .col-md-4 {
+        width: 125%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-sm-6 {
+        width: 125%;
+    }
+}
+</style>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js');
+        });
+      }
+</script>
 
 </body>
 </html>

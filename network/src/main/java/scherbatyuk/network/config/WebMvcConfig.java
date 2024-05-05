@@ -49,7 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages"); // змінено на "messages"
+        messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
@@ -88,6 +88,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+    /**
+     * used to configure the resource handler
+     *
+     * addResourceHandler("/image/**"): This specifies that all requests starting with /image/ should be
+     * handled by this resource handler
+     *
+     * addResourceLocations("classpath:/static/image/"): This specifies the location where the resource
+     * handler should look for resources
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/image/**")

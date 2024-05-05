@@ -11,6 +11,8 @@
 
     <link rel="stylesheet" type="text/css" href="../static/css/home.css">
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="manifest" href="/manifest.json">
+
 </head>
 <body>
 
@@ -47,6 +49,7 @@
                         <div class="row justify-content-between">
 
                             <div class="col-4">
+                                <!--                                Виправити значення postLikes.likePost  !!!!!!!!!   -->
                                 <i class="fa"
                                    th:classappend="${post.likeInPost == 1 ? 'fa-thumbs-up' : 'fa-thumbs-o-up'}"
                                    aria-hidden="true" onclick="likePost(this)"
@@ -70,7 +73,7 @@
 
             </div>
             <!-- Профіль -->
-            <div class="col-2" style="margin-top: 10px;">
+            <div class="col-2 d-none d-lg-block" style="margin-top: 10px;">
 
                 <div id="box_header_right" class="card" style="width: 14rem; border-radius: 15px;">
                     <img class="card-img-top" id="imageProfile" th:src="${'data:image/jpeg;base64,' + user.imageData}"
@@ -167,41 +170,52 @@
     </div>
 </section>
 
+<footer>
+    <main th:replace="footer_Mobile"></main>
+</footer>
+
 <script>
 
-function likePost(iconElement) {
-    let postId = iconElement.getAttribute('data-post-id');
-    let countPost = parseInt(iconElement.getAttribute('data-likes'));
-    let isLiked = iconElement.classList.contains('fa-thumbs-up');
-    countPost += isLiked ? -1 : 1;
-    iconElement.setAttribute('data-likes', countPost);
-    iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
-    iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
-    iconElement.classList.toggle('fa-thumbs-up', !isLiked);
+    function likePost(iconElement) {
+        let postId = iconElement.getAttribute('data-post-id');
+        let countPost = parseInt(iconElement.getAttribute('data-likes'));
+        let isLiked = iconElement.classList.contains('fa-thumbs-up');
+        countPost += isLiked ? -1 : 1;
+        iconElement.setAttribute('data-likes', countPost);
+        iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
+        iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
+        iconElement.classList.toggle('fa-thumbs-up', !isLiked);
 
-    fetch('/addLikeToPost', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            postId: postId,
-            likes: countPost,
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        fetch('/addLikeToPost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                postId: postId,
+                likes: countPost,
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+          });
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
 
 </script>
 

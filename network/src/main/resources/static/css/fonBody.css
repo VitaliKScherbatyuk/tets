@@ -5,3 +5,8 @@ body{
     background-attachment: fixed; /* Зафіксувати фон при скролінгу */
 
 }
+@media (min-width: 768px) {
+    body {
+        background-position: right;
+    }
+}
