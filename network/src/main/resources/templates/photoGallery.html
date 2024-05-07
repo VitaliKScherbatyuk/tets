@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Photo gallery</title>
+    <title th:text="#{photoGallery.title}">Photo gallery</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
           rel="stylesheet"/>
@@ -22,7 +22,7 @@
     <main th:replace="header"></main>
 </header>
 
-<h4 style="text-align: center; color: white; margin-top: 5%;">Photo gallery</h4>
+<h4 style="text-align: center; color: white; margin-top: 5%;" th:text="#{photoGallery.title}">Photo gallery</h4>
 <div class="d-flex col-xl-10">
     <div th:each="album : ${albums}">
         <div class="card" id="userCard" style="width: 10rem; margin: 15px; border-radius: 10px">

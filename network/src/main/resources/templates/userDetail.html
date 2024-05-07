@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>User Details</title>
+    <title th:text="#{userDetails.title}">User Details</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -24,41 +24,41 @@
         <img th:src="${'data:image/jpeg;base64,' + user.imageData}" class="card-img-top" alt="...">
         <div class="card-body" style="text-align:center">
             <h5 class="card-title" th:text="${user.name}">Card title</h5>
-            <p class="card-text textBox" th:text="'Age: ' + ${user.age}">Text</p>
-            <p class="card-text textBox" th:text="'Email: ' + ${user.email}">Text</p>
-            <p class="card-text textBox" th:text="'Country: ' + ${user.country}">Text</p>
-            <p class="card-text textBox" th:text="'City: ' + ${user.city}">Text</p>
-            <small class="text-muted" th:text="'Hobby: ' + ${user.hobby}"></small>
+            <p class="card-text textBox" th:text="#{userDetails.age} + ' ' + ${user.age}">Text</p>
+            <p class="card-text textBox" th:text="#{userDetails.email} + ' ' + ${user.email}">Text</p>
+            <p class="card-text textBox" th:text="#{userDetails.country} + ' ' + ${user.country}">Text</p>
+            <p class="card-text textBox" th:text="#{userDetails.city} + ' ' + ${user.city}">Text</p>
+            <small class="text-muted" th:text="#{userDetails.hobby} + ' ' + ${user.hobby}"></small>
         </div>
 
         <ul class="list-group" style="text-align: center">
             <li class="list-group-item list-group-item-action boxList" th:unless="${isFriend}">
                 <form th:action="@{/addFriends}" method="post" th:object="${friendsRequest}">
                     <input type="hidden" name="friendId" th:value="${user.id}"/>
-                    <button type="submit" class="btn btn-link liBox">Add as Friend</button>
+                    <button type="submit" class="btn btn-link liBox" th:text="#{userDetails.addFriend}">Add as Friend</button>
                 </form>
             </li>
             <li class="list-group-item list-group-item-action boxList" th:if="${isFriend}">
-                <a th:href="@{'/friendliesPage/' + ${user.id}}">Open page</a>
+                <a th:href="@{'/friendliesPage/' + ${user.id}}" th:text="#{userDetails.openPage}">Open page</a>
             </li>
             <li class="list-group-item list-group-item-action boxList">
                 <p class="d-inline-flex gap-1 liBox">
                     <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseExample" role="button"
                        aria-expanded="false"
-                       aria-controls="collapseExample">
+                       aria-controls="collapseExample" th:text="#{userDetails.sendMessage}">
                         Send message
                     </a>
                 </p>
                 <div class="collapse" id="collapseExample">
                     <form id="messageForm" th:action="@{/sendMessage}" method="post">
                         <div class="mb-3">
-                            <label for="messageText" class="form-label">Message Text</label>
+                            <label for="messageText" class="form-label" th:text="#{userDetails.textMessage}">Message Text</label>
                             <textarea class="form-control" id="messageText" name="messageText"
                                       rows="3"></textarea>
                         </div>
                         <input type="hidden" name="userId" th:value="${user.id}"/>
 
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{userDetails.sendMessage}">Send Message</button>
                     </form>
                 </div>
             </li>

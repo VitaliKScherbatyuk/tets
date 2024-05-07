@@ -20,13 +20,24 @@
             });
         });
 
+        $(document).ready(function() {
+            var selItem = localStorage.getItem("locales");
+            $('#locales').val(selItem ? selItem : 'en');
+            $("#locales").change(function() {
+                var selectedOption = $('#locales').val();
+                if (selectedOption) {
+                    window.location.replace('?lang=' + selectedOption);
+                    localStorage.setItem("locales", selectedOption);
+                }
+            });
+        });
     </script>
 
 </head>
 <body>
 
 <nav id="formBody" class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
-    <h3 class="text text1">Hobby network</h3>
+    <h3 class="text text1" th:text="#{headBox.nameNetwork}">Hobby network</h3>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,7 +48,7 @@
             <li class="nav-item active">
                 <a class="nav-link" th:href="@{'/home'}">
                     <i class="fa fa-home"></i>
-                    Home
+                    <span th:text="#{headBox.home}">Home</span>
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
@@ -46,7 +57,7 @@
                     <i class="fa fa-envelope-o" th:href="@{/view-messages}">
                         <span class="badge badge-danger" th:text="${countMessages}"></span>
                     </i>
-                    Messages
+                    <span th:text="#{headBox.messages}">Messages</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -54,28 +65,36 @@
                     <i class="fa fa-bell">
                         <span class="badge badge-info" th:text="${countRequests}"></span>
                     </i>
-                    Notification
+                    <span th:text="#{headBox.notification}">Notification</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/rating}">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                    Rating
+                    <span th:text="#{headBox.rating}">Rating</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/logout}">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
-                    LogOut
+                    <span th:text="#{headBox.logOut}">LogOut</span>
                 </a>
             </li>
         </ul>
-        <div>
+        <div class="d-flex justify-content-center align-items-center">
+            <div style="border-radius: 10px; margin: 0 10px;">
+                <label for="locales"></label>
+                <select id="locales">
+                    <option value="en" th:text="#{headBox.lang.en}">English</option>
+                    <option value="uk" th:text="#{headBox.lang.uk}">Українська</option>
+                </select>
+            </div>
             <nav class="navbar bg-light" style="border-radius: 10px">
                 <div class="container-fluid">
                     <form class="d-flex" role="search" action="/search" method="post">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchTerm">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                               name="searchTerm">
+                        <button class="btn btn-outline-success" type="submit" th:text="#{headBox.search}">Search</button>
                     </form>
                 </div>
             </nav>
