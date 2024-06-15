@@ -34,4 +34,7 @@ public class RepostService {
         return repostRepository.getRepostsByUser(user);
     }
 
+    public boolean hasUserAlreadyReposted(User user, PostNews post) {
+        return repostRepository.findByUserAndPost(user, post).isPresent();
+    }
 }

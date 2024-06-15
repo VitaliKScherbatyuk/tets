@@ -22,7 +22,7 @@
 <section>
     <div class="container text-center boxUpdate">
         <div class="row">
-            <div class="col-6">
+            <div class="col-5 box">
                 <form th:object="${user}" method="post" th:action="@{/profileUpdate}">
                     <h4 style="text-align: center; color: white;" th:text="#{profileUpdate.update}">Update Profile</h4>
                     <label>
@@ -56,11 +56,11 @@
                     </button>
                 </form>
             </div>
-            <div class="col-6">
+            <div class="col-5 box">
                 <form th:action="@{/profileImageUpdate}" method="post" enctype="multipart/form-data">
                     <h4 style="text-align: center; color: white;" th:text="#{profileUpdate.updatePhoto}">Update Photo</h4>
                     <input class="form-control" type="file" name="imageData" multiple>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{profileUpdate.submitPhoto}">Update photo</button>
+                    <button class="btn btn-lg btn-primary btn-block" style="margin-top: 10px;" type="submit" th:text="#{profileUpdate.submitPhoto}">Update photo</button>
                 </form>
             </div>
         </div>

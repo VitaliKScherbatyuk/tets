@@ -14,15 +14,30 @@
     <link rel="manifest" href="/manifest.json">
 
     <style>
-        #box_header_left{
-        };
+        #box_header_left {
+            /* Ваші стилі для #box_header_left тут */
+        }
+
         @media (max-width: 768px) {
             #box_header_left {
-                width: 35rem;
+                width: 100%;
+            }
+
+            #box_header_right {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .custom-col-lg-10 {
+                width: 75.333333%;
+            }
+
+            .custom-col-lg-2 {
+                width: 16.666667%;
             }
         }
     </style>
-
 </head>
 <body>
 
@@ -33,15 +48,15 @@
 <section>
     <div class="container-fluid text-center">
         <div class="row justify-content-center">
-            <div class="col-lg-10 col-md-10">
+            <div class="col-lg-10 col-md-10 custom-col-lg-10">
 
                 <div id="box_header_left" th:each="post: ${posts}" class="card"
-                     style="width: 40rem; margin: 10px auto">
+                     style="width: 100%; max-width: 40rem; margin: 10px auto">
                     <div class="container text-center" style="margin-top: 10px">
                         <div class="row justify-content-between">
                             <div class="col-4">
                                 <a th:href="@{'/user/' + ${user.getId()}}">
-                                    <p th:text="${'Published: ' + ${post.user.name}"></p>
+                                    <p th:text="'Published: ' + ${post.user.name}"></p>
                                 </a>
                             </div>
                             <div class="col-4">
@@ -80,14 +95,14 @@
 
             </div>
             <!-- Профіль -->
-            <div class="col-lg-2 col-md-2" style="margin-top: 10px;">
+            <div class="col-lg-2 col-md-2 custom-col-lg-2" style="margin-top: 10px;">
 
-                <div id="box_header_right" class="card" style="width: 14rem; border-radius: 15px;">
+                <div id="box_header_right" class="card" style="width: 100%; max-width: 14rem; border-radius: 15px;">
                     <img class="card-img-top" id="imageProfile" th:src="${'data:image/jpeg;base64,' + user.imageData}"
                          alt="User Image">
                     <div class="card-body">
 
-                        <div class="card" style="width: 12rem;">
+                        <div class="card" style="width: 100%; max-width: 12rem;">
                             <ul class="list-group list-group-flush link">
 
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -141,7 +156,7 @@
                                                         data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                                 <!-- Copyright -->
                                                 <div class="text-center p-3"
-                                                     style="background-color: rgba(0, 0, 0, 0.05);" th:text="#{pageFriendsPage.projectBy}">
+                                                     style="background-color: rgba(0, 0, 0, 0.05);">
                                                     © 2024 Project by:
                                                     <a class="text-black"
                                                        href="https://www.linkedin.com/in/v-s-485101240/"
@@ -169,38 +184,72 @@
 
 <script>
     function repostPost(element) {
-     var postId = element.getAttribute("data-post-id");
+        var postId = element.getAttribute("data-post-id");
 
-     var rePostId = {
-         postId: postId
-     };
+        var rePostId = {
+            postId: postId
+        };
 
-     fetch('/createRepost', {
-         method: 'POST',
-         headers: {
-             'Content-Type': 'application/json'
-         },
-         body: JSON.stringify(rePostId)
-     })
-     .then(response => {
-         if (response.ok) {
-             // Якщо репост створено успішно, ви можете виконати необхідні дії, наприклад, оновити сторінку або відобразити повідомлення про успішність
-             console.log('Репост створено успішно');
-         } else {
-             // Якщо сталася помилка при створенні репосту, ви можете відобразити повідомлення про помилку або виконати інші дії
-             console.error('Помилка при створенні репосту');
-         }
-     })
-     .catch(error => {
-         // Обробка помилок під час відправлення запиту на сервер
-         console.error('Помилка при відправленні запиту на сервер:', error);
-     });
- }
+        fetch('/createRepost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(rePostId)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Якщо репост створено успішно, ви можете виконати необхідні дії, наприклад, оновити сторінку або відобразити повідомлення про успішність
+                console.log('Репост створено успішно');
+            } else {
+                // Якщо сталася помилка при створенні репосту, ви можете відобразити повідомлення про помилку або виконати інші дії
+                console.error('Помилка при створенні репосту');
+            }
+        })
+        .catch(error => {
+            // Обробка помилок під час відправлення запиту на сервер
+            console.error('Помилка при відправленні запиту на сервер:', error);
+        });
+    }
 
-     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js');
-      });
+    function likePost(iconElement) {
+        let postId = iconElement.getAttribute('data-post-id');
+        let countPost = parseInt(iconElement.getAttribute('data-likes'), 10);
+        let isLiked = iconElement.classList.contains('fa-thumbs-up');
+        countPost += isLiked ? -1 : 1;
+        iconElement.setAttribute('data-likes', countPost);
+        iconElement.nextElementSibling.textContent = countPost > 0 ? countPost : '';
+        iconElement.classList.toggle('fa-thumbs-o-up', isLiked);
+        iconElement.classList.toggle('fa-thumbs-up', !isLiked);
+
+        fetch('/addLikeToPost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                postId: postId,
+                likes: countPost,
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js');
+        });
     }
 </script>
 

@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.domain.PhotoAlbum;
 import scherbatyuk.network.domain.User;
-import scherbatyuk.network.service.PhotoAlbumService;
-import scherbatyuk.network.service.PhotoService;
-import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,6 +23,10 @@ public class PhotoAlbumController {
     private UserService userService;
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private FriendsService friendsService;
+    @Autowired
+    private MessageService messageService;
 
 
     @GetMapping("/photoSetting")
@@ -45,6 +47,12 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "photoSetting";
     }
@@ -86,6 +94,12 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
         return "albums";
     }
 
@@ -126,6 +140,12 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
         return "photoGallery";
     }
 
@@ -148,6 +168,12 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "photoGalleryDetails";
     }

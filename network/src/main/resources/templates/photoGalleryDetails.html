@@ -17,6 +17,13 @@
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
     <link rel="manifest" href="/manifest.json">
 
+    <style>
+        .photoBox{
+           -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+           -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+           box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <body>
 
@@ -27,9 +34,7 @@
 <h4 style="text-align: center; color: white; margin-top: 5%;" th:text="#{photoGalleryDetail.photos}">Photos</h4>
 <div class="container d-flex">
     <div class="col" style="margin: 5px">
-        <!-- Виправлений HTML-шаблон для видалення фото -->
-        <div th:each="photo : ${photos}" class="card" style="width: 10rem;">
-                        <!-- Відображення зображення -->
+        <div th:each="photo : ${photos}" class="card photoBox" style="width: 10rem;">
             <img th:src="@{'data:image/jpeg;base64,' + ${photo.encodedImage}}" class="card-img-top" alt="Photo"/>
             <!-- Відображення опису фотографії -->
             <div class="card-body" style="text-align: center">

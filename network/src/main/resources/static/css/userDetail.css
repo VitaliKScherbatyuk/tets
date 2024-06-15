@@ -1,18 +1,20 @@
-#cardBox{
-   -moz-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-   -webkit-box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
-   box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
-}
 img{
    max-width: 11rem;
    max-height: 11rem;
    border-radius: 10px;
    margin: 10px auto 0 auto ;
 }
+
 .textBox{
    margin: -2px 0;
 }
+
 li.list-group-item.list-group-item-action{
    padding: 0.15rem 1.25rem;
 }
 
+.userBox{
+   -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+   -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}

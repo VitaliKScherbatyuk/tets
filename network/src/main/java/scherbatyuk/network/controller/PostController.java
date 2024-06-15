@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import scherbatyuk.network.domain.PostLikes;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
-import scherbatyuk.network.service.PostLikesService;
-import scherbatyuk.network.service.PostNewsService;
-import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +28,10 @@ public class PostController {
     private UserService userService;
     @Autowired
     private PostLikesService postLikesService;
+    @Autowired
+    private FriendsService friendsService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * Відображення сторінки addPost враховуючи сортування за датою створення
@@ -58,6 +60,12 @@ public class PostController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "addPost";
     }
@@ -96,7 +104,7 @@ public class PostController {
     }
 
     /**
-     * видалення посту за його id
+     * видалення посту за його id та лайки до цього посту
      * @param postId
      * @return
      */
@@ -105,6 +113,5 @@ public class PostController {
         postNewsService.deletePost(postId);
         return "redirect:/addPost";
     }
-
 
 }

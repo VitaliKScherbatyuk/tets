@@ -12,6 +12,7 @@ import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.service.FriendsService;
+import scherbatyuk.network.service.MessageService;
 import scherbatyuk.network.service.PostNewsService;
 import scherbatyuk.network.service.UserService;
 
@@ -33,6 +34,8 @@ public class FriendsController {
     private FriendsService friendsService;
     @Autowired
     private PostNewsService postNewsService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * the method handles sending a friend request between a user and another user;
@@ -96,6 +99,12 @@ public class FriendsController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
+
         return "answer-request";
     }
 
@@ -113,6 +122,7 @@ public class FriendsController {
         User currentUser = userService.findByEmail(userEmail);
 
         friendsService.responseFriendRequest(currentUser.getId(), id, status);
+
         return "redirect:/home";
     }
 
@@ -151,6 +161,12 @@ public class FriendsController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
+
         return "friends";
     }
 
@@ -183,8 +199,14 @@ public class FriendsController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageDate", imageDate);
 
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
+
         return "friendliesPage";
     }
+
 }
 
 

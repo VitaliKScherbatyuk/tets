@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
+import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.MessageService;
 import scherbatyuk.network.service.UserService;
 
@@ -24,6 +25,8 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private FriendsService friendsService;
 
     /**
      * Контроллер для збереження нового повідомлення в БД.
@@ -88,6 +91,12 @@ public class MessageController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(currentUser.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(currentUser.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(currentUser.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "viewMessages";
     }

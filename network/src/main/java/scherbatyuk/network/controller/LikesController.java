@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import scherbatyuk.network.domain.PostLikes;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
-import scherbatyuk.network.service.FriendsService;
-import scherbatyuk.network.service.PostLikesService;
-import scherbatyuk.network.service.PostNewsService;
-import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +30,8 @@ public class LikesController {
     private PostNewsService postNewsService;
     @Autowired
     private FriendsService friendsService;
+    @Autowired
+    private MessageService messageService;
 
     @PostMapping("/addLikeToPost")
     @Transactional
@@ -106,6 +105,11 @@ public class LikesController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "rating";
     }

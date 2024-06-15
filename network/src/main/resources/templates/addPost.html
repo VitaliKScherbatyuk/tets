@@ -25,18 +25,18 @@
         <div class="row">
             <div class="col-6">
                 <div id="box_header_left" th:each="post : ${posts}" class="card"
-                     style="width: 20rem; margin: 10px auto">
+                     style="width: 20rem; margin: 15px auto">
                     <a class="position-absolute top-0 start-100 translate-middle p-1"
                        th:href="@{'/deletePost/' + ${post.getId()}}">
                         <i class="fas fa-trash"></i></a>
                     <img th:src="${'data:image/jpeg;base64,' + post.encodedImage}" class="card-img-top"
                          alt="Post image">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${post.postNews}">Post title</h5>
+                        <h6 class="card-title" th:text="${post.postNews}">Post title</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-4 boxAddPostMain">
+            <div class="col-4" id="boxAddPostMain">
                 <form action="/savePost" method="post" enctype="multipart/form-data">
                     <h4 style="text-align: center; color: white;" th:text="#{pageAddPost.addPost}">Add post</h4>
                     <label for="image" th:text="#{pageAddPost.image}">Image:</label>

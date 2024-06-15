@@ -43,7 +43,7 @@
                     <img th:src="${'data:image/jpeg;base64,' + post.encodedImage}" class="card-img-top"
                          alt="Post image">
                     <div style="margin: 10px">
-                        <h5 class="card-title" th:text="${post.postNews}">Post title</h5>
+                        <h6 class="card-title" th:text="${post.postNews}">Post title</h6>
                     </div>
 
                     <div class="container text-center" style="margin-bottom: 10px">
@@ -61,6 +61,7 @@
 
 
                             <div class="col-4">
+<!--                                Злетів репост !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
                                 <i class="fa fa-retweet" aria-hidden="true"></i>
                             </div>
                             <div class="col-4">
@@ -87,7 +88,7 @@
                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="flush-headingOne">
-                                            <button class="accordion-button collapsed" type="button"
+                                            <button id="profileButton" class="accordion-button collapsed" type="button"
                                                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
                                                     aria-expanded="false" aria-controls="flush-collapseOne" th:text="#{pageHome.profile}">
                                                 Profile

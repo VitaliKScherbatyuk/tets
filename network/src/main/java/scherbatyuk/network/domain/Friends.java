@@ -33,8 +33,6 @@ public class Friends {
     @Enumerated(EnumType.STRING)
     private FriendshipStatus status;
 
-    // Додайте інші необхідні поля або методи, які вам потрібні
-
 }
 
 

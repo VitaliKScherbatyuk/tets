@@ -12,6 +12,7 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/albums.css">
     <link rel="manifest" href="/manifest.json">
 
 </head>
@@ -21,7 +22,7 @@
     <main th:replace="header"></main>
 </header>
 
-<h4 style="text-align: center; color: white; margin-top: 5%;" th:text="#{pageAlbums.photos}">Photos</h4>
+<h4 style="text-align: center; color: white;" th:text="#{pageAlbums.photos}">Photos</h4>
 <div class="container d-flex">
         <div class="col" style="margin: 5px">
 
@@ -37,14 +38,15 @@
         </div>
 </div>
 
-<br>
+<div class="addPhoto">
 <h4 style="text-align: center; color: white;" th:text="#{pageAlbums.addPhoto}">Add Photo</h4>
-<form th:action="@{/uploadPhotos}" method="post" enctype="multipart/form-data" style="margin: 0 20%;">
-    <input type="file" name="image" multiple>
-    <input type="text" name="description" th:placeholder="#{pageAlbums.description}" required>
+<form style="margin: 5px 20px;" th:action="@{/uploadPhotos}" method="post" enctype="multipart/form-data">
+    <input class="form-control" style="margin: 5px 0" type="file" name="image" multiple>
+        <input class="form-control" style="margin: 5px 0" type="text" name="description" th:placeholder="#{pageAlbums.description}" required>
     <input type="hidden" name="id" th:value="${id}">
-    <button type="submit" th:text="#{pageAlbums.savePhoto}">Save photo</button>
+    <button class="btn btn-lg btn-primary btn-block" style="margin: 5px 0" type="submit" th:text="#{pageAlbums.savePhoto}">Save photo</button>
 </form>
+</div>
 
 <footer>
     <main th:replace="footer_Mobile"></main>

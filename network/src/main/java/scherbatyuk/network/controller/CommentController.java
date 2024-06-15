@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import scherbatyuk.network.domain.Comment;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
-import scherbatyuk.network.service.CommentService;
-import scherbatyuk.network.service.FriendsService;
-import scherbatyuk.network.service.PostNewsService;
-import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +28,8 @@ public class CommentController {
     private FriendsService friendsService;
     @Autowired
     private PostNewsService postNewsService;
+    @Autowired
+    private MessageService messageService;
 
     /**
      * this method retrieves the post and all its comments from the database
@@ -60,6 +59,12 @@ public class CommentController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "comment";
     }

@@ -3,7 +3,9 @@ package scherbatyuk.network.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import scherbatyuk.network.dao.PostLikesRepository;
 import scherbatyuk.network.dao.PostNewsRepository;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
@@ -18,6 +20,8 @@ public class PostNewsService {
     private PostNewsRepository newsRepository;
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private PostLikesRepository postLikesRepository;
 
     public PostNews createPost(MultipartFile image, String postNews, String hashTag, User user) {
         PostNews post = new PostNews();
@@ -46,11 +50,6 @@ public class PostNewsService {
         return newsRepository.findByUser(user);
     }
 
-    public void deletePost(Integer postId) {
-        newsRepository.deleteById(postId);
-    }
-
-
     public PostNews findById(Integer postId) {
         return newsRepository.findById(postId).orElse(null);
     }
@@ -58,5 +57,9 @@ public class PostNewsService {
     public void save(PostNews post) {
         newsRepository.save(post);
     }
-
-   }
+    @Transactional
+    public void deletePost(Integer postId) {
+        postLikesRepository.deleteByPostId(postId);
+        newsRepository.deleteById(postId);
+    }
+}

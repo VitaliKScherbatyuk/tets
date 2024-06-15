@@ -42,14 +42,14 @@ public class RepostController {
         User user = userService.findByEmail(userEmail);
 
         PostNews post = postNewsService.findById(postId);
-
-        if (user == null || post == null) {
+        boolean flagPost = repostService.hasUserAlreadyReposted(user, post);
+        Repost repost;
+        if (flagPost) {
+            repost = repostService.repostPost(user, post);
+        } else {
             return new ResponseEntity<>("Користувач або пост не знайдено", HttpStatus.NOT_FOUND);
         }
 
-        Repost repost = repostService.repostPost(user, post);
-
-        // Повернути успішну відповідь з інформацією про створений репост
         return new ResponseEntity<>(repost, HttpStatus.CREATED);
     }
 

@@ -185,6 +185,11 @@ public class UserController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
+        int countRequests = friendsService.countIncomingFriendRequests(user.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(user.getId());
+        model.addAttribute("countMessages", countMessages);
+
         return "profileUpdate";
     }
 
@@ -299,6 +304,15 @@ public class UserController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName();
+        User userMy = userService.findByEmail(userEmail);
+
+        int countRequests = friendsService.countIncomingFriendRequests(userMy.getId());
+        model.addAttribute("countRequests", countRequests);
+        int countMessages = messageService.countIncomingFriendMessage(userMy.getId());
+        model.addAttribute("countMessages", countMessages);
 
         return "userDetail";
     }
