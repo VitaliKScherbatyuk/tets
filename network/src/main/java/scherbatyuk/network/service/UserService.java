@@ -18,6 +18,7 @@ import scherbatyuk.network.domain.User;
 import scherbatyuk.network.domain.UserRole;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
@@ -41,6 +42,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private EntityManager entityManager;
 
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -124,6 +127,13 @@ public class UserService {
 
             userRepository.save(user);
         }
+    }
+
+    public List<String> findUsernamesByTerm(String term) {
+        return entityManager.createQuery(
+                        "SELECT u.name FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :term, '%'))", String.class)
+                .setParameter("term", term)
+                .getResultList();
     }
 
 }

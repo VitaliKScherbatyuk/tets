@@ -10,6 +10,7 @@ import scherbatyuk.network.dao.PostNewsRepository;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class PostNewsService {
     private PhotoService photoService;
     @Autowired
     private PostLikesRepository postLikesRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     public PostNews createPost(MultipartFile image, String postNews, String hashTag, User user) {
         PostNews post = new PostNews();
@@ -61,5 +64,12 @@ public class PostNewsService {
     public void deletePost(Integer postId) {
         postLikesRepository.deleteByPostId(postId);
         newsRepository.deleteById(postId);
+    }
+
+    public List<String> findHashtagsByTerm(String term) {
+        return entityManager.createQuery(
+                        "SELECT DISTINCT p.hashTag FROM PostNews p WHERE LOWER(p.hashTag) LIKE LOWER(CONCAT('%', :term, '%'))", String.class)
+                .setParameter("term", term)
+                .getResultList();
     }
 }
