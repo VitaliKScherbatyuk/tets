@@ -23,4 +23,11 @@ public class PostLikesService {
         postLikesRepository.save(newLike);
     }
 
+    public List<PostLikes> getLikesByPost(Integer postId) {
+        return postLikesRepository.findByPostId(postId);
+    }
+
+    public void deleteById(Integer postLikeId) {
+        postLikesRepository.deleteById(postLikeId);
+    }
 }

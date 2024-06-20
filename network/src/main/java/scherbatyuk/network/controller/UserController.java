@@ -10,6 +10,7 @@ package scherbatyuk.network.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,8 +47,6 @@ public class UserController {
     private UserService userService;
     @Autowired
     private HttpServletRequest request;
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -317,5 +316,43 @@ public class UserController {
         return "userDetail";
     }
 
+//    @PostMapping("/deleteAccount")
+//    @ResponseBody
+//    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {
+//        String login = payload.get("login").trim();
+//
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String userEmail = auth.getName().trim();
+//        User user = userService.findByEmail(userEmail);
+//
+//        if (login.equals(userEmail)) {
+//            userService.deleteUser(user);
+//            SecurityContextHolder.getContext().setAuthentication(null);
+//
+//            // Повертаємо статус 200 і текстову відповідь, яка вказує клієнту, куди перенаправити користувача
+//            return ResponseEntity.ok("redirect:/");
+//        } else {
+//            return ResponseEntity.ok("redirect:/profileUpdate");
+//        }
+//    }
+
+    @PostMapping("/deleteAccount")
+    @ResponseBody
+    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {
+        String login = payload.get("login").trim();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = auth.getName().trim();
+        User user = userService.findByEmail(userEmail);
+
+        if (login.equals(userEmail)) {
+            userService.deleteUser(user);
+            SecurityContextHolder.getContext().setAuthentication(null);
+
+            return ResponseEntity.ok("redirect:/");
+        } else {
+            return ResponseEntity.ok("redirect:/profileUpdate");
+        }
+    }
 
 }

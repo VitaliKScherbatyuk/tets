@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import scherbatyuk.network.dao.UserRepository;
-import scherbatyuk.network.domain.Photo;
-import scherbatyuk.network.domain.PhotoAlbum;
-import scherbatyuk.network.domain.User;
-import scherbatyuk.network.domain.UserRole;
+import scherbatyuk.network.dao.*;
+import scherbatyuk.network.domain.*;
 
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
@@ -44,6 +41,22 @@ public class UserService {
     private PhotoService photoService;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private PostNewsService postNewsService;
+    @Autowired
+    private PhotoAlbumService photoAlbumService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private RepostService repostService;
+    @Autowired
+    private FriendsService friendsService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private FriendsRepository friendsRepository;
+    @Autowired
+    private PostLikesService postLikesService;
 
     public void save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -106,7 +119,7 @@ public class UserService {
         }
     }
 
-    public User findById(int id){
+    public User findById(int id) {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -134,6 +147,79 @@ public class UserService {
                         "SELECT u.name FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :term, '%'))", String.class)
                 .setParameter("term", term)
                 .getResultList();
+    }
+
+    @Transactional
+    public void deleteUser(User user) {
+
+        List<PostNews> posts = postNewsService.getPostsByUser(user);
+        if (!posts.isEmpty()) {
+            posts.forEach(post -> {
+
+                List<Comment> comments = commentService.getCommentByPost(post.getId());
+                if (!comments.isEmpty()) {
+                    comments.forEach(comment -> commentService.deleteById(comment.getId()));
+                }
+
+                List<PostLikes> postLikesList = postLikesService.getLikesByPost(post.getId());
+                if (!postLikesList.isEmpty()) {
+                    postLikesList.forEach(postLikes -> postLikesService.deleteById(postLikes.getId()));
+                }
+
+                postNewsService.deletePost(post.getId());
+            });
+        }
+
+        List<Repost> reposts = repostService.getRepostsByUser(user);
+        if (!reposts.isEmpty()) {
+            reposts.forEach(repost -> repostService.deleteById(repost.getId()));
+        }
+
+        List<PhotoAlbum> photoAlbums = photoAlbumService.findByUserId(user.getId());
+        if (!photoAlbums.isEmpty()) {
+            photoAlbums.forEach(photoAlbum -> {
+                List<Photo> photos = photoService.getAllPhotosByAlbumId(photoAlbum.getId());
+
+                if (!photos.isEmpty()) {
+                    photos.forEach(photo -> photoService.deletePhoto(photo.getId()));
+                }
+
+                photoAlbumService.deleteById(photoAlbum.getId());
+            });
+        }
+
+        List<Message> messages = messageService.getMessagesForUser(user.getId());
+        if (!messages.isEmpty()) {
+            messages.forEach(message -> {
+
+                if (!message.getReplies().isEmpty()) {
+                    message.getReplies().forEach(reply -> messageService.deleteById(reply.getId()));
+                }
+
+                messageService.deleteById(message.getId());
+            });
+        }
+
+        List<User> friends = friendsService.getFriends(user.getId());
+        if (!friends.isEmpty()) {
+            friends.forEach(friend -> {
+                friendsService.deleteFriend(friend, user);
+            });
+        }
+
+        List<Message> messagesToUser = messageService.getMessagesToUser(user.getId());
+        if (!messagesToUser.isEmpty()) {
+            messagesToUser.forEach(message -> {
+
+                if (!message.getReplies().isEmpty()) {
+                    message.getReplies().forEach(reply -> messageService.deleteReplyById(reply.getId()));
+                }
+
+                messageService.deleteById(message.getId());
+            });
+        }
+
+        userRepository.delete(user);
     }
 
 }

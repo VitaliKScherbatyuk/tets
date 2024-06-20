@@ -37,4 +37,8 @@ public class RepostService {
     public boolean hasUserAlreadyReposted(User user, PostNews post) {
         return repostRepository.findByUserAndPost(user, post).isPresent();
     }
+
+    public void deleteById(Integer id) {
+        repostRepository.deleteById(id);
+    }
 }

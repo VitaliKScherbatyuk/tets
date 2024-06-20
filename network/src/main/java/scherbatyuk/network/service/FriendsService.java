@@ -160,4 +160,19 @@ public class FriendsService {
         return duration.toMinutes() < 5;
     }
 
+    public void deleteFriend(User friend, User user) {
+
+        if (areFriends(friend.getId(), user.getId())) {
+
+            Optional<Friends> friendship = friendsRepository.findByFriendAndUser(friend, user);
+            if (!friendship.isPresent()) {
+                friendship = friendsRepository.findByFriendAndUser(user, friend);
+            }
+
+            friendship.ifPresent(f -> {
+                friendsRepository.delete(f);
+            });
+        }
+    }
+
 }

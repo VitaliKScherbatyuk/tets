@@ -11,6 +11,7 @@ import scherbatyuk.network.domain.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ public class MessageService {
 
     /**
      * Сервіс для збереження повідомлення в БД
+     *
      * @param message
      */
     public void saveMessage(Message message) {
@@ -46,6 +48,7 @@ public class MessageService {
 
     /**
      * Сервіс для виведення всіх повідомлень авторизованого користувача
+     *
      * @param friendId
      * @return
      */
@@ -55,6 +58,7 @@ public class MessageService {
 
     /**
      * Сервер для підрахунку кількості не прочитаних повідомлень у авторизованого користувача
+     *
      * @param userId
      * @return
      */
@@ -67,6 +71,7 @@ public class MessageService {
 
     /**
      * Сервіс для оновлення збереженого повідомлення в БД
+     *
      * @param message
      */
     public void updateMessage(Message message) {
@@ -81,5 +86,17 @@ public class MessageService {
     public Message findById(Integer messageId) {
         return messageRepository.findById(messageId)
                 .orElse(null);
+    }
+
+    public void deleteById(Integer id) {
+        messageRepository.deleteById(id);
+    }
+
+    public List<Message> getMessagesToUser(Integer userId) {
+        return messageRepository.findAllMessageByUserId(userId);
+    }
+
+    public void deleteReplyById(Integer replyId) {
+        messageRepository.deleteById(replyId);
     }
 }

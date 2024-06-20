@@ -3,6 +3,7 @@ package scherbatyuk.network.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
 
@@ -16,4 +17,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer>, Crud
 
     boolean existsByUser_IdAndId(Integer userId, Integer messageId);
 
+    List<Message> findAllMessageByUserId(Integer userId);
 }

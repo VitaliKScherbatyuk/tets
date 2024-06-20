@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
@@ -33,5 +34,6 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer>, Crud
     @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END FROM Friends f WHERE ((f.user.id = ?1 AND f.friend.id = ?2) OR (f.user.id = ?2 AND f.friend.id = ?1)) AND f.status = 'ACCEPTED'")
     boolean areFriends(Integer userId, Integer friendId);
 
+    Optional<Friends> findByFriendAndUser(User friend, User user);
 }
 

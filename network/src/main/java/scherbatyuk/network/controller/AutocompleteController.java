@@ -25,7 +25,7 @@ public class AutocompleteController {
 
     @GetMapping
     public List<String> autocomplete(@RequestParam("term") String term) {
-        System.err.println(term);  // Для відладки
+
         if (term.startsWith("#")) {
             return postNewsService.findHashtagsByTerm(term);
         } else {

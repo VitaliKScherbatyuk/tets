@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostNewsService {
@@ -62,6 +63,7 @@ public class PostNewsService {
     }
     @Transactional
     public void deletePost(Integer postId) {
+
         postLikesRepository.deleteByPostId(postId);
         newsRepository.deleteById(postId);
     }
