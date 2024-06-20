@@ -316,26 +316,6 @@ public class UserController {
         return "userDetail";
     }
 
-//    @PostMapping("/deleteAccount")
-//    @ResponseBody
-//    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {
-//        String login = payload.get("login").trim();
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        String userEmail = auth.getName().trim();
-//        User user = userService.findByEmail(userEmail);
-//
-//        if (login.equals(userEmail)) {
-//            userService.deleteUser(user);
-//            SecurityContextHolder.getContext().setAuthentication(null);
-//
-//            // Повертаємо статус 200 і текстову відповідь, яка вказує клієнту, куди перенаправити користувача
-//            return ResponseEntity.ok("redirect:/");
-//        } else {
-//            return ResponseEntity.ok("redirect:/profileUpdate");
-//        }
-//    }
-
     @PostMapping("/deleteAccount")
     @ResponseBody
     public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {
