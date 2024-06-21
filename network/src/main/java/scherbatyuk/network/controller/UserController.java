@@ -7,6 +7,7 @@
 
 package scherbatyuk.network.controller;
 
+import com.neovisionaries.i18n.CountryCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import scherbatyuk.network.config.VerificationCodeGenerator;
 import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.*;
 import scherbatyuk.network.service.*;
@@ -26,12 +28,14 @@ import scherbatyuk.network.service.*;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -59,6 +63,8 @@ public class UserController {
     private PostLikesService postLikesService;
     @Autowired
     private RepostService repostService;
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/")
     public String showLoginForm() {
@@ -92,7 +98,11 @@ public class UserController {
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
         User existingUser = userService.findByEmail(user.getEmail());
+
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+            if ("Admin".equals(existingUser.getRole())) {
+                return "redirect:/users";
+            }
             return "redirect:/home";
         } else {
             model.addAttribute("error", "Invalid login or password.");
@@ -112,6 +122,12 @@ public class UserController {
     @GetMapping("/registration")
     public String registrationForm(Model model) {
         model.addAttribute("user", new User());
+
+        List<String> countryNames = Arrays.stream(CountryCode.values())
+                .map(CountryCode::getName)
+                .collect(Collectors.toList());
+        model.addAttribute("countries", countryNames);
+
         return "registration";
     }
 
@@ -125,14 +141,59 @@ public class UserController {
      * @return
      */
     @PostMapping("/registration")
-    public String registrationSubmit(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+    public String registrationSubmit(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
+
+            List<String> countryNames = Arrays.stream(CountryCode.values())
+                    .map(CountryCode::getName)
+                    .collect(Collectors.toList());
+            model.addAttribute("countries", countryNames);
+
+            return "registration";
+        }
+
+//        String verificationCode = VerificationCodeGenerator.generateCode();
+//        emailService.sendVerificationCode(user.getEmail(), verificationCode);
+//
+//        session.setAttribute("user", user);
+//        session.setAttribute("verificationCode", verificationCode);
+//
+//        return "redirect:/verifyCode";
+
+        if ("Russian Federation".equals(user.getCountry())) {
+            bindingResult.rejectValue("country", "error.user", "Registration from Russia is not allowed.");
+            List<String> countryNames = Arrays.stream(CountryCode.values())
+                    .map(CountryCode::getName)
+                    .collect(Collectors.toList());
+            model.addAttribute("countries", countryNames);
             return "registration";
         }
 
         userService.save(user);
         return "redirect:/";
     }
+
+    @GetMapping("/verifyCode")
+    public String verifyCodeForm() {
+        return "verifyCode";
+    }
+
+    @PostMapping("/verifyCode")
+    public String verifyCodeSubmit(@RequestParam("code") String code, HttpSession session, Model model) {
+        String storedCode = (String) session.getAttribute("verificationCode");
+        User user = (User) session.getAttribute("user");
+
+        if (storedCode != null && storedCode.equals(code)) {
+            userService.save(user);
+            session.removeAttribute("verificationCode");
+            session.removeAttribute("user");
+            return "redirect:/login";
+        } else {
+            model.addAttribute("error", "Invalid verification code.");
+            return "verifyCode";
+        }
+    }
+
 
     /**
      * method handles HTTP GET requests to the URL path "/logout". It calls the
@@ -270,7 +331,7 @@ public class UserController {
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
         model.addAttribute("countMessages", countMessages);
 
-        return "home";
+            return "home";
     }
 
     @GetMapping("/user/{id}")

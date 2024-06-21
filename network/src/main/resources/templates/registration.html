@@ -44,7 +44,10 @@
                                     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red;"></span><br>
 
                                     <label>
-                                        <input type="text" class="form-control" placeholder="country" th:field="*{country}" required autofocus>
+                                        <select class="form-control" th:field="*{country}" required>
+                                            <option value="">Оберіть країну</option>
+                                            <option th:each="country : ${countries}" th:value="${country}" th:text="${country}"></option>
+                                        </select>
                                     </label>
                                     <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span><br>
 
