@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -67,14 +67,16 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{'/home'}">
+                <a class="nav-link" th:href="@{'/redirectHome'}">
                     <i class="fa fa-home"></i>
                     <span th:text="#{headBox.home}">Home</span>
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
-            <li class="nav-item">
+
+            <li class="nav-item" sec:authorize="hasAuthority('User')">
                 <a class="nav-link" th:href="@{/viewMessages}">
                     <i class="fa fa-envelope-o" th:href="@{/view-messages}">
                         <span class="badge badge-danger" th:text="${countMessages}"></span>
@@ -82,7 +84,7 @@
                     <span th:text="#{headBox.messages}">Messages</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" sec:authorize="hasAuthority('User')">
                 <a class="nav-link" th:href="@{/answer-request}">
                     <i class="fa fa-bell">
                         <span class="badge badge-info" th:text="${countRequests}"></span>
@@ -90,12 +92,28 @@
                     <span th:text="#{headBox.notification}">Notification</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" sec:authorize="hasAuthority('User')">
                 <a class="nav-link" th:href="@{/rating}">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i>
                     <span th:text="#{headBox.rating}">Rating</span>
                 </a>
             </li>
+
+            <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+                <a class="nav-link" th:href="@{/users}">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+                <a class="nav-link" th:href="@{/letter}">
+                    <i class="fa fa-envelope-o" aria-hidden="true">
+                        <span class="badge badge-danger" th:text="${countSupport}">0</span>
+                    </i>
+                    <span th:text="#{headBox.letter}">Letters</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/logout}">
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -137,7 +155,11 @@
 </html>
 
 
-
+<!--                            <ul -th:if="${role==T(scherbatyuk.network.domain.UserRole).Admin}" sec:authorize="hasAuthority('Admin')"             class="list-group list-group-flush">-->
+<!--                                <li class="list-group-item" id="sizeLi5"><a th:href="@{/users}"-->
+<!--                                                                            th:text="#{pageHome.users}">Users</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
 
 
 

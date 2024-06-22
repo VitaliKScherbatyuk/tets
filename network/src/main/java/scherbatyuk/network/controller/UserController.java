@@ -101,7 +101,7 @@ public class UserController {
 
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
             if ("Admin".equals(existingUser.getRole())) {
-                return "redirect:/users";
+                return "redirect:/admin";
             }
             return "redirect:/home";
         } else {
@@ -209,23 +209,6 @@ public class UserController {
     public String logout(HttpServletRequest request) throws ServletException {
         request.logout();
         return "redirect:/login";
-    }
-
-
-    /**
-     * Gets a list of all users using the getAllUser method of the UserService service.
-     * Adds the resulting list of users to the model for use on the page.
-     * Returns the name of the "users" page.
-     *
-     * @param model
-     * @return
-     */
-    @RequestMapping("/users")
-    public String userPage(Model model) {
-        List<User> users = userService.getAllUser();
-        model.addAttribute("users", users);
-
-        return "users";
     }
 
     @GetMapping("/profileUpdate")

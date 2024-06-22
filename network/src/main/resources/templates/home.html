@@ -141,12 +141,6 @@
                                                                             th:text="#{pageHome.addPost}">Add post</a>
                                 </li>
                             </ul>
-<!--                            <ul th:if="${role==T(scherbatyuk.network.domain.UserRole).Admin}"-->
-<!--                                sec:authorize="hasAuthority('Admin')" class="list-group list-group-flush">-->
-<!--                                <li class="list-group-item" id="sizeLi5"><a th:href="@{/users}"-->
-<!--                                                                            th:text="#{pageHome.users}">Users</a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item" id="sizeLi4">
 
@@ -173,7 +167,7 @@
                                                 </div>
                                                 <!-- Copyright -->
                                             </footer>
-                                            <a href="mailto:vitaliktuhata@gmail.com" style="margin-top: 5%">vitaliktuhata@gmail.com</a>
+                                            <a th:href="@{/sendLetter}" style="margin-top: 5%">Написати лист</a>
                                         </div>
                                     </div>
 
