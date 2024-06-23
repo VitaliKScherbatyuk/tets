@@ -86,7 +86,6 @@ public class UserController {
     public String loginForm(Model model) {
 
         model.addAttribute("user", new User());
-
         return "login";
     }
 
@@ -135,31 +134,21 @@ public class UserController {
     /**
      * Handles the user registration process. Saves the new user and redirects to the login page if successful.
      *
-     * @param user          object containing registration details.
+     * @param user object containing registration details.
      * @param bindingResult the binding result for validation.
-     * @param session       the HTTP session.
-     * @param model         to add attributes to.
+     * @param session the HTTP session.
+     * @param model to add attributes to.
      * @return the name of the view to render.
      */
     @PostMapping("/registration")
     public String registrationSubmit(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
-
             List<String> countryNames = Arrays.stream(CountryCode.values())
                     .map(CountryCode::getName)
                     .collect(Collectors.toList());
             model.addAttribute("countries", countryNames);
-
             return "registration";
         }
-
-        String verificationCode = VerificationCodeGenerator.generateCode();
-        emailService.sendVerificationCode(user.getEmail(), verificationCode);
-
-        session.setAttribute("user", user);
-        session.setAttribute("verificationCode", verificationCode);
-
-        return "redirect:/verifyCode";
 
         if ("Russian Federation".equals(user.getCountry())) {
             bindingResult.rejectValue("country", "error.user", "Registration from Russia is not allowed.");
@@ -170,8 +159,13 @@ public class UserController {
             return "registration";
         }
 
-        userService.save(user);
-        return "redirect:/";
+        String verificationCode = VerificationCodeGenerator.generateCode();
+        emailService.sendVerificationCode(user.getEmail(), verificationCode);
+
+        session.setAttribute("user", user);
+        session.setAttribute("verificationCode", verificationCode);
+
+        return "redirect:/verifyCode";
     }
 
     /**
