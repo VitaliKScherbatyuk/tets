@@ -2,7 +2,7 @@
  * author: Vitalik Scherbatyuk
  * version: 1
  * developing social network for portfolio
- * 24.12.2023
+ * 01.01.2024
  */
 
 package scherbatyuk.network.config;
@@ -55,22 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param http
      * @throws Exception
      */
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/home").authenticated()
-//                .antMatchers("/users").hasAuthority("Admin")
-//                .anyRequest().permitAll().and()
-//
-//                .formLogin().loginPage("/login")
-//                .defaultSuccessUrl("/home").usernameParameter("email").passwordParameter("password").and()
-//                .logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID")
-//                .invalidateHttpSession(true).and()
-//                .exceptionHandling().accessDeniedPage("/403").and()
-//                .csrf().disable();
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.domain;
 
 import lombok.AllArgsConstructor;
@@ -27,9 +34,12 @@ public class Support {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String email;
     private String firstName;
     private String comment;
     private LocalDate commentCreate;
     private boolean answerLetter;
+    private String answer;
+    private LocalDate answerCreate;
 
 }

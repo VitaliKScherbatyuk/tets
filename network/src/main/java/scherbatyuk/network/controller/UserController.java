@@ -39,8 +39,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * Spring MVC controller that handles HTTP requests and manages
- * user interaction in your web application
+ * Spring MVC controller that handles HTTP requests and manages user interaction in your web application.
  */
 @Controller
 public class UserController {
@@ -66,34 +65,39 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Displays the login form.
+     *
+     * @return the name of the start page.
+     */
     @GetMapping("/")
     public String showLoginForm() {
+
         return "start";
     }
 
     /**
-     * method is responsible for processing HTTP GET requests to the URL path "/login".
-     * It initializes a User object and returns a "login" page along with a model
-     * that contains that object to create a login form
+     * Displays the login form and initializes a User object.
      *
-     * @param model
-     * @return
+     * @param model to add attributes to.
+     * @return the name of the login page.
      */
     @GetMapping("/login")
     public String loginForm(Model model) {
+
         model.addAttribute("user", new User());
+
         return "login";
     }
 
     /**
-     * method handles HTTP POST requests to the URL path "/login" to authenticate the user.
-     * It will try to find the user by email, check the password and redirect to
-     * the "home" page if the authentication is successful. If authentication fails,
-     * it will display an error message on the "login" page
+     * Authenticates the user. Redirects to the home page if successful,
+     * or displays an error message on the login page if authentication fails.
      *
-     * @param user
-     * @param model
-     * @return
+     * @param user    object containing login credentials.
+     * @param model   to add attributes to.
+     * @param request the HTTP request.
+     * @return the name of the view to render.
      */
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
@@ -111,13 +115,10 @@ public class UserController {
     }
 
     /**
-     * method is responsible for processing HTTP GET requests to the URL path "/registration".
-     * It initializes a User object and returns a "registration" page along with a model
-     * that contains this object to create a user registration form
-     * ф
+     * Displays the registration form and initializes a User object.
      *
-     * @param model
-     * @return
+     * @param model to add attributes to.
+     * @return the name of the registration page.
      */
     @GetMapping("/registration")
     public String registrationForm(Model model) {
@@ -132,13 +133,13 @@ public class UserController {
     }
 
     /**
-     * method handles HTTP POST requests to the URL path "/registration" to create a new user.
-     * It uses userService to save the new user and redirects the user to the "login"
-     * page after successful registration
+     * Handles the user registration process. Saves the new user and redirects to the login page if successful.
      *
-     * @param user
-     * @param model
-     * @return
+     * @param user          object containing registration details.
+     * @param bindingResult the binding result for validation.
+     * @param session       the HTTP session.
+     * @param model         to add attributes to.
+     * @return the name of the view to render.
      */
     @PostMapping("/registration")
     public String registrationSubmit(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession session) {
@@ -152,13 +153,13 @@ public class UserController {
             return "registration";
         }
 
-//        String verificationCode = VerificationCodeGenerator.generateCode();
-//        emailService.sendVerificationCode(user.getEmail(), verificationCode);
-//
-//        session.setAttribute("user", user);
-//        session.setAttribute("verificationCode", verificationCode);
-//
-//        return "redirect:/verifyCode";
+        String verificationCode = VerificationCodeGenerator.generateCode();
+        emailService.sendVerificationCode(user.getEmail(), verificationCode);
+
+        session.setAttribute("user", user);
+        session.setAttribute("verificationCode", verificationCode);
+
+        return "redirect:/verifyCode";
 
         if ("Russian Federation".equals(user.getCountry())) {
             bindingResult.rejectValue("country", "error.user", "Registration from Russia is not allowed.");
@@ -173,11 +174,24 @@ public class UserController {
         return "redirect:/";
     }
 
+    /**
+     * Displays the verification code form.
+     *
+     * @return the name of the verification code page.
+     */
     @GetMapping("/verifyCode")
     public String verifyCodeForm() {
         return "verifyCode";
     }
 
+    /**
+     * Verifies the submitted verification code. Saves the user and redirects to the login page if successful.
+     *
+     * @param code    the verification code submitted by the user.
+     * @param session the HTTP session.
+     * @param model   to add attributes to.
+     * @return the name of the view to render.
+     */
     @PostMapping("/verifyCode")
     public String verifyCodeSubmit(@RequestParam("code") String code, HttpSession session, Model model) {
         String storedCode = (String) session.getAttribute("verificationCode");
@@ -194,23 +208,28 @@ public class UserController {
         }
     }
 
-
     /**
-     * method handles HTTP GET requests to the URL path "/logout". It calls the
-     * request.logout() method to log the user out and redirects the user to the "login"
-     * page after logging out
+     * Logs the user out and redirects to the login page.
      *
-     * @param request
-     * @return
-     * @throws ServletException
+     * @param request the HTTP request.
+     * @return the name of the login page.
+     * @throws ServletException if logout fails.
      */
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
+
         request.logout();
+
         return "redirect:/login";
     }
 
+    /**
+     * Displays the profile update page for the authenticated user.
+     *
+     * @param model     to add attributes to.
+     * @param principal the authenticated user principal.
+     * @return the name of the profile update page.
+     */
     @GetMapping("/profileUpdate")
     public String showProfileUpdatePage(Model model, Principal principal) {
         String userEmail = principal.getName();
@@ -236,10 +255,19 @@ public class UserController {
         return "profileUpdate";
     }
 
+    /**
+     * Updates the profile of the authenticated user.
+     *
+     * @param updatedUser the updated user details.
+     * @param principal   the authenticated user principal.
+     * @param model       to add attributes to.
+     * @return the name of the view to render.
+     */
     @PostMapping("/profileUpdate")
     public String updateProfile(@ModelAttribute("user") User updatedUser, Principal principal, Model model) {
         String userEmail = principal.getName();
         User existingUser = userService.findByEmail(userEmail);
+
         if (existingUser != null) {
             existingUser.setName(updatedUser.getName());
             existingUser.setAge(updatedUser.getAge());
@@ -255,23 +283,29 @@ public class UserController {
         return "redirect:/home";
     }
 
+    /**
+     * Updates the profile image of the authenticated user.
+     *
+     * @param imageData the new profile image data.
+     * @param principal the authenticated user principal.
+     * @return the name of the view to render.
+     */
     @PostMapping("/profileImageUpdate")
     public String updateProfileImage(@RequestParam("imageData") MultipartFile[] imageData, Principal principal) {
         String userEmail = principal.getName();
 
         for (MultipartFile image : imageData) {
-            userService.uploadImage(image, userEmail); // передайте зображення, а не масив зображень
+            userService.uploadImage(image, userEmail);
         }
+
         return "redirect:/home";
     }
 
-
     /**
-     * method is responsible for processing HTTP GET requests to the URL path "/home"
-     * and returns the page "home"
+     * Displays the home page with user information and posts.
      *
-     * @param model
-     * @return
+     * @param model to add attributes to.
+     * @return the name of the home page.
      */
     @GetMapping("/home")
     public String homePage(Model model) {
@@ -280,8 +314,8 @@ public class UserController {
         User user = userService.findByEmail(userEmail);
         UserRole role = user.getRole();
 
-        List<User> friends = friendsService.getFriends(user.getId()); // отримати список друзів користувача
-        List<PostNews> postFromUser = postNewsService.getPostsByUsers(friends); // отримати пости друзів
+        List<User> friends = friendsService.getFriends(user.getId());
+        List<PostNews> postFromUser = postNewsService.getPostsByUsers(friends);
         List<PostNews> myPost = postNewsService.getPostsByUser(user);
         List<Repost> repostsFromFriends = repostService.getRepostsByUser(user);
 
@@ -291,9 +325,9 @@ public class UserController {
         }
         posts.addAll(myPost);
 
-        posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed()); // сортувати по даті
+        posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed());
 
-        model.addAttribute("posts", posts); // додати пости в модель
+        model.addAttribute("posts", posts);
 
         List<User> userList = userService.getAllUser();
         model.addAttribute("users", userList);
@@ -303,10 +337,11 @@ public class UserController {
         String country = user.getCountry();
         String hobby = user.getHobby();
         String imageDate = user.getImageData();
-        model.addAttribute("user", user); // Додати об'єкт користувача в модель
-        model.addAttribute("age", age); // Додати вік в модель
-        model.addAttribute("country", country); // Додати країну в модель
-        model.addAttribute("hobby", hobby); // Додати хобі в модель
+
+        model.addAttribute("user", user);
+        model.addAttribute("age", age);
+        model.addAttribute("country", country);
+        model.addAttribute("hobby", hobby);
         model.addAttribute("imageDate", imageDate);
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
@@ -314,16 +349,22 @@ public class UserController {
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
         model.addAttribute("countMessages", countMessages);
 
-            return "home";
+        return "home";
     }
 
+    /**
+     * Displays the user details page for the specified user.
+     * @param id  the ID of the user to view.
+     * @param model to add attributes to.
+     * @param principal the authenticated user principal.
+     * @return the name of the user details page.
+     */
     @GetMapping("/user/{id}")
     public String viewUserDetails(@PathVariable Integer id, Model model, Principal principal) {
 
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
 
-        // Перевірка чи авторизований користувач є товаришем користувача, що відображається на сторінці
         boolean isFriend = false;
         if (principal != null) {
             String userEmail = principal.getName();
@@ -333,7 +374,6 @@ public class UserController {
         }
         model.addAttribute("isFriend", isFriend);
 
-        // Додайте новий об'єкт FriendsRequest до моделі для використання в формі
         Friends friendsRequest = new Friends();
         friendsRequest.setId(id);
         model.addAttribute("friendsRequest", friendsRequest);
@@ -360,6 +400,11 @@ public class UserController {
         return "userDetail";
     }
 
+    /**
+     * Deletes the account of the authenticated user.
+     * @param payload the payload containing the user login.
+     * @return the response entity indicating the result.
+     */
     @PostMapping("/deleteAccount")
     @ResponseBody
     public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {

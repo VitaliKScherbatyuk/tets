@@ -46,6 +46,24 @@
           navigator.serviceWorker.register('/service-worker.js');
         });
       }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Отримуємо локальне сховище браузера
+        var count = localStorage.getItem('startPageVisitCount');
+        // Перевіряємо, чи вже є лічильник, якщо ні - створюємо
+        if (!count) {
+            count = 0;
+        } else {
+            count = parseInt(count);
+        }
+        // Збільшуємо лічильник
+        count++;
+        // Записуємо оновлений лічильник у локальне сховище
+        localStorage.setItem('startPageVisitCount', count);
+        // Відображаємо на сторінці
+        document.getElementById('visitCount').innerText = count;
+    });
+
 </script>
 
 </body>

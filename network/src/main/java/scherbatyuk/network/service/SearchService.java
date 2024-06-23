@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +17,24 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+/**
+ * Service class for searching users and posts.
+ */
 @Service
 public class SearchService {
 
     @Autowired
     private UserRepository userRepository;
-
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Searches for users based on various fields.
+     * @param searchTerm The term to search for in user fields
+     * @return List of users matching the search term
+     */
     public List<User> searchUsers(String searchTerm) {
+
         return entityManager.createQuery(
                         "SELECT u FROM User u WHERE " +
                                 "LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
@@ -33,6 +48,11 @@ public class SearchService {
                 .getResultList();
     }
 
+    /**
+     * Searches for news posts based on hashtags.
+     * @param searchTerm The hashtag term to search for in posts
+     * @return List of news posts matching the hashtag search term
+     */
     public List<PostNews> searchPost(String searchTerm) {
 
         return entityManager.createQuery(

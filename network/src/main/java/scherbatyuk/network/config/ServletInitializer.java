@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.config;
 
 import org.springframework.boot.web.servlet.ServletContextInitializer;

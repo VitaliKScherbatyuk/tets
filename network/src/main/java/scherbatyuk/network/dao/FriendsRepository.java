@@ -1,16 +1,20 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 import scherbatyuk.network.domain.Friends;
 import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.User;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +30,6 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer>, Crud
 
     @Query("SELECT f.id FROM Friends f WHERE ((f.user.id = :userId AND f.friend.id = :friendId) OR (f.user.id = :friendId AND f.friend.id = :userId)) AND f.status = :status")
     Integer requestIdByFriendAndUser(@Param("userId") Integer userId, @Param("friendId") Integer friendId, @Param("status") FriendshipStatus status);
-
-    @Modifying
-    @Query("UPDATE Friends f SET f.status = :status WHERE f.id = :friendshipId")
-    void updateStatus(@Param("friendshipId") Integer friendshipId, @Param("status") FriendshipStatus status);
 
     @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END FROM Friends f WHERE ((f.user.id = ?1 AND f.friend.id = ?2) OR (f.user.id = ?2 AND f.friend.id = ?1)) AND f.status = 'ACCEPTED'")
     boolean areFriends(Integer userId, Integer friendId);

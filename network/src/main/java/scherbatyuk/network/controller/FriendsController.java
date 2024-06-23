@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * responsible for handling HTTP requests related to a user's friends, including adding friends,
- * responding to friend requests, and displaying a list of friends
+ * Is responsible for processing requests related to the friendship of users in the social network.
  */
 @Controller
 public class FriendsController {
@@ -38,12 +44,12 @@ public class FriendsController {
     private MessageService messageService;
 
     /**
-     * the method handles sending a friend request between a user and another user;
-     * Creates a Friends object that represents the friend request and stores it in the database;
-     * А friend request message is sent
-     * @param friendId
-     * @param model
-     * @return
+     * A method to send a friend request between a user and another user.
+     * Creates a Friends object representing the friend request and stores it in the database.
+     * Sends a friend request message.
+     * @param friendId the ID of the user to send the friend request to
+     * @param model for transferring data to the page
+     * @return redirect to /home page
      */
     @PostMapping("/addFriends")
     public String sendFriendRequest(@RequestParam Integer friendId, Model model) {
@@ -70,10 +76,10 @@ public class FriendsController {
     }
 
     /**
-     * Displays all friend requests for the logged in user.
+     * Display all friend requests for an authorized user.
      * Returns a page where the user can approve or decline friend requests.
-     * @param model
-     * @return
+     * @param model for transferring data to the page
+     * @return the name of the view to display the friend request page
      */
     @GetMapping("/answer-request")
     public String responseToFriendRequest(Model model) {
@@ -109,11 +115,12 @@ public class FriendsController {
     }
 
     /**
-     * Handles responses to friend requests.
-     * Changes the friendship status depending on whether the request was accepted
-     * @param id
-     * @param model
-     * @return
+     * Handling responses to friend requests.
+     * Changes the friendship status depending on whether the request was accepted.
+     * @param id of the user who sent the friend request
+     * @param status of the response to the friend request (accepted / rejected)
+     * @param model for transferring data to the page
+     * @return redirect to /home page
      */
     @PostMapping("/responseRequest/{id}")
     public String responseToFriendRequest(@PathVariable Integer id, @RequestParam String status, Model model) {
@@ -127,11 +134,11 @@ public class FriendsController {
     }
 
     /**
-     * Displays all verified friends of the user.
+     * Display of all verified friends of the user.
      * Gets a list of friends and their online status.
-     * Returns a page with a list of friends and their online status
-     * @param model
-     * @return
+     * Returns a page with a list of friends and their online status.
+     * @param model for transferring data to the page
+     * @return the name of the view to display the friends list page
      */
     @GetMapping("/friends/{id}")
     public String getFriends(@PathVariable Integer id, Model model) {
@@ -175,9 +182,9 @@ public class FriendsController {
      * Gets a list of the user's friends and their posts, sorted by date.
      * Adds information about the user (age, country, hobbies, etc.) and their posts to the model
      * to be displayed on the page.
-     * @param id
-     * @param model
-     * @return
+     * @param id dynamic parameter that contains the user ID.
+     * @param model is used to transfer data to the page.
+     * @return friendliesPage
      */
     @GetMapping("/friendliesPage/{id}")
     public String friendliesPage (@PathVariable Integer id, Model model){

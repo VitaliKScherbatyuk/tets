@@ -65,6 +65,23 @@
           navigator.serviceWorker.register('/service-worker.js');
         });
       }
+
+     document.addEventListener('DOMContentLoaded', function() {
+        // Отримуємо локальне сховище браузера
+        var countLogin = localStorage.getItem('loginPageVisitCount');
+        // Перевіряємо, чи вже є лічильник, якщо ні - створюємо
+        if (!countLogin) {
+            countLogin = 0;
+        } else {
+            countLogin = parseInt(countLogin);
+        }
+        // Збільшуємо лічильник
+        countLogin++;
+        // Записуємо оновлений лічильник у локальне сховище
+        localStorage.setItem('loginPageVisitCount', countLogin);
+        // Відображаємо на сторінці
+        document.getElementById('visitCountLogin').innerText = countLogin;
+    });
 </script>
 
 </body>

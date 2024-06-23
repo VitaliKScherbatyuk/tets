@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,9 @@ import scherbatyuk.network.service.UserService;
 
 import java.util.List;
 
+/**
+ * Controller for handling search functionality.
+ */
 @Controller
 public class SearchController {
 
@@ -28,6 +38,13 @@ public class SearchController {
     @Autowired
     private MessageService messageService;
 
+    /**
+     * Handles search requests. If the search term starts with "#", it searches for posts.
+     * Otherwise, it searches for users. Adds the search results to the model.
+     * @param searchTerm The term to search for.
+     * @param model to which the search results will be added.
+     * @return The view name "searchResults".
+     */
     @PostMapping("/search")
     public String search(@RequestParam String searchTerm, Model model) {
 
@@ -55,6 +72,7 @@ public class SearchController {
         model.addAttribute("imageData", imageData);
 
         List<User> friends = friendsService.getFriends(user.getId());
+
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
         int countMessages = messageService.countIncomingFriendMessage(user.getId());

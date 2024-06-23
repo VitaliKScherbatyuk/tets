@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +22,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service for managing friendship requests and interactions between users.
+ */
 @Service
 public class FriendsService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private FriendsRepository friendsRepository;
 
     /**
-     * Метод що відповідає за створення запиту дружби між користувачами
-     * @param friendId
-     * @param userId
+     * Sends a friend request from one user to another.
+     * @param friendId ID of the user to whom the friend request is sent
+     * @param userId ID of the user sending the friend request
      */
     public void sendFriendRequest(Integer friendId, Integer userId) {
+
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("Sender with id " + friendId + " not found"));
 
@@ -49,12 +59,13 @@ public class FriendsService {
     }
 
     /**
-     * Метод що відповідає за погодження або відхилення дружби двох користувачів на основі id та статусу із html
-     * @param userId
-     * @param friendId
-     * @param status
+     * Processes a friend request by accepting or rejecting it.
+     * @param userId ID of the user accepting or rejecting the friend request
+     * @param friendId ID of the user who sent the friend request
+     * @param status Status of the request (ACCEPTED or REJECTED)
      */
     public void responseFriendRequest(Integer userId, Integer friendId, String status) {
+
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + friendId + " not found"));
         User user = userRepository.findById(userId)
@@ -64,35 +75,33 @@ public class FriendsService {
                 friendsRepository.existsByFriendAndUser(user, friend);
 
         if (existingFriendRequest) {
-            // Знайдемо id запиту дружби
             Integer requestId = friendsRepository.requestIdByFriendAndUser(user.getId(), friend.getId(), FriendshipStatus.PENDING);
-
-            // Прийняти або відхилити запит дружби
             acceptOrRejectFriendshipRequest(requestId, status);
         }
     }
 
     /**
-     * Метод що змінює статус в БД на основі статусу що надійшов для індентифікації прийняття або відхилення дружби
-     * @param requestId
-     * @param status
+     * Accepts or rejects a friendship request.
+     * @param requestId ID of the friendship request
+     * @param status Status of the request (ACCEPTED or REJECTED)
      */
     private void acceptOrRejectFriendshipRequest(int requestId, String status) {
+
         Optional<Friends> friendshipRequest = friendsRepository.findById(requestId);
 
         friendshipRequest.ifPresent(friendship -> {
-            // Змінюємо статус на ACCEPTED або REJECTED
             friendship.setStatus(status.equals("ACCEPTED") ? FriendshipStatus.ACCEPTED : FriendshipStatus.REJECTED);
             friendsRepository.save(friendship);
         });
     }
 
     /**
-     * Метод що повертає на сторінку answer-request.html всі не підтверджені запити дружби
-     * @param userId
-     * @return
+     * Finds users who have sent friend requests.
+     * @param userId ID of the user
+     * @return List of users who have sent friend requests
      */
     public List<User> findUsersWithFriendRequests(Integer userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
@@ -104,11 +113,12 @@ public class FriendsService {
     }
 
     /**
-     * Метод що повертає всіх підтерджених друзів залогіненого користувача
-     * @param userId
-     * @return
+     * Gets a list of friends of the user.
+     * @param userId ID of the user
+     * @return List of the user's friends
      */
     public List<User> getFriends(Integer userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
@@ -127,11 +137,12 @@ public class FriendsService {
     }
 
     /**
-     * Метод що підраховує кількість запитів дружби
-     * @param userId
-     * @return
+     * Counts the number of incoming friend requests for the user.
+     * @param userId ID of the user
+     * @return Number of incoming friend requests
      */
     public int countIncomingFriendRequests(Integer userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
@@ -139,27 +150,44 @@ public class FriendsService {
     }
 
     /**
-     * Метод що відповідає за збереження зміни в БД
-     * @param friendship
+     * Saves a friendship in the database.
+     * @param friendship Friendship object to save
      */
     public void saveFriendship(Friends friendship) {
-        // Логіка для збереження дружби в базі даних
         friendsRepository.save(friendship);
     }
 
+    /**
+     * Checks if two users are friends.
+     * @param userId ID of the first user
+     * @param friendId ID of the second user
+     * @return true if the users are friends, otherwise false
+     */
     public boolean areFriends(Integer userId, Integer friendId) {
         return friendsRepository.areFriends(userId, friendId);
     }
 
+    /**
+     * Checks if a user is online.
+     * @param user to check
+     * @return true if the user is online, otherwise false
+     */
     public boolean isUserOnline(User user) {
+
         LocalDateTime lastActivityTime = user.getLastActivityTime();
         if (lastActivityTime == null) {
             return false;
         }
+
         Duration duration = Duration.between(lastActivityTime, LocalDateTime.now());
         return duration.toMinutes() < 5;
     }
 
+    /**
+     * Deletes a friendship between two users.
+     * @param friend Friend of the user
+     * @param user User
+     */
     public void deleteFriend(User friend, User user) {
 
         if (areFriends(friend.getId(), user.getId())) {

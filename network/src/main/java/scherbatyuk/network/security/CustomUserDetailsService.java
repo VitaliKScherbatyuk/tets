@@ -2,7 +2,7 @@
  * author: Vitalik Scherbatyuk
  * version: 1
  * developing social network for portfolio
- * 24.12.2023
+ * 01.01.2024
  */
 
 package scherbatyuk.network.security;
@@ -29,10 +29,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     /**
-     * designed to load information about a user by their username, which in this case is an email
-     * @param email
-     * @return
-     * @throws UsernameNotFoundException
+     * Designed to load information about a user by their username, which in this case is an email.
+     * @param email of the user to be loaded
+     * @return  UserDetails object containing user information
+     * @throws UsernameNotFoundException if no user is found with the provided email
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

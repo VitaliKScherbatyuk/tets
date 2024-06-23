@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +19,13 @@ import scherbatyuk.network.service.FriendsService;
 import scherbatyuk.network.service.MessageService;
 import scherbatyuk.network.service.UserService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Allows users to send messages to each other, view and reply to their messages.
+ */
 @Controller
 public class MessageController {
 
@@ -29,12 +38,11 @@ public class MessageController {
     private FriendsService friendsService;
 
     /**
-     * Контроллер для збереження нового повідомлення в БД.
-     *
-     * @param userId
-     * @param messageText
-     * @param model
-     * @return
+     * Controller method for saving a new message in the database.
+     * @param userId The ID of the user to whom the message is being sent.
+     * @param messageText The text content of the message.
+     * @param model to add attributes for rendering the view.
+     * @return the redirect view name ("/home") after saving the message.
      */
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestParam("userId") Integer userId,
@@ -52,17 +60,15 @@ public class MessageController {
         message.setMessage(messageText);
         message.setCreateMessage(LocalDateTime.now());
 
-        // Збереження повідомлення
         messageService.saveMessage(message);
 
         return "redirect:/home";
     }
 
     /**
-     * Контроллер для відображення всіх повідомлень у авторизованого користувача
-     *
-     * @param model
-     * @return
+     * Controller method for displaying all messages for the authenticated user.
+     * @param model to add attributes for rendering the view.
+     * @return The view name ("viewMessages") to render after processing.
      */
     @GetMapping("/viewMessages")
     public String viewMessages(Model model) {
@@ -73,10 +79,9 @@ public class MessageController {
         List<Message> messages = messageService.getMessagesForUser(currentUser.getId());
         messages.sort(Comparator.comparing(Message::getCreateMessage).reversed());
 
-        // Оновлення значення readMessage на true для кожного повідомлення
         for (Message message : messages) {
             message.setReadMessage(true);
-            messageService.updateMessage(message); // Збереження змін у базу даних
+            messageService.updateMessage(message);
         }
 
         model.addAttribute("messages", messages);
@@ -101,7 +106,13 @@ public class MessageController {
         return "viewMessages";
     }
 
-
+    /**
+     * Method for replying to a message.
+     * @param messageId The ID of the message to reply to.
+     * @param replyText The text content of the reply.
+     * @param model to add attributes for rendering the view.
+     * @return The redirect view name ("/viewMessages") after saving the reply.
+     */
     @PostMapping("/replyMessage")
     public String replyMessage(@RequestParam("messageId") Integer messageId,
                                @RequestParam("replyText") String replyText,
@@ -112,14 +123,13 @@ public class MessageController {
 
         Message originalMessage = messageService.findById(messageId);
 
-        // Створюємо нове повідомлення з відповіддю
         Message reply = new Message();
         reply.setUser(currentUser);
-        reply.setFriend(originalMessage.getUser()); // Отримувач відповіді - автор початкового повідомлення
+        reply.setFriend(originalMessage.getUser());
         reply.setMessage(replyText);
         reply.setCreateMessage(LocalDateTime.now());
-        reply.setParentMessage(originalMessage); // Встановлюємо батьківське повідомлення для відповіді
-        // Збереження відповіді
+        reply.setParentMessage(originalMessage);
+
         messageService.saveMessage(reply);
 
         return "redirect:/viewMessages";

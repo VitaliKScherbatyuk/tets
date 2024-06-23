@@ -1,20 +1,25 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.MessageRepository;
 import scherbatyuk.network.dao.UserRepository;
-import scherbatyuk.network.domain.Friends;
-import scherbatyuk.network.domain.FriendshipStatus;
 import scherbatyuk.network.domain.Message;
 import scherbatyuk.network.domain.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Service for managing messages between users.
+ */
 @Service
 public class MessageService {
 
@@ -24,22 +29,18 @@ public class MessageService {
     private MessageRepository messageRepository;
 
     /**
-     * Сервіс для збереження повідомлення в БД
+     * Saves a message to the database.
      *
-     * @param message
+     * @param message The message to be saved
      */
     public void saveMessage(Message message) {
-        // Логіка для збереження повідомлення в базі даних
-        message.setCreateMessage(LocalDateTime.now()); // Встановлюємо поточну дату
-        message.setReadMessage(false); // Позначаємо повідомлення як непрочитане
 
-        // Перевіряємо, чи не null message.getFriend(), щоб уникнути NullPointerException
+        message.setCreateMessage(LocalDateTime.now());
+        message.setReadMessage(false);
+
         if (message.getFriend() != null) {
-            // Отримуємо друга для повідомлення
             User friend = userRepository.findById(message.getFriend().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Friend not found with id: " + message.getFriend().getId()));
-
-            // Встановлюємо отримувача повідомлення (друга)
             message.setFriend(friend);
         }
 
@@ -47,22 +48,23 @@ public class MessageService {
     }
 
     /**
-     * Сервіс для виведення всіх повідомлень авторизованого користувача
+     * Retrieves messages for a specific user by their friend's ID.
      *
-     * @param friendId
-     * @return
+     * @param friendId The ID of the friend
+     * @return List of messages
      */
     public List<Message> getMessagesForUser(Integer friendId) {
         return messageRepository.findByFriend_Id(friendId);
     }
 
     /**
-     * Сервер для підрахунку кількості не прочитаних повідомлень у авторизованого користувача
+     * Counts the number of unread messages for a user.
      *
-     * @param userId
-     * @return
+     * @param userId The ID of the user
+     * @return The count of unread messages
      */
     public int countIncomingFriendMessage(Integer userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id " + userId + " not found"));
 
@@ -70,32 +72,48 @@ public class MessageService {
     }
 
     /**
-     * Сервіс для оновлення збереженого повідомлення в БД
+     * Updates a message in the database.
      *
-     * @param message
+     * @param message The message to be updated
      */
     public void updateMessage(Message message) {
         messageRepository.save(message);
     }
 
-    public boolean isReply(Integer userId, Integer messageId) {
-        // Перевіряємо, чи є у базі даних відповідь від користувача на це повідомлення
-        return messageRepository.existsByUser_IdAndId(userId, messageId);
-    }
-
+    /**
+     * Finds a message by its ID.
+     *
+     * @param messageId The ID of the message
+     * @return The found message or null if not found
+     */
     public Message findById(Integer messageId) {
         return messageRepository.findById(messageId)
                 .orElse(null);
     }
 
+    /**
+     * Deletes a message by its ID.
+     *
+     * @param id The ID of the message
+     */
     public void deleteById(Integer id) {
         messageRepository.deleteById(id);
     }
 
+    /**
+     * Retrieves all messages sent to a specific user.
+     *
+     * @param userId The ID of the user
+     * @return List of messages
+     */
     public List<Message> getMessagesToUser(Integer userId) {
         return messageRepository.findAllMessageByUserId(userId);
     }
 
+    /**
+     * Deletes a reply by its ID.
+     * @param replyId The ID of the reply
+     */
     public void deleteReplyById(Integer replyId) {
         messageRepository.deleteById(replyId);
     }

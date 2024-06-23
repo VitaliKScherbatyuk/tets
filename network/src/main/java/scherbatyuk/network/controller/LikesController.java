@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import scherbatyuk.network.domain.PostLikes;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.User;
 import scherbatyuk.network.service.*;
@@ -19,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Processing requests related to post likes and display of post ratings in the social network.
+ */
 @Controller
 public class LikesController {
 
@@ -33,6 +42,11 @@ public class LikesController {
     @Autowired
     private MessageService messageService;
 
+    /**
+     * Updates the number of likes for a specific post based on the provided payload.
+     * @param payload A map containing postId and likes values sent in the request body.
+     * @return ResponseEntity indicating the success of updating likes with HTTP status OK (200).
+     */
     @PostMapping("/addLikeToPost")
     @Transactional
     public ResponseEntity<Void> updateLikes(@RequestBody Map<String, Integer> payload) {
@@ -51,11 +65,10 @@ public class LikesController {
     }
 
     /**
-     * відображення кількості лайків під постом
-     *
-     * @param postId
-     * @param model
-     * @return
+     * Retrieves the number of likes for a specific post and adds it to the model.
+     * @param postId The ID of the post to retrieve likes for.
+     * @param model The model to add attributes for rendering the view.
+     * @return The view name ("home") to render after processing.
      */
     @PostMapping("/likeable")
     public String countLike(@RequestParam Integer postId, Model model) {
@@ -63,14 +76,13 @@ public class LikesController {
         int likePost = post.getLikeInPost();
         model.addAttribute("likeInPost", likePost);
 
-
         return "home";
     }
 
     /**
-     * відображення сторінки з рейтингами rating (не реалізовано)
-     *
-     * @return
+     * Displays a page with posts sorted by popularity based on the number of likes.
+     * @param model to add attributes for rendering the view.
+     * @return view name ("rating") to render after processing.
      */
     @GetMapping("/rating")
     public String ratingPost(Model model) {
@@ -87,12 +99,12 @@ public class LikesController {
 
         topPost.ifPresent(post -> model.addAttribute("topPost", post));
 
-        List<PostNews> myPosts = postNewsService.getPostsByUser(user); // Отримати всі пости користувача
+        List<PostNews> myPosts = postNewsService.getPostsByUser(user);
         Optional<PostNews> myTopPost = myPosts.stream()
                 .sorted(Comparator.comparingInt(PostNews::getLikeInPost).reversed())
                 .findFirst();
 
-        myTopPost.ifPresent(post -> model.addAttribute("myTopPost", post)); // Передати пост користувача в шаблон
+        myTopPost.ifPresent(post -> model.addAttribute("myTopPost", post));
 
         model.addAttribute("user", user);
 

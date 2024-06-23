@@ -10,12 +10,65 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/fonBody2.css">
+
+    <style>
+        .cardBox{
+            text-align: center;
+            color: white;
+            background-color: rgba(0,0,0,0.3) !important;
+            -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <body>
 
 <header>
     <main th:replace="header"></main>
 </header>
+
+<section class="container mt-5">
+
+    <div class="card mb-4 cardBox">
+        <div class="card-body">
+            <h5 class="card-title">Кількість відвідувань:</h5>
+            <p>Кількість відвідувань стартової сторінки: <span id="visitCountDisplay1">0</span></p>
+            <p>Кількість відвідувань сторінки входу: <span id="visitCountDisplay2">0</span></p>
+        </div>
+    </div>
+    <div class="card mb-4 cardBox">
+        <div class="card-body">
+            <h5 class="card-title">Кількість зареєстрованих користувачів:</h5>
+            <p>Загальна кількість: <span th:text="${countAllUser}">0</span></p>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Отримуємо дані з локального сховища браузера
+        var startPageCount = localStorage.getItem('startPageVisitCount');
+        var loginPageCount = localStorage.getItem('loginPageVisitCount');
+
+        // Виводимо дані на сторінці для адміністратора
+        document.getElementById('visitCountDisplay1').innerText = startPageCount ? startPageCount : 0;
+        document.getElementById('visitCountDisplay2').innerText = loginPageCount ? loginPageCount : 0;
+
+        // Отримуємо дані про країни з локального сховища браузера
+        var countryData = JSON.parse(localStorage.getItem('countryData')) || {};
+        var countryList = document.getElementById('countryList');
+
+        // Додаємо країни до списку
+        Object.keys(countryData).forEach(function(country) {
+            var listItem = document.createElement('li');
+            listItem.classList.add('list-group-item');
+            listItem.innerHTML = '<strong>' + country + '</strong>: ' + countryData[country];
+            countryList.appendChild(listItem);
+        });
+    });
+</script>
 
 </body>
 </html>

@@ -1,3 +1,10 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- *
+ * Is responsible for processing requests related to comments on posts on the page.
  */
 @Controller
 public class CommentController {
@@ -32,11 +39,10 @@ public class CommentController {
     private MessageService messageService;
 
     /**
-     * this method retrieves the post and all its comments from the database
-     * and passes them to the “comment” view for display
-     * @param id
-     * @param model
-     * @return
+     * Gets the post and all its comments from the database and passes them to the "comment" view for display.
+     * @param id post identifier
+     * @param model for transferring data to type
+     * @return the name of the view to display the comments
      */
     @GetMapping("/comment/{id}")
     public String commentPage(@PathVariable Integer id, Model model) {
@@ -70,10 +76,10 @@ public class CommentController {
     }
 
     /**
-     * method is used to add a new comment to a post
-     * @param postId
-     * @param commentText
-     * @return
+     * Method for adding a new comment to a post.
+     * @param postId the ID of the post to which the comment is added
+     * @param commentText comment text
+     * @return redirection to the comments page for the corresponding post
      */
     @PostMapping("/addComment")
     public String addComment(@RequestParam("postId") Integer postId,

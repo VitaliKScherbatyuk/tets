@@ -2,7 +2,7 @@
  * author: Vitalik Scherbatyuk
  * version: 1
  * developing social network for portfolio
- * 24.12.2023
+ * 01.01.2024
  */
 
 package scherbatyuk.network.security;
