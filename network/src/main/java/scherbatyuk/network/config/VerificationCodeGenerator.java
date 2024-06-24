@@ -7,6 +7,9 @@
 
 package scherbatyuk.network.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Random;
 
 /**
@@ -15,14 +18,22 @@ import java.util.Random;
  */
 public class VerificationCodeGenerator {
 
+    static Logger logger = LoggerFactory.getLogger(VerificationCodeGenerator.class);
+
     /**
      * Generates a number between 100000 and 999999
      * Returns the code as a string
-     * @return
+     * @return the generated code as a string
      */
     public static String generateCode() {
-        Random random = new Random();
-        int code = 100000 + random.nextInt(900000);
-        return String.valueOf(code);
+
+        try {
+            Random random = new Random();
+            int code = 100000 + random.nextInt(900000);
+            return String.valueOf(code);
+        } catch (Exception e) {
+            logger.error(" VerificationCodeGenerator: Error generating verification code", e);
+            return "000000";
+        }
     }
 }

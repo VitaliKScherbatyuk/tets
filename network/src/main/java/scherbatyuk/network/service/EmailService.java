@@ -58,4 +58,21 @@ public class EmailService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Sends an email with the specified subject  to the specified email address.
+     * @param to the recipient's email address
+     * @param subject the subject of the email
+     */
+    public void sendMessageAndComment(String to, String subject) {
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject(subject);
+            emailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
+    }
 }

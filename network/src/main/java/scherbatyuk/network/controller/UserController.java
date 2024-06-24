@@ -72,7 +72,6 @@ public class UserController {
      */
     @GetMapping("/")
     public String showLoginForm() {
-
         return "start";
     }
 
@@ -99,7 +98,8 @@ public class UserController {
      * @return the name of the view to render.
      */
     @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
+    public String loginSubmit(@ModelAttribute("user") User user, Model model) {
+
         User existingUser = userService.findByEmail(user.getEmail());
 
         if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
@@ -142,6 +142,7 @@ public class UserController {
      */
     @PostMapping("/registration")
     public String registrationSubmit(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, HttpSession session) {
+
         if (bindingResult.hasErrors()) {
             List<String> countryNames = Arrays.stream(CountryCode.values())
                     .map(CountryCode::getName)
@@ -166,6 +167,10 @@ public class UserController {
         session.setAttribute("verificationCode", verificationCode);
 
         return "redirect:/verifyCode";
+
+        // For testing without verify code in registration
+//        userService.save(user);
+//        return "start";
     }
 
     /**
@@ -188,6 +193,7 @@ public class UserController {
      */
     @PostMapping("/verifyCode")
     public String verifyCodeSubmit(@RequestParam("code") String code, HttpSession session, Model model) {
+
         String storedCode = (String) session.getAttribute("verificationCode");
         User user = (User) session.getAttribute("user");
 
@@ -210,9 +216,14 @@ public class UserController {
      * @throws ServletException if logout fails.
      */
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) throws ServletException {
+    public String logout(HttpServletRequest request) {
 
-        request.logout();
+        try {
+            request.logout();
+        } catch (ServletException e) {
+            logger.error("UserController -> logout: Error logout");
+            throw new RuntimeException(e);
+        }
 
         return "redirect:/login";
     }
@@ -226,6 +237,7 @@ public class UserController {
      */
     @GetMapping("/profileUpdate")
     public String showProfileUpdatePage(Model model, Principal principal) {
+
         String userEmail = principal.getName();
         User user = userService.findByEmail(userEmail);
 
@@ -259,6 +271,7 @@ public class UserController {
      */
     @PostMapping("/profileUpdate")
     public String updateProfile(@ModelAttribute("user") User updatedUser, Principal principal, Model model) {
+
         String userEmail = principal.getName();
         User existingUser = userService.findByEmail(userEmail);
 
@@ -268,12 +281,15 @@ public class UserController {
             existingUser.setCountry(updatedUser.getCountry());
             existingUser.setCity(updatedUser.getCity());
             existingUser.setHobby(updatedUser.getHobby());
+
             try {
                 userService.updateProfile(Collections.singletonList(existingUser));
             } catch (Exception e) {
                 model.addAttribute("error", "Your profile is nit update");
+                logger.error("UserController -> updateProfile: Error to update profile for UserId: " + existingUser.getId(), e);
             }
         }
+
         return "redirect:/home";
     }
 
@@ -286,10 +302,16 @@ public class UserController {
      */
     @PostMapping("/profileImageUpdate")
     public String updateProfileImage(@RequestParam("imageData") MultipartFile[] imageData, Principal principal) {
-        String userEmail = principal.getName();
 
-        for (MultipartFile image : imageData) {
-            userService.uploadImage(image, userEmail);
+        String userEmail = principal.getName();
+        User user = userService.findByEmail(userEmail);
+
+        try {
+            for (MultipartFile image : imageData) {
+                userService.uploadImage(image, userEmail);
+            }
+        } catch (Exception e){
+            logger.error("UserController -> updateProfileImage: Error to update profile image for UserId: " + user.getId(), e);
         }
 
         return "redirect:/home";
@@ -303,6 +325,7 @@ public class UserController {
      */
     @GetMapping("/home")
     public String homePage(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
@@ -402,6 +425,7 @@ public class UserController {
     @PostMapping("/deleteAccount")
     @ResponseBody
     public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> payload) {
+
         String login = payload.get("login").trim();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

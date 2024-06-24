@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Support Letters</title>
+    <title th:text="#{support.title}">Support Letters</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -19,15 +19,15 @@
 <section class="container mt-5">
       <div class="card mb-4 cardBox">
         <div class="card-body">
-            <h5 class="card-title">Запити в службу підтримки:</h5>
+            <h5 class="card-title" th:text="#{support.inquiries}">Запити в службу підтримки:</h5>
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Дата створення</th>
-                    <th scope="col">Електронна пошта</th>
-                    <th scope="col">Ім'я відправника</th>
-                    <th scope="col">Текст повідомлення</th>
-                    <th scope="col">Дії</th>
+                    <th scope="col" th:text="#{support.date}">Дата створення</th>
+                    <th scope="col" th:text="#{support.email}">Електронна пошта</th>
+                    <th scope="col" th:text="#{support.firstName}">Ім'я відправника</th>
+                    <th scope="col" th:text="#{support.comment}">Текст повідомлення</th>
+                    <th scope="col" th:text="#{support.actions}">Дії</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -36,7 +36,7 @@
                     <td th:text="${letter.user.email}">Електронна пошта</td>
                     <td th:text="${letter.firstName}">Ім'я відправника</td>
                     <td th:text="${letter.comment}">Текст повідомлення</td>
-                    <td> <a class="btn btn-primary" th:href="@{/requestAnswerSupport/{id}(id=${letter.id})}">Відповісти</a></td>
+                    <td> <a class="btn btn-primary" th:href="@{/requestAnswerSupport/{id}(id=${letter.id})}" th:text="#{support.answer}">Відповісти</a></td>
                 </tr>
                 </tbody>
             </table>

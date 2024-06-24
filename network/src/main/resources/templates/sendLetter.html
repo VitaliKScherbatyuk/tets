@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Send Letter</title>
+    <title th:text="#{sendLetter.title}">Send Letter</title>
+
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -65,27 +66,27 @@
             <div class="col-md-3">
                 <div class="contact-info">
                     <img src="https://image.ibb.co/kUASdV/contact-image.png" alt="image"/>
-                    <h2>Contact Us</h2>
-                    <h4>We would love to hear from you!</h4>
+                    <h2 th:text="#{sendLetter.contactUs}">Contact Us</h2>
+                    <h4 th:text="#{sendLetter.hear}">We would love to hear from you!</h4>
                 </div>
             </div>
             <div class="col-md-9">
                 <form class="contact-form" id="contactForm" th:action="@{/sendLetter}" method="post" onsubmit="return showConfirmation()">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="fname">First Name:</label>
+                        <label class="control-label col-sm-2" for="fname" th:text="#{sendLetter.firstName}">First Name:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname" required>
+                            <input type="text" class="form-control" id="fname" th:placeholder="#{sendLetter.enterFirstName}" name="fname" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="comment">Comment:</label>
+                        <label class="control-label col-sm-2" for="comment" th:text="#{sendLetter.comment}">Comment:</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" rows="5" id="comment" placeholder="Enter your comment" name="comment" required></textarea>
+                            <textarea class="form-control" rows="5" id="comment" th:placeholder="#{sendLetter.enterComment}" name="comment" required></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button type="submit" class="btn btn-default" th:text="#{sendLetter.submit}">Submit</button>
                         </div>
                     </div>
                 </form>

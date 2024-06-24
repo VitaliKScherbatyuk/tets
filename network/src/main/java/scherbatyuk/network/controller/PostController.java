@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,9 @@ import java.util.List;
  */
 @Controller
 public class PostController {
+
+    Logger logger = LoggerFactory.getLogger(PostController.class);
+
     @Autowired
     private PostNewsService postNewsService;
     @Autowired
@@ -45,6 +50,7 @@ public class PostController {
      */
     @GetMapping("/addPost")
     private String addPost(Model model){
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
@@ -64,8 +70,6 @@ public class PostController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
-
-        List<User> friends = friendsService.getFriends(user.getId());
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
@@ -91,16 +95,20 @@ public class PostController {
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
 
-        for (MultipartFile image : images) {
-            PostNews post = postNewsService.createPost(image, postNews, hashTag, user);
+        try {
+            for (MultipartFile image : images) {
+                PostNews post = postNewsService.createPost(image, postNews, hashTag, user);
 
-            PostLikes newLike = PostLikes.builder()
-                    .user(user)
-                    .post(post)
-                    .likePost(0)
-                    .build();
+                PostLikes newLike = PostLikes.builder()
+                        .user(user)
+                        .post(post)
+                        .likePost(0)
+                        .build();
 
-            postLikesService.save(newLike);
+                postLikesService.save(newLike);
+            }
+        } catch (Exception e){
+            logger.error("PostController -> addPost: Error add post for UserId: " + user.getId(), e);
         }
 
         return "redirect:/home";
@@ -114,7 +122,11 @@ public class PostController {
     @GetMapping("/deletePost/{id}")
     public String deletePost(@PathVariable("id") Integer postId) {
 
-        postNewsService.deletePost(postId);
+        try {
+            postNewsService.deletePost(postId);
+        } catch (Exception e){
+            logger.error("PostController -> deletePost: Error delete postId: " + postId, e);
+        }
 
         return "redirect:/addPost";
     }

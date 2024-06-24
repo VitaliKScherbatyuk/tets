@@ -8,6 +8,8 @@
 package scherbatyuk.network.filter;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scherbatyuk.network.domain.User;
 
 import javax.servlet.*;
@@ -16,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.logging.Logger;
 
 /**
  * Is used to track user activity in a web application. It updates the user's last activity
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 @WebFilter("/*")
 public class UserActivityFilter implements Filter {
 
-    private static final Logger logger = Logger.getLogger(UserActivityFilter.class.getName());
+    Logger logger = LoggerFactory.getLogger(UserActivityFilter.class);
 
     /**
      * Filter initialization.
@@ -46,8 +47,7 @@ public class UserActivityFilter implements Filter {
      * @throws ServletException if there is an error processing the request.
      */
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {
 
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession(false);
@@ -56,10 +56,17 @@ public class UserActivityFilter implements Filter {
             User user = (User) session.getAttribute("user");
 
             user.setLastActivityTime(LocalDateTime.now());
-            logger.info("User activity updated: " + user.getLastActivityTime());
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (IOException e) {
+            logger.error("UserActivityFilter -> doFilter: IOException ", e);
+            throw new RuntimeException(e);
+        } catch (ServletException e) {
+            logger.error("UserActivityFilter -> doFilter: ServletException ", e);
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -67,7 +74,6 @@ public class UserActivityFilter implements Filter {
      */
     @Override
     public void destroy() {
-
         Filter.super.destroy();
     }
 }

@@ -21,7 +21,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer>, Crud
 
     List<Message> findByFriend_Id(Integer friendId);
 
-    boolean existsByUser_IdAndId(Integer userId, Integer messageId);
-
     List<Message> findAllMessageByUserId(Integer userId);
 }

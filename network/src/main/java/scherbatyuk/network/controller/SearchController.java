@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +31,8 @@ import java.util.List;
 @Controller
 public class SearchController {
 
+    Logger logger = LoggerFactory.getLogger(SearchController.class);
+
     @Autowired
     private SearchService searchService;
     @Autowired
@@ -49,11 +53,20 @@ public class SearchController {
     public String search(@RequestParam String searchTerm, Model model) {
 
         if (searchTerm.startsWith("#")) {
-            List<PostNews> posts = searchService.searchPost(searchTerm);
-            model.addAttribute("posts", posts);
+            try {
+                List<PostNews> posts = searchService.searchPost(searchTerm);
+                model.addAttribute("posts", posts);
+            } catch (Exception e){
+                logger.error("SearchController -> search: Error search by '#'", e);
+            }
         } else {
-            List<User> users = searchService.searchUsers(searchTerm);
-            model.addAttribute("users", users);
+
+            try {
+                List<User> users = searchService.searchUsers(searchTerm);
+                model.addAttribute("users", users);
+            } catch (Exception e){
+                logger.error("SearchController -> search: Error search by 'users'", e);
+            }
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -70,8 +83,6 @@ public class SearchController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
-
-        List<User> friends = friendsService.getFriends(user.getId());
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);

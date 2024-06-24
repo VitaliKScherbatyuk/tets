@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,8 @@ import java.util.Map;
 @Controller
 public class FriendsController {
 
+    Logger logger = LoggerFactory.getLogger(FriendsController.class);
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -53,6 +57,7 @@ public class FriendsController {
      */
     @PostMapping("/addFriends")
     public String sendFriendRequest(@RequestParam Integer friendId, Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
@@ -70,8 +75,10 @@ public class FriendsController {
             model.addAttribute("friendId", friendId);
             model.addAttribute("userId", user.getId());
         } catch (IllegalArgumentException e) {
+            logger.error("FriendsController -> sendFriendRequest: Error send request from UserId: " +user.getId()+ " to friendId: " +friendId, e);
             model.addAttribute("Error", "Friend request not sent");
         }
+
         return "redirect:/home";
     }
 
@@ -83,6 +90,7 @@ public class FriendsController {
      */
     @GetMapping("/answer-request")
     public String responseToFriendRequest(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
@@ -91,8 +99,8 @@ public class FriendsController {
         if (friendsList.isEmpty()) {
             return "redirect:/home";
         }
-        model.addAttribute("users", friendsList);
 
+        model.addAttribute("users", friendsList);
         model.addAttribute("user", user);
 
         int age = user.getAge();
@@ -123,12 +131,17 @@ public class FriendsController {
      * @return redirect to /home page
      */
     @PostMapping("/responseRequest/{id}")
-    public String responseToFriendRequest(@PathVariable Integer id, @RequestParam String status, Model model) {
+    public String responseToFriendRequest(@PathVariable Integer id, @RequestParam String status) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User currentUser = userService.findByEmail(userEmail);
 
-        friendsService.responseFriendRequest(currentUser.getId(), id, status);
+        try {
+            friendsService.responseFriendRequest(currentUser.getId(), id, status);
+        }catch (Exception e){
+            logger.error("FriendsController -> responseToFriendRequest: Error send request from UserId: " +currentUser.getId()+ " responseRequestId: " +id, e);
+        }
 
         return "redirect:/home";
     }
@@ -142,9 +155,10 @@ public class FriendsController {
      */
     @GetMapping("/friends/{id}")
     public String getFriends(@PathVariable Integer id, Model model) {
-        User user = userService.findById(id);
 
+        User user = userService.findById(id);
         List<User> friendsListAcceped = friendsService.getFriends(user.getId());
+
         if (friendsListAcceped.isEmpty()) {
             return "redirect:/home";
         }
@@ -168,7 +182,6 @@ public class FriendsController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
-        List<User> friends = friendsService.getFriends(user.getId());
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
@@ -188,18 +201,20 @@ public class FriendsController {
      */
     @GetMapping("/friendliesPage/{id}")
     public String friendliesPage (@PathVariable Integer id, Model model){
+
         User user = userService.findById(id);
         List<User> friends = friendsService.getFriends(user.getId());
         List<PostNews> posts = postNewsService.getPostsByUsers(friends);
         posts.sort(Comparator.comparing(PostNews::getAddPostNews).reversed());
 
         model.addAttribute("posts", posts);
-
         model.addAttribute("user", user);
+
         int age = user.getAge();
         String country = user.getCountry();
         String hobby = user.getHobby();
         String imageDate = user.getImageData();
+
         model.addAttribute("user", user);
         model.addAttribute("age", age);
         model.addAttribute("country", country);

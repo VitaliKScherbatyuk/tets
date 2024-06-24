@@ -25,11 +25,9 @@ public class ServletInitializer implements ServletContextInitializer {
      * The onStartup method is called automatically when the servlet context is initialized.
      * In this method, you add a UserActivityFilter to the servlet context using the addFilter method.
      * This filter will be applied to all URL paths (/*) in the application
-     * @param servletContext
-     * @throws ServletException
      */
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
         servletContext.addFilter("userActivityFilter", UserActivityFilter.class).addMappingForUrlPatterns(null, false, "/*");
     }
 }

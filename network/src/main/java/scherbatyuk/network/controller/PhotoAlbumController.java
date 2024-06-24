@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,10 +23,12 @@ import scherbatyuk.network.service.*;
 import java.util.List;
 
 /**
- *
+ * Сontroller for working with user photo albums.
  */
 @Controller
 public class PhotoAlbumController {
+
+    Logger logger = LoggerFactory.getLogger(PhotoAlbumController.class);
 
     @Autowired
     private PhotoAlbumService photoAlbumService;
@@ -44,6 +48,7 @@ public class PhotoAlbumController {
      */
     @GetMapping("/photoSetting")
     public String photoSetting(Model model){
+
         List<PhotoAlbum> albums = photoAlbumService.getAllAlbums();
         model.addAttribute("albums", albums);
 
@@ -60,8 +65,6 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
-
-        List<User> friends = friendsService.getFriends(user.getId());
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
@@ -83,7 +86,11 @@ public class PhotoAlbumController {
         String userEmail = auth.getName();
         User currentUser = userService.findByEmail(userEmail);
 
-        photoAlbumService.createAlbum(albumName, currentUser);
+        try {
+            photoAlbumService.createAlbum(albumName, currentUser);
+        }catch (Exception e){
+            logger.error("PhotoAlbumController -> createAlbum: Error add album for UserId: " + currentUser.getId(), e);
+        }
 
         return "photoSetting";
     }
@@ -95,7 +102,7 @@ public class PhotoAlbumController {
      * @return The redirect view name ("/photoSetting") after deleting the album.
      */
     @GetMapping("/delete/{id}")
-    public String deleteAlbum(@PathVariable Integer id, Model model) {
+    public String deleteAlbum(@PathVariable Integer id) {
 
         PhotoAlbum photoAlbum = photoAlbumService.findById(id);
         photoAlbumService.deleteById(photoAlbum.getId());
@@ -111,6 +118,7 @@ public class PhotoAlbumController {
      */
     @GetMapping("/album/{id}")
     public String viewAlbums(@PathVariable Integer id, Model model) {
+
         model.addAttribute("id", id);
         model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id));
 
@@ -128,8 +136,6 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
-
-        List<User> friends = friendsService.getFriends(user.getId());
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
@@ -151,9 +157,14 @@ public class PhotoAlbumController {
                                @RequestParam("description") String description,
                                @RequestParam("id") Integer id) {
 
-        for (MultipartFile image : images) {
-            photoService.uploadPhoto(image, description, id);
+        try {
+            for (MultipartFile image : images) {
+                photoService.uploadPhoto(image, description, id);
+            }
+        } catch (Exception e){
+            logger.error("PhotoAlbumController -> uploadPhotos: Error to add photo in photoId: " + id, e);
         }
+
         return "redirect:/album/" + id;
     }
 
@@ -165,7 +176,11 @@ public class PhotoAlbumController {
     @GetMapping("/deletePhoto/{id}")
     public String deletePhoto(@PathVariable("id") Integer photoId) {
 
-        photoService.deletePhoto(photoId);
+        try {
+            photoService.deletePhoto(photoId);
+        }catch (Exception e){
+            logger.error("PhotoAlbumController -> deletePhoto: Error to delete photoId: " + photoId, e);
+        }
 
         return "redirect:/albums";
     }
@@ -178,6 +193,7 @@ public class PhotoAlbumController {
      */
     @GetMapping("/photoGallery/{id}")
     public String photoGallery(@PathVariable Integer id, Model model){
+
         List<PhotoAlbum> albums = photoAlbumService.findByUserId(id);
         model.addAttribute("albums", albums);
 
@@ -196,8 +212,6 @@ public class PhotoAlbumController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
-        List<User> friends = friendsService.getFriends(user.getId());
-
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
@@ -214,6 +228,7 @@ public class PhotoAlbumController {
      */
     @GetMapping("/photoGalleryDetails/{id}")
     public String photoGalleryDetails(@PathVariable Integer id, Model model) {
+
         model.addAttribute("id", id);
         model.addAttribute("photos", photoService.getAllPhotosByAlbumId(id)); // Assuming you have a method to retrieve photos by album id
 
@@ -231,8 +246,6 @@ public class PhotoAlbumController {
         model.addAttribute("country", country);
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
-
-        List<User> friends = friendsService.getFriends(user.getId());
 
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);

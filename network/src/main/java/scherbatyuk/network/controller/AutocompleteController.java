@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import java.util.List;
 @RequestMapping("/autocomplete")
 public class AutocompleteController {
 
+    Logger logger = LoggerFactory.getLogger(AutocompleteController.class);
     @Autowired
     private PostNewsService postNewsService;
 
@@ -39,11 +42,16 @@ public class AutocompleteController {
     @GetMapping
     public List<String> autocomplete(@RequestParam("term") String term) {
 
-        if (term.startsWith("#")) {
-            return postNewsService.findHashtagsByTerm(term);
-        } else {
-            return userService.findUsernamesByTerm(term);
+        try {
+            if (term.startsWith("#")) {
+                return postNewsService.findHashtagsByTerm(term);
+            } else {
+                return userService.findUsernamesByTerm(term);
+            }
+        }catch (Exception e){
+            logger.error("AutocompleteController -> autocomplete: Error autocomplete in search", e);
         }
+        return null;
     }
 }
 

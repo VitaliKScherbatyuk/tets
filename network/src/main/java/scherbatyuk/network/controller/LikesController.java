@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ import java.util.Optional;
 @Controller
 public class LikesController {
 
+    Logger logger = LoggerFactory.getLogger(LikesController.class);
+
     @Autowired
     private PostLikesService postLikesService;
     @Autowired
@@ -50,6 +54,7 @@ public class LikesController {
     @PostMapping("/addLikeToPost")
     @Transactional
     public ResponseEntity<Void> updateLikes(@RequestBody Map<String, Integer> payload) {
+
         Integer postId = payload.get("postId");
         Integer likes = payload.get("likes");
         PostNews post = postNewsService.findById(postId);
@@ -58,8 +63,12 @@ public class LikesController {
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
 
-        post.setLikeInPost(likes);
-        postNewsService.save(post);
+        try {
+            post.setLikeInPost(likes);
+            postNewsService.save(post);
+        } catch (Exception e){
+            logger.error("LikesController -> updateLikes: Error add likes from UserId: " + user.getId()+ " to postId: " + postId, e);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -72,6 +81,7 @@ public class LikesController {
      */
     @PostMapping("/likeable")
     public String countLike(@RequestParam Integer postId, Model model) {
+
         PostNews post = postNewsService.findById(postId);
         int likePost = post.getLikeInPost();
         model.addAttribute("likeInPost", likePost);
@@ -86,6 +96,7 @@ public class LikesController {
      */
     @GetMapping("/rating")
     public String ratingPost(Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);

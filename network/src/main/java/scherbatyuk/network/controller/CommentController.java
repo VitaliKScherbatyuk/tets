@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +29,8 @@ import java.util.List;
 @Controller
 public class CommentController {
 
+    Logger logger = LoggerFactory.getLogger(CommentController.class);
+
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -37,6 +41,8 @@ public class CommentController {
     private PostNewsService postNewsService;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Gets the post and all its comments from the database and passes them to the "comment" view for display.
@@ -46,6 +52,7 @@ public class CommentController {
      */
     @GetMapping("/comment/{id}")
     public String commentPage(@PathVariable Integer id, Model model) {
+
         PostNews post = postNewsService.findById(id);
         List<Comment> comments = commentService.getCommentByPost(post.getId());
         model.addAttribute("post", post);
@@ -66,7 +73,6 @@ public class CommentController {
         model.addAttribute("hobby", hobby);
         model.addAttribute("imageData", imageData);
 
-        List<User> friends = friendsService.getFriends(user.getId());
         int countRequests = friendsService.countIncomingFriendRequests(user.getId());
         model.addAttribute("countRequests", countRequests);
         int countMessages = messageService.countIncomingFriendMessage(user.getId());
@@ -84,17 +90,30 @@ public class CommentController {
     @PostMapping("/addComment")
     public String addComment(@RequestParam("postId") Integer postId,
                              @RequestParam("commentText") String commentText) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
         User user = userService.findByEmail(userEmail);
         PostNews post = postNewsService.findById(postId);
-        Comment comment = Comment.builder()
-                .user(user)
-                .post(post)
-                .commentText(commentText)
-                .addCommentTime(LocalDateTime.now())
-                .build();
-        commentService.addComment(comment);
+
+        try {
+            Comment comment = Comment.builder()
+                    .user(user)
+                    .post(post)
+                    .commentText(commentText)
+                    .addCommentTime(LocalDateTime.now())
+                    .build();
+            commentService.addComment(comment);
+        }catch (Exception e){
+            logger.error("CommentController -> addComment: Error create comment from UserId: " + user.getId()+ " for postId: " + postId, e);
+        }
+
+        try {
+            emailService.sendMessageAndComment(post.getUser().getEmail(), "You have a comment for your post");
+        }catch (Exception e){
+            logger.error("CommentController -> addComment: Error to send comment from email userId: " + user.getId()+ " for postId: " + postId, e);
+        }
+
         return "redirect:/comment/" + postId;
     }
 }

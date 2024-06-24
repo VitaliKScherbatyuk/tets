@@ -14,8 +14,6 @@ import java.util.List;
 
 public interface PostLikesRepository extends JpaRepository <PostLikes, Integer> {
 
-    PostLikes findByPostIdAndUserId(Integer postId, Integer userId);
-
     void deleteByPostId(Integer postId);
 
     List<PostLikes> findByPostId(Integer postId);

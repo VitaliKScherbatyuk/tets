@@ -7,6 +7,8 @@
 
 package scherbatyuk.network.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ import java.util.Map;
 @RestController
 public class RepostController {
 
+    Logger logger = LoggerFactory.getLogger(RepostController.class);
+
     private final RepostService repostService;
 
     @Autowired
@@ -49,6 +53,7 @@ public class RepostController {
      */
     @PostMapping("/createRepost")
     public ResponseEntity<?> repostPost(@RequestBody Map<String, Integer> postIdMap) {
+
         Integer postId = postIdMap.get("postId");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = auth.getName();
@@ -57,9 +62,11 @@ public class RepostController {
         PostNews post = postNewsService.findById(postId);
         boolean flagPost = repostService.hasUserAlreadyReposted(user, post);
         Repost repost;
+
         if (flagPost) {
             repost = repostService.repostPost(user, post);
         } else {
+            logger.error("RepostController -> repostPost: Error not found UserId: " + user.getId() + " or post: " + postId);
             return new ResponseEntity<>("User or post not found", HttpStatus.NOT_FOUND);
         }
 
