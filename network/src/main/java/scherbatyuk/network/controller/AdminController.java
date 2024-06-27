@@ -20,6 +20,7 @@ import scherbatyuk.network.domain.User;
 import scherbatyuk.network.service.EmailService;
 import scherbatyuk.network.service.SupportService;
 import scherbatyuk.network.service.UserService;
+import scherbatyuk.network.service.VisitCountService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -39,6 +40,8 @@ public class AdminController {
     private SupportService supportService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private VisitCountService visitCountService;
 
     /**
      * Handles requests related to administrative functions.
@@ -103,7 +106,15 @@ public class AdminController {
         }
 
         int countAllUser = userService.getCountAllUser();
+        System.err.println(countAllUser);
         model.addAttribute("countAllUser", countAllUser);
+
+        int startPageVisitCount = visitCountService.getVisitCount("startPage");
+        int loginPageVisitCount = visitCountService.getVisitCount("loginPage");
+
+        model.addAttribute("startPageVisitCount", startPageVisitCount);
+        model.addAttribute("loginPageVisitCount", loginPageVisitCount);
+
         return "admin";
     }
 

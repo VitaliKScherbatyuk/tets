@@ -33,42 +33,18 @@
     <div class="card mb-4 cardBox">
         <div class="card-body">
             <h5 class="card-title" th:text="#{admin.numberOfVisits}">Кількість відвідувань:</h5>
-            <p th:text="#{admin.countStart}">Кількість відвідувань стартової сторінки: <span id="visitCountDisplay1">0</span></p>
-            <p th:text="#{admin.countLogIn}">Кількість відвідувань сторінки входу: <span id="visitCountDisplay2">0</span></p>
+            <p th:text="#{admin.countStart} + ' ' + ${startPageVisitCount}">Кількість відвідувань стартової сторінки:</p>
+            <p th:text="#{admin.countLogIn} +  ' ' + ${loginPageVisitCount}">Кількість відвідувань сторінки входу:</p>
         </div>
     </div>
     <div class="card mb-4 cardBox">
         <div class="card-body">
             <h5 class="card-title" th:text="#{admin.countLogInUsers}">Кількість зареєстрованих користувачів:</h5>
-            <p th:text="#{admin.countAllUsers}">Загальна кількість: <span th:text="${countAllUser}">0</span></p>
+            <p th:text="#{admin.countAllUsers} + ' ' + ${countAllUser}">Загальна кількість:</p>
         </div>
     </div>
 
 </section>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Отримуємо дані з локального сховища браузера
-        var startPageCount = localStorage.getItem('startPageVisitCount');
-        var loginPageCount = localStorage.getItem('loginPageVisitCount');
-
-        // Виводимо дані на сторінці для адміністратора
-        document.getElementById('visitCountDisplay1').innerText = startPageCount ? startPageCount : 0;
-        document.getElementById('visitCountDisplay2').innerText = loginPageCount ? loginPageCount : 0;
-
-        // Отримуємо дані про країни з локального сховища браузера
-        var countryData = JSON.parse(localStorage.getItem('countryData')) || {};
-        var countryList = document.getElementById('countryList');
-
-        // Додаємо країни до списку
-        Object.keys(countryData).forEach(function(country) {
-            var listItem = document.createElement('li');
-            listItem.classList.add('list-group-item');
-            listItem.innerHTML = '<strong>' + country + '</strong>: ' + countryData[country];
-            countryList.appendChild(listItem);
-        });
-    });
-</script>
 
 </body>
 </html>

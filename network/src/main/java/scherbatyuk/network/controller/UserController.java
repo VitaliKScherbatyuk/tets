@@ -64,6 +64,8 @@ public class UserController {
     private RepostService repostService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private VisitCountService visitCountService;
 
     /**
      * Displays the login form.
@@ -72,6 +74,8 @@ public class UserController {
      */
     @GetMapping("/")
     public String showLoginForm() {
+
+        visitCountService.incrementVisitCount("startPage");
         return "start";
     }
 
@@ -84,6 +88,7 @@ public class UserController {
     @GetMapping("/login")
     public String loginForm(Model model) {
 
+        visitCountService.incrementVisitCount("loginPage");
         model.addAttribute("user", new User());
         return "login";
     }
@@ -94,7 +99,6 @@ public class UserController {
      *
      * @param user    object containing login credentials.
      * @param model   to add attributes to.
-     * @param request the HTTP request.
      * @return the name of the view to render.
      */
     @PostMapping("/login")
