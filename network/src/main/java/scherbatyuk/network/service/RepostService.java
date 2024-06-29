@@ -9,7 +9,9 @@ package scherbatyuk.network.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import scherbatyuk.network.dao.PostNewsRepository;
 import scherbatyuk.network.dao.RepostRepository;
+import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.PostNews;
 import scherbatyuk.network.domain.Repost;
 import scherbatyuk.network.domain.User;
@@ -24,6 +26,10 @@ import java.util.List;
 public class RepostService {
 
     private final RepostRepository repostRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PostNewsRepository postNewsRepository;
 
     @Autowired
     public RepostService(RepostRepository repostRepository) {
@@ -37,6 +43,9 @@ public class RepostService {
      * @return The created Repost object
      */
     public Repost repostPost(User user, PostNews post) {
+
+        userRepository.save(user);
+        postNewsRepository.save(post);
 
         Repost repost = Repost.builder()
                 .user(user)
@@ -53,6 +62,7 @@ public class RepostService {
      * @return List of reposts by the user
      */
     public List<Repost> getRepostsByUser(User user) {
+        userRepository.save(user);
         return repostRepository.getRepostsByUser(user);
     }
 
@@ -63,6 +73,8 @@ public class RepostService {
      * @return true if the user has reposted the post, false otherwise
      */
     public boolean hasUserAlreadyReposted(User user, PostNews post) {
+        userRepository.save(user);
+        postNewsRepository.save(post);
         return repostRepository.findByUserAndPost(user, post).isPresent();
     }
 

@@ -62,6 +62,7 @@ public class UserService {
      * @param user The user to save
      */
     public void save(User user) {
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if(user.getEmail().equals("vitaliktuhata@gmail.com")){
@@ -106,8 +107,9 @@ public class UserService {
      * @return The User object if found, otherwise null
      */
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).get();
+        return userRepository.findFirstByEmail(email);
     }
+
 
     /**
      * Retrieves all users from the database.
@@ -191,6 +193,8 @@ public class UserService {
      */
     @Transactional
     public void deleteUser(User user) {
+
+        friendsRepository.saveAll(user.getFriendsList());
 
         List<PostNews> posts = postNewsService.getPostsByUser(user);
         if (!posts.isEmpty()) {

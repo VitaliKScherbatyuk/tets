@@ -10,6 +10,7 @@ package scherbatyuk.network.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import scherbatyuk.network.dao.SupportRepository;
+import scherbatyuk.network.dao.UserRepository;
 import scherbatyuk.network.domain.Support;
 import scherbatyuk.network.domain.User;
 
@@ -24,6 +25,8 @@ public class SupportService {
 
     @Autowired
     private SupportRepository supportRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Saves a support letter from a user.
@@ -32,6 +35,8 @@ public class SupportService {
      * @param comment Content of the support letter
      */
     public void saveLetter(User user, String firstName, String comment) {
+
+        userRepository.save(user);
 
         Support support = Support.builder()
                 .user(user)

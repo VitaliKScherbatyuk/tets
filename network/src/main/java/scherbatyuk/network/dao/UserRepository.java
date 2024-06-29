@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, CrudReposi
 
     @Query("SELECT COUNT(u) FROM User u")
     int countAllUsers();
+
+    User findFirstByEmail(String email);
 }
