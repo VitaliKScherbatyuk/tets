@@ -57,7 +57,7 @@
                                     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span><br>
 
                                     <label>
-                                        <input type="password" class="form-control" placeholder="password" th:field="*{password}" required>
+                                        <input type="password" class="form-control" placeholder="password" th:field="*{password}" required minlength="6">
                                     </label>
                                     <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span><br>
 

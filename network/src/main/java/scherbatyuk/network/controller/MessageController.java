@@ -67,6 +67,7 @@ public class MessageController {
             message.setCreateMessage(LocalDateTime.now());
 
             messageService.saveMessage(message);
+            emailService.sendMessageAndComment(friend.getEmail(), "New message received");
         } catch (Exception e){
             logger.error("MessageController -> sendMessage: Error add message from UserId: " + currentUser.getId()+ " to friendId: " + userId, e);
         }
@@ -121,7 +122,6 @@ public class MessageController {
      *
      * @param messageId The ID of the message to reply to.
      * @param replyText The text content of the reply.
-     * @param model     to add attributes for rendering the view.
      * @return The redirect view name ("/viewMessages") after saving the reply.
      */
     @PostMapping("/replyMessage")
@@ -143,6 +143,7 @@ public class MessageController {
             reply.setParentMessage(originalMessage);
 
             messageService.saveMessage(reply);
+            emailService.sendMessageAndComment(originalMessage.getFriend().getEmail(), "New message received");
         }catch (Exception e){
             logger.error("MessageController -> replyMessage: Error add reply to message from UserId: " + currentUser.getId()+ " to messageId: " + messageId, e);
         }

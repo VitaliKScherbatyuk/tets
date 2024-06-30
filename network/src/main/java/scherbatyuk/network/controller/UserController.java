@@ -171,45 +171,6 @@ public class UserController {
         session.setAttribute("verificationCode", verificationCode);
 
         return "redirect:/verifyCode";
-
-        // For testing without verify code in registration
-//        userService.save(user);
-//        return "start";
-    }
-
-    /**
-     * Displays the verification code form.
-     *
-     * @return the name of the verification code page.
-     */
-    @GetMapping("/verifyCode")
-    public String verifyCodeForm() {
-        return "verifyCode";
-    }
-
-    /**
-     * Verifies the submitted verification code. Saves the user and redirects to the login page if successful.
-     *
-     * @param code    the verification code submitted by the user.
-     * @param session the HTTP session.
-     * @param model   to add attributes to.
-     * @return the name of the view to render.
-     */
-    @PostMapping("/verifyCode")
-    public String verifyCodeSubmit(@RequestParam("code") String code, HttpSession session, Model model) {
-
-        String storedCode = (String) session.getAttribute("verificationCode");
-        User user = (User) session.getAttribute("user");
-
-        if (storedCode != null && storedCode.equals(code)) {
-            userService.save(user);
-            session.removeAttribute("verificationCode");
-            session.removeAttribute("user");
-            return "redirect:/login";
-        } else {
-            model.addAttribute("error", "Invalid verification code.");
-            return "verifyCode";
-        }
     }
 
     /**

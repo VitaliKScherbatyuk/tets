@@ -32,7 +32,7 @@
                     <div class="container text-center" style="margin-top: 10px">
                         <div class="row justify-content-between">
                             <div class="col-4">
-                                <a th:href="@{'/user/' + ${user.getId()}}">
+                                <a th:href="@{'/user/' + ${post.user.getId()}}">
                                     <p th:text="${'Published: ' + post.user.name}"></p></a>
                             </div>
                             <div class="col-4">

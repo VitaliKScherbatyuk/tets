@@ -1,36 +1,44 @@
+/*
+ * author: Vitalik Scherbatyuk
+ * version: 1
+ * developing social network for portfolio
+ * 01.01.2024
+ */
+
 package scherbatyuk.network.controller;
 
 import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.resource.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import scherbatyuk.network.config.VerificationCodeGenerator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+/**
+ * REST controller for handling email-related operations.
+ */
 @RestController
 public class EmailController {
 
     @Autowired
     private MailjetClient mailjetClient;
 
+    /**
+     * GET endpoint to simulate sending an email with a verification code.
+     *
+     * @param request the HTTP request object
+     * @return a message indicating the email was sent successfully
+     */
     @GetMapping("/sendEmail")
-    public String sendEmail() {
-        try {
-            MailjetRequest email = new MailjetRequest(Email.resource)
-                    .property(Email.FROMEMAIL, "your@email.com")
-                    .property(Email.FROMNAME, "Your Name")
-                    .property(Email.SUBJECT, "Test Subject")
-                    .property(Email.TEXTPART, "Text content")
-                    .property(Email.HTMLPART, "<h3>HTML content</h3>")
-                    .property(Email.RECIPIENTS, "[{\"Email\":\"recipient@email.com\"}]");
+    public String sendEmail(HttpServletRequest request) {
+        String verificationCode = VerificationCodeGenerator.generateCode();
 
-            MailjetResponse response = mailjetClient.post(email);
-            return "Email sent successfully! Response: " + response.getStatus();
-        } catch (MailjetException | MailjetSocketTimeoutException e) {
-            return "Failed to send email: " + e.getMessage();
-        }
+        HttpSession session = request.getSession();
+        session.setAttribute("verificationCode", verificationCode);
+
+        return "Email sent successfully!";
     }
 }
+

@@ -62,12 +62,11 @@ public class UserService {
      * @param user The user to save
      */
     public void save(User user) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if(user.getEmail().equals("vitaliktuhata@gmail.com")){
+        if (user.getEmail().equals("vitaliktuhata@gmail.com")) {
             user.setRole(UserRole.Admin);
-        }else {
+        } else {
             user.setRole(UserRole.User);
         }
         user.setCreateData(LocalDate.now());

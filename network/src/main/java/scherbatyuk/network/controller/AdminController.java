@@ -22,6 +22,7 @@ import scherbatyuk.network.service.SupportService;
 import scherbatyuk.network.service.UserService;
 import scherbatyuk.network.service.VisitCountService;
 
+import javax.servlet.http.HttpSession;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -202,10 +203,43 @@ public class AdminController {
         try {
             supportService.saveLetter(letter, answer);
             emailService.sendEmail(letter.getUser().getEmail(), "Answer to your request", answer);
+            logger.info("Email sent successfully in response to support request.");
         } catch (Exception e) {
-            logger.error("AdminController -> handleAnswerSubmission: Error send request answer to letterId: ", letterId, e);
+            logger.error("Error sending email in response to support request: " + e.getMessage(), e);
+            return "errorPage";
         }
         return "redirect:/letter";
+    }
+
+    /**
+     * Handles GET requests to display the verification code verification page.
+     *
+     * @return the name of the view template "verifyCode"
+     */
+    @GetMapping("/verifyCode")
+    public String verifyCode() {
+        return "verifyCode";
+    }
+
+    /**
+     * Handles POST requests to verify the entered verification code.
+     *
+     * @param enteredCode the verification code entered by the user
+     * @param session the HTTP session to retrieve stored verification code and user information
+     * @return a redirect to the login page if verification succeeds; otherwise, redirects to a 403 error page
+     */
+    @PostMapping("/verifyCode")
+    public String verifyCode(@RequestParam("code") String enteredCode, HttpSession session) {
+
+        String verificationCode = (String) session.getAttribute("verificationCode");
+        User user = (User) session.getAttribute("user");
+
+        if (verificationCode != null && verificationCode.equals(enteredCode)) {
+            userService.save(user);
+            return "redirect:/login";
+        } else {
+            return "redirect:/403";
+        }
     }
 }
 

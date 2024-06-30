@@ -123,9 +123,10 @@
 		<dependency>
 			<groupId>com.mailjet</groupId>
 			<artifactId>mailjet-client</artifactId>
-			<version>4.5.0</version> <!-- Check for the latest version -->
+			<version>5.2.1</version>
 		</dependency>
-        <dependency>
+
+		<dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
