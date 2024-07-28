@@ -1,0 +1,31 @@
+"2024-07-28 21:20:19 [restartedMain]  INFO s.network.NetworkOnlineApplication - Starting NetworkOnlineApplication using Java 17.0.8.1 on DESKTOP-4MRA94D with PID 12044 (D:\Vitalik\IT\Rep2\network\target\classes started by Vitalik in D:\Vitalik\IT\Rep2\network)
+""2024-07-28 21:20:19 [restartedMain]  INFO s.network.NetworkOnlineApplication - No active profile set, falling back to 1 default profile: "default"
+""2024-07-28 21:20:19 [restartedMain]  INFO o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+""2024-07-28 21:20:19 [restartedMain]  INFO o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+""2024-07-28 21:20:21 [restartedMain]  INFO o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2024-07-28 21:20:21 [restartedMain]  INFO o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 183 ms. Found 11 JPA repository interfaces.
+""2024-07-28 21:20:23 [restartedMain]  INFO o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+""2024-07-28 21:20:23 [restartedMain]  INFO o.a.catalina.core.StandardService - Starting service [Tomcat]
+""2024-07-28 21:20:23 [restartedMain]  INFO o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.64]
+""2024-07-28 21:20:24 [restartedMain]  INFO o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+""2024-07-28 21:20:24 [restartedMain]  INFO o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 4022 ms
+""2024-07-28 21:20:24 [restartedMain]  INFO o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+""2024-07-28 21:20:24 [restartedMain]  INFO org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.9.Final
+""2024-07-28 21:20:25 [restartedMain]  INFO o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+""2024-07-28 21:20:25 [restartedMain]  INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+""2024-07-28 21:20:26 [restartedMain]  INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+""2024-07-28 21:20:26 [restartedMain]  INFO org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+""2024-07-28 21:20:28 [restartedMain]  INFO o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+""2024-07-28 21:20:28 [restartedMain]  INFO o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2024-07-28 21:20:28 [restartedMain]  WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2024-07-28 21:20:31 [restartedMain]  INFO o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@461025e2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@229e25ac, org.springframework.security.web.context.SecurityContextPersistenceFilter@343cf3d2, org.springframework.security.web.header.HeaderWriterFilter@26da6232, org.springframework.security.web.authentication.logout.LogoutFilter@35a8fa8a, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@7d7888a0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5de31f04, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@536cda71, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4c3f3946, org.springframework.security.web.session.SessionManagementFilter@652c2, org.springframework.security.web.access.ExceptionTranslationFilter@12c5731f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2bc74e6f]
+""2024-07-28 21:20:32 [restartedMain]  INFO o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+""2024-07-28 21:20:32 [restartedMain]  INFO o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+""2024-07-28 21:20:32 [restartedMain]  INFO s.network.NetworkOnlineApplication - Started NetworkOnlineApplication in 13.201 seconds (JVM running for 14.32)
+""2024-07-28 21:20:41 [http-nio-8080-exec-1]  INFO o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+""2024-07-28 21:20:41 [http-nio-8080-exec-1]  INFO o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+""2024-07-28 21:20:41 [http-nio-8080-exec-1]  INFO o.s.web.servlet.DispatcherServlet - Completed initialization in 8 ms
+""2024-07-28 21:20:42 [http-nio-8080-exec-5]  WARN o.s.web.servlet.PageNotFound - No mapping for GET /favicon.ico
+""2024-07-28 21:20:42 [http-nio-8080-exec-6]  WARN o.s.web.servlet.PageNotFound - No mapping for GET /manifest.json
+""2024-07-28 21:20:42 [http-nio-8080-exec-7]  WARN o.s.web.servlet.PageNotFound - No mapping for GET /service-worker.js
+"
