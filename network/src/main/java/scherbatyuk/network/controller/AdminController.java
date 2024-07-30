@@ -107,7 +107,6 @@ public class AdminController {
         }
 
         int countAllUser = userService.getCountAllUser();
-        System.err.println(countAllUser);
         model.addAttribute("countAllUser", countAllUser);
 
         int startPageVisitCount = visitCountService.getVisitCount("startPage");
