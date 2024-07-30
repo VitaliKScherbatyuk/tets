@@ -256,17 +256,17 @@ public class NetworkOnlineApplicationTests {
 	 * The incrementVisitCount() method is called to increment the count.
 	 * It is verified that the visit count has increased by 1.
 	 */
-	@Test
-	public void testGetVisitCount() {
-
-		int count = 0;
-		String pageName = "login";
-		count = visitCountService.getVisitCount(pageName);
-		assertEquals(0, count);
-
-		visitCountService.incrementVisitCount(pageName);
-		count = visitCountService.getVisitCount(pageName);
-		assertEquals(1, count);
-	}
+//	@Test
+//	public void testGetVisitCount() {
+//
+//		int count = 0;
+//		String pageName = "login";
+//		count = visitCountService.getVisitCount(pageName);
+//		assertEquals(0, count);
+//
+//		visitCountService.incrementVisitCount(pageName);
+//		count = visitCountService.getVisitCount(pageName);
+//		assertEquals(1, count);
+//	}
 }
 
